@@ -272,12 +272,201 @@ form:has(input[value="rogue"]:checked)
     outline-offset: 3px;
 }
 
+
+/* Champion confirmation screen */
+
+.champion-confirmation {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.champion-confirmation__heading {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.champion-confirmation__heading h2 {
+    color: #B49570;
+    margin-bottom: 12px;
+}
+
+.champion-confirmation__heading p {
+    color: #B8B7B2;
+    line-height: 1.6;
+}
+
+/* Confirmation status */
+
+.champion-confirmation__status {
+    padding: 14px 18px;
+    margin-bottom: 24px;
+
+    color: #F0ECE4;
+    background: #25282C;
+
+    border-left: 3px solid #B49570;
+    border-radius: 6px;
+}
+
+/* Champion identity */
+
+.champion-confirmation__identity {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+
+    padding: 24px 0;
+    border-top: 1px solid #48494A;
+    border-bottom: 1px solid #48494A;
+}
+
+.champion-confirmation__identity > div:last-child {
+    text-align: right;
+}
+
+.champion-confirmation__label {
+    display: block;
+    margin-bottom: 8px;
+
+    color: #B8B7B2;
+    font-size: 0.85rem;
+}
+
+.champion-confirmation__identity h3 {
+    margin: 0;
+    color: #F0ECE4;
+    overflow-wrap: anywhere;
+}
+
+.champion-confirmation__faction {
+    margin: 0;
+    color: #B49570;
+    font-weight: 600;
+}
+
+/* Character statistics */
+
+.champion-confirmation__stats {
+    padding: 24px 0;
+    border-bottom: 1px solid #48494A;
+
+}
+
+.champion-confirmation__stats h3 {
+    margin: 0 0 20px;
+    color: #F0ECE4;
+}
+
+.champion-confirmation__stats dl {
+    margin: 0;
+}
+
+.champion-confirmation__stats dl > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    padding: 12px 0;
+
+}
+
+.champion-confirmation__stats dt {
+    color: #B8B7B2;
+}
+
+.champion-confirmation__stats dd {
+    margin: 0;
+    color: #F0ECE4;
+    font-weight: 600;
+}
+
+/* Closing text */
+
+.champion-confirmation__closing {
+    margin: 12px 0 28px;
+    color: #B8B7B2;
+    text-align: center;
+    line-height: 1.6;
+}
+
+/* Navigation buttons */
+
+.champion-confirmation__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.champion-confirmation__actions form {
+    margin: 0;
+}
+
+.champion-confirmation__actions button {
+    width: 100%;
+    min-height: 54px;
+    padding: 14px 18px;
+
+    border-radius: 12px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.champion-confirmation__back {
+    background: #25282C;
+    color: #F0ECE4;
+    border: 1px solid #48494A;
+}
+
+.champion-confirmation__back:hover {
+    background: #30353A;
+    border-color: #B49570;
+}
+
+.champion-confirmation__begin {
+    background: #9E534A;
+    color: #F0ECE4;
+    border: 1px solid #9E534A;
+}
+
+.champion-confirmation__begin:hover {
+    background: #A75B4B;
+}
+
+.champion-confirmation__actions button:focus-visible {
+    outline: 2px solid #D3D0C8;
+    outline-offset: 3px;
+}
+
+
+/* Responsive layout */
+
 @media (max-width: 600px) {
     .stats-preview {
         padding: 16px;
     }
 
     .stats-preview__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .champion-confirmation__identity {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .champion-confirmation__identity > div:last-child {
+        text-align: left;
+    }
+
+    .champion-confirmation__actions {
         grid-template-columns: 1fr;
     }
 }
@@ -302,6 +491,10 @@ form:has(input[value="rogue"]:checked)
     }
 
     .begin-adventure-btn {
+        transition: none;
+    }
+
+    .champion-confirmation__actions button {
         transition: none;
     }
 }
