@@ -1,0 +1,500 @@
+
+/* Character creation: faction selection */
+
+.faction-selection {
+    border: none;
+    padding: 0;
+    margin: 24px 0;
+    min-width: 0;
+}
+
+.faction-selection legend {
+    color: #F0ECE4;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 14px;
+}
+
+.faction-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.faction-card {
+    --faction-color: #B49570;
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    min-height: 180px;
+    padding: 24px 16px;
+
+    background: #25282C;
+    border: 1px solid #48494A;
+    border-radius: 14px;
+
+    text-align: center;
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.faction-card--warrior {
+    --faction-color: #A75B4B;
+}
+
+.faction-card--mage {
+    --faction-color: #728BB7;
+}
+
+.faction-card--rogue {
+    --faction-color: #9675A5;
+}
+
+.faction-card:hover {
+    background: #30353A;
+}
+
+.faction-card:has(input:checked) {
+    background: #30353A;
+    border: 2px solid var(--faction-color);
+}
+
+.faction-card:has(input:focus-visible) {
+    outline: 2px solid #D3D0C8;
+    outline-offset: 3px;
+}
+
+.faction-card input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.faction-card__name {
+    color: #F0ECE4;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.faction-card__description {
+    color: #B8B7B2;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.faction-card__indicator {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #B8B7B2;
+    border-radius: 50%;
+}
+
+.faction-card:has(input:checked) .faction-card__indicator {
+    border-color: var(--faction-color);
+    background: var(--faction-color);
+    box-shadow: inset 0 0 0 3px #30353A;
+}
+
+
+
+/* Starting statistics preview */
+
+.stats-preview {
+    margin: 24px 0;
+    padding: 24px;
+    background: #25282C;
+    border: 1px solid #48494A;
+    border-radius: 14px;
+}
+
+.stats-preview h3 {
+    margin: 0 0 12px;
+    color: #F0ECE4;
+}
+
+.stats-preview__placeholder {
+    margin: 0;
+    color: #B8B7B2;
+    text-align: center;
+    padding: 20px;
+}
+
+.stats-preview__group {
+    display: none;
+}
+
+.stats-preview__group h4 {
+    margin: 0 0 16px;
+    color: #B49570;
+}
+
+.stats-preview__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.stats-preview__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 18px 12px;
+    background: #191C20;
+    border: 1px solid #48494A;
+    border-radius: 10px;
+}
+
+.stats-preview__stat span {
+    color: #B8B7B2;
+    font-size: 0.9rem;
+}
+
+.stats-preview__stat strong {
+    color: #F0ECE4;
+    font-size: 1.6rem;
+}
+
+/* Hide placeholder when any faction is selected */
+
+form:has(input[name="faction"]:checked)
+.stats-preview__placeholder {
+    display: none;
+}
+
+/* Reveal the matching faction's statistics */
+
+form:has(input[value="warrior"]:checked)
+.stats-preview__group--warrior {
+    display: block;
+}
+
+form:has(input[value="mage"]:checked)
+.stats-preview__group--mage {
+    display: block;
+}
+
+form:has(input[value="rogue"]:checked)
+.stats-preview__group--rogue {
+    display: block;
+}
+
+
+/* Champion name field */
+
+.champion-name-field {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 24px 0;
+}
+
+.champion-name-field label {
+    color: #F0ECE4;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.champion-name-field input {
+    width: 100%;
+    min-width: 0;
+    padding: 15px 18px;
+
+    background: #25282C;
+    color: #F0ECE4;
+
+    border: 1px solid #48494A;
+    border-radius: 10px;
+
+    font: inherit;
+    font-size: 1rem;
+
+    transition: border-color 0.2s ease;
+}
+
+.champion-name-field input::placeholder {
+    color: #B8B7B2;
+}
+
+.champion-name-field input:focus-visible {
+    outline: 2px solid #B49570;
+    outline-offset: 2px;
+    border-color: #B49570;
+}
+
+/* Begin Adventure button */
+
+.begin-adventure-btn {
+    display: block;
+    width: 100%;
+
+    margin-top: 24px;
+    padding: 18px 24px;
+
+    background-color: #9E534A;
+    color: #F0ECE4;
+
+    border: 1px solid #9E534A;
+    border-radius: 12px;
+
+    font: inherit;
+    font-size: 1.15rem;
+    font-weight: 600;
+    text-align: center;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.begin-adventure-btn:hover {
+    background-color: #A75B4B;
+    border-color: #A75B4B;
+}
+
+.begin-adventure-btn:active {
+    background-color: #87463F;
+}
+
+.begin-adventure-btn:focus-visible {
+    outline: 2px solid #D3D0C8;
+    outline-offset: 3px;
+}
+
+
+/* Champion confirmation screen */
+
+.champion-confirmation {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.champion-confirmation__heading {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.champion-confirmation__heading h2 {
+    color: #B49570;
+    margin-bottom: 12px;
+}
+
+.champion-confirmation__heading p {
+    color: #B8B7B2;
+    line-height: 1.6;
+}
+
+/* Confirmation status */
+
+.champion-confirmation__status {
+    padding: 14px 18px;
+    margin-bottom: 24px;
+
+    color: #F0ECE4;
+    background: #25282C;
+
+    border-left: 3px solid #B49570;
+    border-radius: 6px;
+}
+
+/* Champion identity */
+
+.champion-confirmation__identity {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+
+    padding: 24px 0;
+    border-top: 1px solid #48494A;
+    border-bottom: 1px solid #48494A;
+}
+
+.champion-confirmation__identity > div:last-child {
+    text-align: right;
+}
+
+.champion-confirmation__label {
+    display: block;
+    margin-bottom: 8px;
+
+    color: #B8B7B2;
+    font-size: 0.85rem;
+}
+
+.champion-confirmation__identity h3 {
+    margin: 0;
+    color: #F0ECE4;
+    overflow-wrap: anywhere;
+}
+
+.champion-confirmation__faction {
+    margin: 0;
+    color: #B49570;
+    font-weight: 600;
+}
+
+/* Character statistics */
+
+.champion-confirmation__stats {
+    padding: 24px 0;
+    border-bottom: 1px solid #48494A;
+
+}
+
+.champion-confirmation__stats h3 {
+    margin: 0 0 20px;
+    color: #F0ECE4;
+}
+
+.champion-confirmation__stats dl {
+    margin: 0;
+}
+
+.champion-confirmation__stats dl > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    padding: 12px 0;
+
+}
+
+.champion-confirmation__stats dt {
+    color: #B8B7B2;
+}
+
+.champion-confirmation__stats dd {
+    margin: 0;
+    color: #F0ECE4;
+    font-weight: 600;
+}
+
+/* Closing text */
+
+.champion-confirmation__closing {
+    margin: 12px 0 28px;
+    color: #B8B7B2;
+    text-align: center;
+    line-height: 1.6;
+}
+
+/* Navigation buttons */
+
+.champion-confirmation__actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.champion-confirmation__actions form {
+    margin: 0;
+}
+
+.champion-confirmation__actions button {
+    width: 100%;
+    min-height: 54px;
+    padding: 14px 18px;
+
+    border-radius: 12px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.champion-confirmation__back {
+    background: #25282C;
+    color: #F0ECE4;
+    border: 1px solid #48494A;
+}
+
+.champion-confirmation__back:hover {
+    background: #30353A;
+    border-color: #B49570;
+}
+
+.champion-confirmation__begin {
+    background: #9E534A;
+    color: #F0ECE4;
+    border: 1px solid #9E534A;
+}
+
+.champion-confirmation__begin:hover {
+    background: #A75B4B;
+}
+
+.champion-confirmation__actions button:focus-visible {
+    outline: 2px solid #D3D0C8;
+    outline-offset: 3px;
+}
+
+
+/* Responsive layout */
+
+@media (max-width: 600px) {
+    .stats-preview {
+        padding: 16px;
+    }
+
+    .stats-preview__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .champion-confirmation__identity {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .champion-confirmation__identity > div:last-child {
+        text-align: left;
+    }
+
+    .champion-confirmation__actions {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 650px) {
+    .faction-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .faction-card {
+        min-height: 120px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .faction-card {
+        transition: none;
+    }
+
+    .champion-name-field input {
+        transition: none;
+    }
+
+    .begin-adventure-btn {
+        transition: none;
+    }
+
+    .champion-confirmation__actions button {
+        transition: none;
+    }
+}

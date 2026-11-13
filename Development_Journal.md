@@ -37,3 +37,29 @@
 ### AI Assistance
 - ChatGPT assisted with planning, environment
   verification instructions, and documentation.
+
+## November 10, 2026 — Sprint 2: UI Foundation
+
+**Developer:** Trajuan Smith
+
+### Work Completed
+- Established the initial project folder structure.
+- Started developing `index.php` as the homepage for Three Kingdoms Ascension.
+- Added the game's title, introduction, and character creation placeholder.
+- Added semantic HTML elements, including the header, main section, and footer.
+- Linked the homepage to the shared stylesheet (`assets/css/styles.css`).
+
+### Testing
+- Homepage browser rendering: Pending confirmation.
+- Navigation testing: Not started.
+
+### Issues and Resolutions
+- No implementation issues reported so far.
+
+### Next Steps
+- Verify the homepage displays correctly.
+- Implement shared CSS styling.
+- Create reusable navigation and page components.
+- Begin the character creation interface.
+
+
