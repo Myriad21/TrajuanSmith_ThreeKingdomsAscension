@@ -6,14 +6,17 @@
     <meta name="description" content="Fill out description here">
     <title>Three Kingdoms Ascension</title>
     <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-    <link rel="stylesheet" href="css/styles.css">
+    
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/navigation.css">
+
 </head>
 <body>
 
     <!-- Header with navigation -->
     <header class="site-header">
         <nav class="site-nav" aria-label="Main navigation">
-            <a href="index.html" class="site-logo">
+            <a href="index.php" class="site-logo">
                 Three Kingdoms Ascension
             </a>
 

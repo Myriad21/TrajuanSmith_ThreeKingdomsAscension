@@ -1,0 +1,98 @@
+
+/* =========================================
+   THREE KINGDOMS ASCENSION
+   Shared Navigation Styles
+   ========================================= */
+
+/* Main navigation container */
+.site-header .site-nav {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 30px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+}
+
+/* Homepage header styling */
+.site-header:not(.site-header--compact) {
+    padding: 0;
+    text-align: left;
+    background-color: var(--bg-panel);
+    border-bottom: 1px solid var(--border-default);
+}
+
+
+/* Website logo */
+.site-header .site-logo {
+    color: var(--accent-secondary);
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+/* Navigation links container */
+.site-header .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Individual navigation links */
+.site-header .nav-links a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+
+    transition: color 0.3s ease;
+}
+
+/* Hover and keyboard focus */
+.site-header .nav-links a:hover,
+.site-header .nav-links a:focus-visible {
+    color: var(--accent-secondary);
+}
+
+/* Current page indicator */
+.site-header .nav-links a[aria-current="page"] {
+    color: var(--accent-secondary);
+}
+
+/* Keyboard accessibility */
+.site-header .nav-links a:focus-visible,
+.site-header .site-logo:focus-visible {
+    outline: 2px solid var(--accent-secondary);
+    outline-offset: 5px;
+}
+
+/* Responsive navigation */
+@media (max-width: 768px) {
+    .site-header .site-nav {
+        flex-direction: column;
+        text-align: center;
+        padding: 16px;
+    }
+
+    .site-header .nav-links {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px 20px;
+    }
+
+    .site-header .site-logo {
+        font-size: 1.1rem;
+    }
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .site-header .nav-links a {
+        transition: none;
+    }
+}
