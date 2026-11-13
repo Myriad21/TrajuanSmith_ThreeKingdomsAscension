@@ -40,11 +40,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/character.css">
+    <link rel="stylesheet" href="assets/css/faction_background.css">
 </head>
 
 <body>
 
-    
+    <!-- Faction-specific background layers -->
+    <div class="faction-backgrounds" aria-hidden="true">
+        <div class="faction-background faction-background--warrior"></div>
+        <div class="faction-background faction-background--mage"></div>
+        <div class="faction-background faction-background--rogue"></div>
+    </div>
 
     <header class="site-header site-header--compact">
         <h1>Three Kingdoms Ascension</h1>

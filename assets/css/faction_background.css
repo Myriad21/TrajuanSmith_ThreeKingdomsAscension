@@ -1,0 +1,100 @@
+
+/* =========================================
+   Faction Background System
+   ========================================= */
+
+/* Background container behind the page */
+.faction-backgrounds {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Individual faction background layers */
+.faction-background {
+    position: absolute;
+    inset: 0;
+
+    opacity: 0;
+    transition: opacity 0.6s ease;
+
+    filter: blur(6px);
+    transform: scale(1.04);
+}
+
+
+/* Warrior Kingdom */
+.faction-background--warrior {
+    background-image:
+        linear-gradient(
+            rgba(15, 17, 22, 0.60),
+            rgba(15, 17, 22, 0.75)
+        ),
+        url("../../images/Factions/warrior-background.jpeg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Mage Kingdom */
+.faction-background--mage {
+    background-image:
+        linear-gradient(
+            rgba(15, 17, 22, 0.60),
+            rgba(15, 17, 22, 0.75)
+        ),
+        url("../../images/Factions/mage-background.jpeg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Rogue Territory */
+.faction-background--rogue {
+    background-image:
+        linear-gradient(
+            rgba(15, 17, 22, 0.60),
+            rgba(15, 17, 22, 0.75)
+        ),
+       url("../../images/Factions/rogue-background.jpeg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+/* Reveal the selected faction background */
+body:has(input[name="faction"][value="warrior"]:checked)
+.faction-background--warrior {
+    opacity: 1;
+}
+
+body:has(input[name="faction"][value="mage"]:checked)
+.faction-background--mage {
+    opacity: 1;
+}
+
+body:has(input[name="faction"][value="rogue"]:checked)
+.faction-background--rogue {
+    opacity: 1;
+}
+
+/* Keep page content above the backgrounds */
+body > header,
+body > main,
+body > footer {
+    position: relative;
+    z-index: 1;
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .faction-background {
+        transition: none;
+    }
+}
