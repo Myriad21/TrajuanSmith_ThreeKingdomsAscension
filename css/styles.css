@@ -8,19 +8,21 @@
 
 :root {
     /* Backgrounds */
-    --bg-primary: #0B1726;
-    --bg-panel: #162C42;
+    --bg-primary: #191c20;
+    --content-pannel: #30353A;
+    --cards: #25282C;
 
     /* Accent colors */
-    --accent-cyan: #75CDE0;
-    --accent-gold: #D4B477;
+    --muted-silver: #D3D0C8;
+    --ember-red: #9E534A;
+    --cooper: #B49570;
 
     /* Text */
-    --text-primary: #EAF3F7;
-    --text-secondary: #B7C9D5;
+    --text-primary: #F0ECE4;
+    --text-secondary: #B8B7B2;
 
     /* Borders */
-    --border-color: #35536B;
+    --border-color: #48494A;
 }
 
 html {
