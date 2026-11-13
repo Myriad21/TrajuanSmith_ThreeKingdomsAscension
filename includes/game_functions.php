@@ -1,27 +1,32 @@
 
 <?php
 
-function createChampion(string $name, string $faction): array
+
+function getStartingStats(): array
 {
-    $startingStats = [
+    return [
         "warrior" => [
             "hp" => 120,
             "strength" => 15,
             "mana" => 8
         ],
-
         "mage" => [
             "hp" => 85,
             "strength" => 7,
             "mana" => 20
         ],
-
         "rogue" => [
             "hp" => 85,
             "strength" => 13,
             "mana" => 12
         ]
     ];
+}
+
+
+function createChampion(string $name, string $faction): array
+{
+    $startingStats = getStartingStats();
 
     if (!isset($startingStats[$faction])) {
         throw new InvalidArgumentException(

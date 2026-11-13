@@ -20,7 +20,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $_SESSION["champion"] = createChampion($name, $faction);
             session_regenerate_id(true);
 
-            $characterCreated = true;
+            header("Location: character_confirm.php");
+            exit;
         } catch (InvalidArgumentException $exception) {
             $errorMessage = $exception->getMessage();
         }
@@ -38,6 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <title><?php echo htmlspecialchars($pageTitle); ?></title>
 
     <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/character.css">
 </head>
 
 <body>
@@ -70,43 +72,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </p>
             <?php endif; ?>
 
-            
-            <?php if ($characterCreated): ?>
-                <div class="character-preview">
-                    <h3>Champion Created Successfully!</h3>
-
-                    <p>
-                        Name:
-                        <?php echo htmlspecialchars($_SESSION["champion"]["name"]); ?>
-                    </p>
-
-                    <p>
-                        Faction:
-                        <?php echo htmlspecialchars(ucfirst($_SESSION["champion"]["faction"])); ?>
-                    </p>
-
-                    <p>
-                        HP: <?php echo $_SESSION["champion"]["hp"]; ?>
-                    </p>
-
-                    <p>
-                        Strength: <?php echo $_SESSION["champion"]["strength"]; ?>
-                    </p>
-
-                    <p>
-                        Mana: <?php echo $_SESSION["champion"]["mana"]; ?>
-                    </p>
-
-                    <p>
-                        Level: <?php echo $_SESSION["champion"]["level"]; ?>
-                    </p>
-                </div>
-            <?php endif; ?>
-
 
             <form action="character.php" method="POST">
 
-                <div>
+               
+                <div class="champion-name-field">
                     <label for="champion_name">
                         Champion Name
                     </label>
@@ -115,54 +85,109 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                         type="text"
                         id="champion_name"
                         name="champion_name"
+                        placeholder="Enter your champion's name"
+                        minlength="1"
                         maxlength="30"
+                        autocomplete="off"
                         required
                     >
                 </div>
 
-                <fieldset>
+                <!--Choose your faction-->
+                <fieldset class="faction-selection">
                     <legend>Select Your Faction</legend>
 
-                    <div>
-                        <input
-                            type="radio"
-                            id="warrior"
-                            name="faction"
-                            value="warrior"
-                            required
-                        >
-                        <label for="warrior">
-                            Warriors
-                        </label>
-                    </div>
+                    <div class="faction-grid">
 
-                    <div>
-                        <input
-                            type="radio"
-                            id="mage"
-                            name="faction"
-                            value="mage"
-                        >
-                        <label for="mage">
-                            Mages
-                        </label>
-                    </div>
+                        <label class="faction-card faction-card--warrior">
+                            <input
+                                type="radio"
+                                name="faction"
+                                value="warrior"
+                                required
+                            >
 
-                    <div>
-                        <input
-                            type="radio"
-                            id="rogue"
-                            name="faction"
-                            value="rogue"
-                        >
-                        <label for="rogue">
-                            Rogues
-                        </label>
-                    </div>
+                            <span class="faction-card__name">Warrior</span>
 
+                            <span class="faction-card__description">
+                                High health and strength
+                            </span>
+
+                            <span class="faction-card__indicator" aria-hidden="true"></span>
+                        </label>
+
+                        <label class="faction-card faction-card--mage">
+                            <input
+                                type="radio"
+                                name="faction"
+                                value="mage"
+                            >
+
+                            <span class="faction-card__name">Mage</span>
+
+                            <span class="faction-card__description">
+                                Powerful mana abilities
+                            </span>
+
+                            <span class="faction-card__indicator" aria-hidden="true"></span>
+                        </label>
+
+                        <label class="faction-card faction-card--rogue">
+                            <input
+                                type="radio"
+                                name="faction"
+                                value="rogue"
+                            >
+
+                            <span class="faction-card__name">Rogue</span>
+
+                            <span class="faction-card__description">
+                                Precise and agile fighting style
+                            </span>
+
+                            <span class="faction-card__indicator" aria-hidden="true"></span>
+                        </label>
+
+                    </div>
                 </fieldset>
 
-                <button type="submit">
+                <!--Preview Stats-->
+                <div class="stats-preview">
+                    <h3>Starting Statistics Preview</h3>
+
+                    <p class="stats-preview__placeholder">
+                        Select a faction to reveal your starting statistics.
+                    </p>
+
+                    <?php foreach (getStartingStats() as $faction => $stats): ?>
+                        <div class="stats-preview__group stats-preview__group--<?php echo htmlspecialchars($faction); ?>">
+
+                            <h4>
+                                <?php echo htmlspecialchars(ucfirst($faction)); ?> Starting Statistics
+                            </h4>
+
+                            <div class="stats-preview__grid">
+                                <div class="stats-preview__stat">
+                                    <span>Health (HP)</span>
+                                    <strong><?php echo $stats["hp"]; ?></strong>
+                                </div>
+
+                                <div class="stats-preview__stat">
+                                    <span>Strength</span>
+                                    <strong><?php echo $stats["strength"]; ?></strong>
+                                </div>
+
+                                <div class="stats-preview__stat">
+                                    <span>Mana</span>
+                                    <strong><?php echo $stats["mana"]; ?></strong>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+
+
+                <button type="submit" class="begin-adventure-btn">
                     Begin Adventure
                 </button>
 
