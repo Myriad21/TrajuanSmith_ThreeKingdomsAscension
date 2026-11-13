@@ -62,4 +62,31 @@
 - Create reusable navigation and page components.
 - Begin the character creation interface.
 
+### November 13, 2026 — Character Creation and Faction Backgrounds
 
+**Work Completed:**
+- Continued developing the character creation system and its confirmation flow.
+- Implemented a champion confirmation page displaying the selected name, faction, starting statistics, and level.
+- Added functionality to return to character creation and reset the previously selected champion.
+- Created a temporary adventure initialization process using PHP sessions.
+- Implemented dynamic faction backgrounds for Warrior, Mage, and Rogue using CSS.
+- Added illustrated fantasy environments representing each faction's territory.
+- Organized the background styling into a separate `faction_background.css` file to improve maintainability.
+- Applied background blur, dark overlays, and smooth transitions to maintain readability.
+
+**Testing and Debugging:**
+- Verified that all three faction selections display the appropriate background images.
+- Confirmed that the selected faction's starting statistics update correctly.
+- Tested the champion confirmation, reset, and adventure initialization functionality.
+- Encountered a `404 Not Found` error when loading the background images.
+- Resolved the image-loading issue by correcting the relative paths in the CSS.
+- Confirmed that the background images remain behind the character creation panel without interfering with user interactions.
+
+**AI Assistance:**
+- Received guidance on CSS selectors, background layering, blur effects, transitions.
+- Reviewed and tested the generated code, making adjustments as needed.
+
+**Next Steps:**
+- Continue developing the adventure flow and story progression.
+- Connect character confirmation to the actual game interface.
+- Implement additional PHP session-based game mechanics.
