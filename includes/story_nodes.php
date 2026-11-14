@@ -32,7 +32,13 @@ function getStoryNodes(): array
                     "text" => "Investigate the rumors",
                     "description" => "Gather information before beginning your expedition.",
                     "next" => "expedition_start",
-                    "requires" => [],
+                    
+                    "requires" => [
+                        "stats" => [],
+                        "inventory" => [],
+                        "flags" => [],
+                        "trust" => []
+                    ],
                     
                     "effects" => [
                         "stats" => [],
@@ -53,10 +59,16 @@ function getStoryNodes(): array
                     "text" => "Prepare for the expedition",
                     "description" => "Strengthen your preparations before leaving the kingdom.",
                     "next" => "expedition_start",
-                    "requires" => [
-                        "strength" => 15
-                    ],
                     
+                    "requires" => [
+                        "stats" => [
+                            "strength" => 15
+                        ],
+                        "inventory" => [],
+                        "flags" => [],
+                        "trust" => []
+                    ],
+
                     "effects" => [
                         "stats" => [],
                         "inventory" => [

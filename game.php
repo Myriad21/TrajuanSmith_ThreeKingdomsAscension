@@ -86,6 +86,8 @@
                 !is_array($requirements) ||
                 !meetsChoiceRequirements(
                     $_SESSION["champion"],
+                    $_SESSION["inventory"],
+                    $_SESSION["story_flags"],
                     $requirements
                 )
             ) {
@@ -284,6 +286,8 @@
                                 // Determine whether the champion meets them.
                                 $isUnlocked = meetsChoiceRequirements(
                                     $champion,
+                                    $_SESSION["inventory"],
+                                    $_SESSION["story_flags"],
                                     $requirements
                                 );
                                 ?>
@@ -311,25 +315,37 @@
                                         <?php if (!$isUnlocked): ?>
                                             <span class="game-choice__requirement">
 
-                                                <?php foreach ($requirements as $stat => $minimum): ?>
+                                                <?php foreach ($requirements["stats"] ?? [] as $stat => $minimum): ?>
                                                     <?php
-                                                    $current = $champion[$stat] ?? 0;
-                                                    $missing = max(0, $minimum - $current);
+                                                        $current = $champion[$stat] ?? 0;
+                                                        $missing = max(0, $minimum - $current);
                                                     ?>
 
-                                                    <span class="game-choice__requirement-detail">
-                                                        <?php echo htmlspecialchars(ucfirst($stat)); ?>:
-                                                        <?php echo htmlspecialchars((string) $current); ?>
-                                                        /
-                                                        <?php echo htmlspecialchars((string) $minimum); ?>
+                                                    <?php if ($missing > 0): ?>
+                                                        <span class="game-choice__requirement-detail">
+                                                            <?= htmlspecialchars(ucfirst($stat)) ?>:
+                                                            <?= htmlspecialchars((string) $current) ?>
+                                                            /
+                                                            <?= htmlspecialchars((string) $minimum) ?>
 
-                                                        <?php if ($missing > 0): ?>
                                                             <small>
-                                                                (Need <?php echo htmlspecialchars((string) $missing); ?> more)
+                                                                (Need <?= htmlspecialchars((string) $missing) ?> more)
                                                             </small>
-                                                        <?php endif; ?>
-                                                    </span>
+                                                        </span>
+                                                    <?php endif; ?>
+
                                                 <?php endforeach; ?>
+
+                                                <?php if (
+                                                    !empty($requirements["inventory"]) ||
+                                                    !empty($requirements["flags"]) ||
+                                                    !empty($requirements["trust"])
+                                                ): ?>
+                                                    <span class="game-choice__requirement-detail">
+                                                        <br>Additional story conditions may be required.
+                                                    </span>
+                                                <?php endif; ?>
+
                                             </span>
                                         <?php endif; ?>
 

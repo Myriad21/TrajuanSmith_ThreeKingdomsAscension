@@ -91,7 +91,7 @@
 - Connect character confirmation to the actual game interface.
 - Implement additional PHP session-based game mechanics.
 
-### November 14, 2026 — Story Engine and Inventory Foundation
+### 1. November 14, 2026 — Story Engine and Inventory Foundation
 
 **Completed:**
 - Implemented categorized story choice effects.
@@ -107,3 +107,28 @@
 - Add story flags and advanced choice requirements.
 - Continue developing the Insight Relic and remaining core story engine features.
 
+
+### 2. November 14, 2026 — Dynamic Relationships and Story Flags
+
+**Completed:**
+- Implemented dynamic first-rival identification based on the player's faction.
+- Added relationship target resolution to avoid hardcoding faction-specific story consequences.
+- Implemented trust increases and decreases, with values restricted to 0–100.
+- Added relationship tiers: Hostile, Wary, Neutral, Cooperative, Trusted, and Fully Trusted.
+- Created a helper for retrieving rival relationship statuses without revealing numerical trust values.
+- Implemented persistent story flags using PHP sessions.
+- Connected story flag effects to the existing story consequence system.
+- Tested dynamic trust changes and verified that story flags persist after refreshing the page.
+- Fixed a session variable naming mismatch that caused a PHP error.
+
+**Design Decisions:**
+- Trust values remain hidden from the player.
+- Rival champions will display descriptive relationship tiers during encounters.
+- The Insight Relic will provide narrative hints about relationship changes without revealing exact trust values.
+- Story flags will track important discoveries, decisions, and encounters.
+- The same story engine will support all three factions through dynamic lookup functions.
+
+**Next Steps:**
+- Implement advanced choice requirements involving statistics, inventory, story flags, and trust.
+- Develop consequence previews and the Insight Relic adviser.
+- Continue building the remaining core story engine features before writing Act I.

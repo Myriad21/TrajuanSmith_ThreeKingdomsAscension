@@ -71,20 +71,77 @@ function createChampion(string $name, string $faction): array
  *
  * An empty requirements array means the choice is unlocked.
  */
-function meetsChoiceRequirements(array $champion, array $requirements) : bool {
-    foreach ($requirements as $stat => $minimum) {
+function meetsChoiceRequirements(array $champion, array $inventory, array $flags, array $requirements): bool {
 
-        // Reject requirements for unknown or invalid stats.
+    // Rejects unsupported requirement categories.
+    $allowedCategories = ["stats", "inventory", "flags", "trust"];
+
+    foreach ($requirements as $category => $value) {
         if (
-            !array_key_exists($stat, $champion) ||
+            !in_array($category, $allowedCategories, true) ||
+            !is_array($value)
+        ) {
+            return false;
+        }
+    }
+
+    // 1. Check minimum stat requirements.
+    foreach ($requirements["stats"] ?? [] as $stat => $minimum) {
+        if (
+            !is_string($stat) ||
+            !isset($champion[$stat]) ||
             !is_numeric($champion[$stat]) ||
+            !is_numeric($minimum) ||
+            $champion[$stat] < $minimum
+        ) {
+            return false;
+        }
+    }
+
+    // 2. Check required inventory items.
+    foreach ($requirements["inventory"] ?? [] as $itemId) {
+        if (
+            !is_string($itemId) ||
+            !in_array($itemId, $inventory, true)
+        ) {
+            return false;
+        }
+    }
+
+    // 3. Check story flags.
+    foreach ($requirements["flags"] ?? [] as $flag => $expected) {
+        if (
+            !is_string($flag) ||
+            !is_bool($expected) ||
+            ($flags[$flag] ?? false) !== $expected
+        ) {
+            return false;
+        }
+    }
+
+    // 4. Check hidden relationship requirements.
+    $playerFaction = $champion["faction"] ?? "";
+
+    foreach ($requirements["trust"] ?? [] as $target => $minimum) {
+
+        if (
+            !is_string($target) ||
             !is_numeric($minimum)
         ) {
             return false;
         }
 
-        // The champion must meet every minimum requirement.
-        if ($champion[$stat] < $minimum) {
+        $resolvedTarget = resolveRelationshipTarget(
+            $target,
+            $playerFaction
+        );
+
+        if (
+            $resolvedTarget === null ||
+            $resolvedTarget === $playerFaction ||
+            !isset($champion["relationships"][$resolvedTarget]) ||
+            $champion["relationships"][$resolvedTarget] < $minimum
+        ) {
             return false;
         }
     }
@@ -93,13 +150,14 @@ function meetsChoiceRequirements(array $champion, array $requirements) : bool {
 }
 
 
+
 /** Apply stat changes caused by a story choice.
  *
  * Positive values increase a stat.
  * Negative values decrease a stat.
  */
 function applyStatEffects(array $champion, array $effects): array {
-    // Only these statistics can be modified by this function.
+    // Only these Stats can be modified by this function.
     $allowedStats = [
         "hp",
         "strength",
