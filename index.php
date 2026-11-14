@@ -47,7 +47,7 @@ if (isset($_SESSION['user'])) {
 
     <!-- Main content -->
     <main>
-        <section class="hero-section">
+        <div class="hero-section">
             <img src="images/favicon.ico" alt="Game logo">
             <h1>
                 Three Kingdoms Ascension
@@ -62,8 +62,9 @@ if (isset($_SESSION['user'])) {
                 <?php else: ?>
                     <a href="register.php" class="btn">Register</a>
                     <a href="login.php" class="btn">Login</a>
+                <?php endif; ?>
             </div>
-        </section>
+        </div>
     </main>
 
     <!-- Footer -->
