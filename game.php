@@ -168,6 +168,8 @@
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/navigation.css">
     <link rel="stylesheet" href="assets/css/game.css">
+    <link rel="stylesheet" href="assets/css/insight_relic.css">
+
 </head>
 
 <body>
@@ -290,6 +292,14 @@
                                     $_SESSION["story_flags"],
                                     $requirements
                                 );
+
+
+                                $choiceEffects = $choice["effects"] ?? [];
+
+                                $statPreviews = getChoiceStatPreviews(
+                                    is_array($choiceEffects) ? $choiceEffects : []
+                                );
+
                                 ?>
 
                                 <form action="game.php" method="POST" class="game-choice">
@@ -311,6 +321,19 @@
                                         <span>
                                             <?php echo htmlspecialchars($choice["description"]); ?>
                                         </span>
+
+                                        <!-- Potential Stats Preview--->
+                                        <?php if (!empty($statPreviews)): ?>
+                                            <span class="game-choice__effects">
+
+                                                <?php foreach ($statPreviews as $preview): ?>
+                                                    <span class="game-choice__effect game-choice__effect--<?= htmlspecialchars($preview["type"]) ?>">
+                                                        <?= htmlspecialchars($preview["text"]) ?>
+                                                    </span>
+                                                <?php endforeach; ?>
+
+                                            </span>
+                                        <?php endif; ?>
 
                                         <?php if (!$isUnlocked): ?>
                                             <span class="game-choice__requirement">

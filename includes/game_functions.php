@@ -480,6 +480,51 @@ function applyFlagEffects(array $flags, array $effects): array {
 }
 
 
+/**
+ * Generate visible stat consequence previews
+ * from a story choice's effects.
+ *
+ * Hidden trust changes and story flags are excluded.
+ */
+function getChoiceStatPreviews(array $effects): array
+{
+    $previews = [];
+
+    $allowedStats = [
+        "hp" => "HP",
+        "strength" => "Strength",
+        "mana" => "Mana"
+    ];
+
+    $statEffects = $effects["stats"] ?? [];
+
+    if (!is_array($statEffects)) {
+        return $previews;
+    }
+
+    foreach ($statEffects as $stat => $change) {
+
+        if (
+            !isset($allowedStats[$stat]) ||
+            !is_numeric($change) ||
+            $change == 0
+        ) {
+            continue;
+        }
+
+        $sign = $change > 0 ? "+" : "";
+
+        $previews[] = [
+            "text" => $sign . $change . " " . $allowedStats[$stat],
+            "type" => $change > 0 ? "positive" : "negative"
+        ];
+    }
+
+    return $previews;
+}
+
+
+
 
 
 
