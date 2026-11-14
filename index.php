@@ -47,24 +47,47 @@ if (isset($_SESSION['user'])) {
 
     <!-- Main content -->
     <main>
+        <!-- Hero section with Register and Login button -->
         <div class="hero-section">
-            <img src="images/favicon.ico" alt="Game logo">
-            <h1>
-                Three Kingdoms Ascension
-            </h1>
-            <p>
-                Three Kingdoms. Three Champions. One Legendary Artifact.
-            </p>
+            <div class="title-section">
+                <img src="images/scroll-banner.png">
+                <h1>Three Kingdoms Ascension</h1>
+                <p>Three Kingdoms. Three Champions. One Legendary Artifact.</p>
+            </div>
             <div class="authentication-section">
                 <?php if (isset($_SESSION['user'])): ?>
-                    <a href="game.php" class="btn">Continue Game</a>
-                    <a href="logout.php" class="btn">Logout</a>
+                    <a href="game.php" class="button">Continue Game</a>
+                    <a href="logout.php" class="button">Logout</a>
                 <?php else: ?>
-                    <a href="register.php" class="btn">Register</a>
-                    <a href="login.php" class="btn">Login</a>
+                    <a href="register.php" class="button">Register</a>
+                    <a href="login.php" class="button">Login</a>
                 <?php endif; ?>
             </div>
         </div>
+        
+        <!-- About section -->
+        <section class="about-section">
+            <h2>About the Game</h2>
+            <p>
+                Choose your faction, develop your champion, explore branching narative, and determine
+                the fate of the three kingdoms
+            </p>
+            
+            <div class="faction-section">
+                <div class="interactive-card" id="warrior-faction">
+                    <img src="images/factions/warrior-symbol.jpg">
+                    <h3>Warriors</h3>
+                </div>
+                <div class="interactive-card" id="warrior-faction">
+                    <img src="images/factions/mage-symbol.jpg">
+                    <h3>Mages</h3>
+                </div>
+                <div class="interactive-card" id="warrior-faction">
+                    <img src="images/factions/rogue-symbol.jpg">
+                    <h3>Rogues</h3>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
