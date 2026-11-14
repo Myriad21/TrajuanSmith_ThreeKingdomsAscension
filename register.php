@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Passwords do not match.";
     }
 
-    $usersFile = 'users.json';
+    $usersFile = 'storage/users.json';
 
     if (!file_exists($usersFile)) {
         $errors[] = "User storage file is missing.";
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     strcasecmp($user['username'], $username) === 0 ||
                     strcasecmp($user['email'], $email) === 0
                 ) {
-                    $errors[] = "Username or email is already registered.";
+                    $errors[] = "Username is already registered.";
                     break;
                 }
             }

@@ -1,11 +1,5 @@
 <?php
 session_start();
-
-if (isset($_SESSION['user'])) {
-    // Redirect logged-in players to the game
-    header("Location: game.php");
-    exit();
-}
 ?>
 
 <!DOCTYPE html>
