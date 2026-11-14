@@ -1,6 +1,8 @@
 
 <?php
     session_start();
+    require_once __DIR__ . "/includes/story_nodes.php";
+    require_once __DIR__ . "/includes/game_functions.php";
 
     $pageTitle = "Your Adventure";
 
@@ -28,6 +30,118 @@
 
     $championMana = $champion["mana"];
     $championMaxMana = $champion["max_mana"];
+
+
+    // Load the story definitions.
+    $storyNodes = getStoryNodes();
+
+    // TEMPORARY TEST RESET — REMOVE AFTER ONE REFRESH 
+    $_SESSION["story_node"] = "introduction";
+    $_SESSION["choices_log"] = [];
+
+
+    if (!isset($_SESSION["inventory"])) {
+        $_SESSION["inventory"] = [];
+    }
+
+    // Initialize the player's story position if needed.
+    if (!isset($_SESSION["story_node"])) {
+        $_SESSION["story_node"] = "introduction";
+    }
+
+    // Retrieve the current story node.
+    $currentNodeId = $_SESSION["story_node"];
+
+    // Fall back to the introduction if the saved node is invalid.
+    if (!is_string($currentNodeId) || !isset($storyNodes[$currentNodeId])) {
+        $currentNodeId = "introduction";
+        $_SESSION["story_node"] = $currentNodeId;
+    }
+
+    $currentNode = $storyNodes[$currentNodeId];
+
+    // Process a player's story choice.
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+        $choiceId = $_POST["choice"] ?? null;
+
+        // Only accept choices belonging to the current scene.
+        if (
+            is_string($choiceId) &&
+            isset($currentNode["choices"][$choiceId])
+        ) {
+            $selectedChoice = $currentNode["choices"][$choiceId];
+
+            // Validate requirements on the server.
+            $requirements = $selectedChoice["requires"] ?? [];
+
+            if (
+                !is_array($requirements) ||
+                !meetsChoiceRequirements(
+                    $_SESSION["champion"],
+                    $requirements
+                )
+            ) {
+                // Reject the locked choice without changing the story.
+                header("Location: game.php");
+                exit;
+            }
+
+            // Only unlocked choices can advance.
+            $nextNodeId = $selectedChoice["next"];
+
+
+            // Makes sure the destination scene exists.
+            
+            if (
+                is_string($nextNodeId) &&
+                isset($storyNodes[$nextNodeId])
+            ) {
+                // Retrieve the selected choice's stat effects.
+                $effects = $selectedChoice["effects"] ?? [];
+
+                // Apply valid effects to the champion.
+                if (is_array($effects)) {
+                    $updatedState = applyStoryConsequences(
+                        $_SESSION["champion"],
+                        $_SESSION["inventory"],
+                        $effects
+                    );
+
+                    $_SESSION["champion"] = $updatedState["champion"];
+                    $_SESSION["inventory"] = $updatedState["inventory"];
+                }
+                // Initialize the decision history if necessary.
+                if (
+                    !isset($_SESSION["choices_log"]) ||
+                    !is_array($_SESSION["choices_log"])
+                ) {
+                    $_SESSION["choices_log"] = [];
+                }
+
+                // Record the player's decision.
+                $_SESSION["choices_log"][] = [
+                    "scene" => $currentNodeId,
+                    "act" => $currentNode["act"],
+                    "scene_title" => $selectedChoice["tracker_title"]
+                        ?? $currentNode["title"],
+                    "choice" => $choiceId,
+                    "choice_text" => $selectedChoice["tracker_text"]
+                        ?? $selectedChoice["text"]
+                ];
+
+
+                // Advance to the next scene.
+                $_SESSION["story_node"] = $nextNodeId;
+
+                // Prevent duplicate form submissions.
+                header("Location: game.php");
+                exit;
+            }
+
+        }
+    }
+
 
 ?>
 
@@ -57,6 +171,7 @@
     <main class="game-main">
        
         <div class="game-layout">
+            <!-- Main Game Display -->
             <section class="game-interface">
 
                 <!-- Champion Information Panel -->
@@ -75,6 +190,29 @@
                                 <?php echo htmlspecialchars((string) $championLevel); ?>
                             </p>
                         </div>
+
+                        <!-- Inventory Display -->
+                        <details class="inventory-dropdown">
+                            <summary class="inventory-toggle">
+                                Inventory
+                            </summary>
+
+                            <section class="inventory-section">
+                                <h3>Your Inventory</h3>
+
+                                <?php if (empty($_SESSION["inventory"])): ?>
+                                    <p>Your inventory is empty.</p>
+                                <?php else: ?>
+                                    <ul class="inventory-list">
+                                        <?php foreach ($_SESSION["inventory"] as $itemId): ?>
+                                            <li>
+                                                <?= htmlspecialchars($itemId) ?>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    </ul>
+                                <?php endif; ?>
+                            </section>
+                        </details>
                     </div>
 
                     <!-- Champion Statistics -->
@@ -106,16 +244,95 @@
                         </div>
 
                     </div>
+
                 </div>
 
-                <!-- Temporary story placeholder -->
+                
+                <!-- Dynamic Story Narration -->
                 <div class="game-story">
-                    <h2>Your Adventure Begins</h2>
+                    <h2>
+                        <?php echo htmlspecialchars($currentNode["title"]); ?>
+                    </h2>
+
                     <p>
-                        Your champion's journey through the Three Kingdoms
-                        is about to begin.
+                        <?php echo htmlspecialchars($currentNode["text"]); ?>
                     </p>
                 </div>
+
+                <!-- Choices --->
+                <?php if (!empty($currentNode["choices"])): ?>
+                    <section class="game-choices" aria-labelledby="choices-heading">
+                        <h2 id="choices-heading">Choose Your Path</h2>
+
+                        <div class="game-choices__grid">
+                            
+                            <?php foreach ($currentNode["choices"] as $choiceId => $choice): ?>
+
+                                <?php
+                                // Retrieve this choice's requirements.
+                                $requirements = $choice["requires"] ?? [];
+
+                                // Determine whether the champion meets them.
+                                $isUnlocked = meetsChoiceRequirements(
+                                    $champion,
+                                    $requirements
+                                );
+                                ?>
+
+                                <form action="game.php" method="POST" class="game-choice">
+                                    <input
+                                        type="hidden"
+                                        name="choice"
+                                        value="<?php echo htmlspecialchars($choiceId); ?>"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="game-choice__button<?php echo $isUnlocked ? '' : ' game-choice__button--locked'; ?>"
+                                        <?php echo $isUnlocked ? '' : 'disabled'; ?>
+                                    >
+                                        <strong>
+                                            <?php echo htmlspecialchars($choice["text"]); ?>
+                                        </strong>
+
+                                        <span>
+                                            <?php echo htmlspecialchars($choice["description"]); ?>
+                                        </span>
+
+                                        <?php if (!$isUnlocked): ?>
+                                            <span class="game-choice__requirement">
+
+                                                <?php foreach ($requirements as $stat => $minimum): ?>
+                                                    <?php
+                                                    $current = $champion[$stat] ?? 0;
+                                                    $missing = max(0, $minimum - $current);
+                                                    ?>
+
+                                                    <span class="game-choice__requirement-detail">
+                                                        <?php echo htmlspecialchars(ucfirst($stat)); ?>:
+                                                        <?php echo htmlspecialchars((string) $current); ?>
+                                                        /
+                                                        <?php echo htmlspecialchars((string) $minimum); ?>
+
+                                                        <?php if ($missing > 0): ?>
+                                                            <small>
+                                                                (Need <?php echo htmlspecialchars((string) $missing); ?> more)
+                                                            </small>
+                                                        <?php endif; ?>
+                                                    </span>
+                                                <?php endforeach; ?>
+                                            </span>
+                                        <?php endif; ?>
+
+                                    </button>
+                                </form>
+
+                            <?php endforeach; ?>
+
+                        </div>
+                        
+                    </section>
+                <?php endif; ?>
 
             </section>
 
@@ -124,9 +341,30 @@
                 <h2 id="tracker-heading">Story Path Tracker</h2>
 
                 <div class="game-tracker__history">
-                    <p>Your journey has just begun.</p>
+                    <?php
+                    $choicesLog = $_SESSION["choices_log"] ?? [];
+                    ?>
+
+                    <?php if (empty($choicesLog)): ?>
+                        <p>Your journey has just begun.</p>
+                    <?php else: ?>
+                        <ol class="game-tracker__list">
+                            <?php foreach ($choicesLog as $entry): ?>
+                                <li class="game-tracker__entry">
+                                    <strong>
+                                        <?php echo htmlspecialchars($entry["scene_title"]); ?>
+                                    </strong>
+
+                                    <span>
+                                        <?php echo htmlspecialchars($entry["choice_text"]); ?>
+                                    </span>
+                                </li>
+                            <?php endforeach; ?>
+                        </ol>
+                    <?php endif; ?>
                 </div>
             </aside>
+
         </div>
 
     </main>
