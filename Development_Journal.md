@@ -90,3 +90,20 @@
 - Continue developing the adventure flow and story progression.
 - Connect character confirmation to the actual game interface.
 - Implement additional PHP session-based game mechanics.
+
+### November 14, 2026 — Story Engine and Inventory Foundation
+
+**Completed:**
+- Implemented categorized story choice effects.
+- Connected stat and inventory consequences to the story engine.
+- Added session-based inventory storage.
+- Implemented inventory item addition and removal.
+- Created an expandable inventory interface within the Champion panel.
+- Verified that stat changes and inventory updates persist across page refreshes.
+- Tested inventory rewards and removal through story choices.
+
+**Next Steps:**
+- Implement faction and NPC trust tracking.
+- Add story flags and advanced choice requirements.
+- Continue developing the Insight Relic and remaining core story engine features.
+

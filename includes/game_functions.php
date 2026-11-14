@@ -158,7 +158,7 @@ function applyStatEffects(array $champion, array $effects): array {
  * - flags
  *
  */
-function applyStoryConsequences( array $champion, array $inventory, array $effects): array {
+function applyStoryConsequences( array $champion, array $inventory, array $flags, array $effects): array {
     // Apply champion stat changes.
     $statEffects = $effects["stats"] ?? [];
 
@@ -179,13 +179,31 @@ function applyStoryConsequences( array $champion, array $inventory, array $effec
         );
     }
 
-    // Future handlers:
-    // NPC and faction trust changes
+    // Apply faction relationship changes.
+    $trustEffects = $effects["trust"] ?? [];
+
+    if (is_array($trustEffects)) {
+        $champion = applyTrustEffects(
+            $champion,
+            $trustEffects
+        );
+    }
+
     // Story flags
+    $flagEffects = $effects["flags"] ?? [];
+
+    if (is_array($flagEffects)) {
+        $flags = applyFlagEffects(
+            $flags,
+            $flagEffects
+        );
+    }
+
 
     return [
         "champion" => $champion,
-        "inventory" => $inventory
+        "inventory" => $inventory,
+        "flags" => $flags
     ];
 }
 
@@ -228,6 +246,184 @@ function applyInventoryEffects( array $inventory, array $effects): array {
     // Reindex the inventory after removing items.
     return array_values($inventory);
 }
+
+
+/**
+ * Determine which rival champion the player
+ * encounters first in Act 1 based on their faction.
+ */
+function getFirstRival(string $faction): ?string
+{
+    $encounters = [
+        "warrior" => "rogue",
+        "rogue" => "mage",
+        "mage" => "warrior"
+    ];
+
+    return $encounters[$faction] ?? null;
+}
+
+
+/**
+ * Resolve a relationship target based on
+ * the player's selected faction.
+ */
+function resolveRelationshipTarget( string $target, string $playerFaction): ?string {
+    if ($target === "first_rival") {
+        return getFirstRival($playerFaction);
+    }
+
+    $validFactions = ["warrior", "mage", "rogue"];
+
+    if (in_array($target, $validFactions, true)) {
+        return $target;
+    }
+
+    return null;
+}
+
+
+/**
+ * Apply relationship changes from story choices.
+ *
+ * Positive values increase trust.
+ * Negative values decrease trust.
+ * Trust is always limited to 0–100.
+ */
+function applyTrustEffects(array $champion, array $effects): array {
+    $playerFaction = $champion["faction"];
+
+    foreach ($effects as $target => $change) {
+
+        // Ignore invalid trust changes.
+        if (!is_string($target) || !is_numeric($change)) {
+            continue;
+        }
+
+        // Convert dynamic targets into actual factions.
+        $resolvedTarget = resolveRelationshipTarget(
+            $target,
+            $playerFaction
+        );
+
+        // Ignore unknown relationship targets.
+        if (
+            $resolvedTarget === null ||
+            !isset($champion["relationships"][$resolvedTarget])
+        ) {
+            continue;
+        }
+
+        // Keep the player's own faction at maximum trust.
+        if ($resolvedTarget === $playerFaction) {
+            continue;
+        }
+
+        // Apply the change and enforce the 0–100 limits.
+        $currentTrust = $champion["relationships"][$resolvedTarget];
+
+        $champion["relationships"][$resolvedTarget] = max(
+            0,
+            min(100, $currentTrust + $change)
+        );
+    }
+
+    return $champion;
+}
+
+
+/**
+ * Convert a numerical trust value into
+ * a descriptive relationship tier.
+ */
+function getRelationshipTier(int $trust): string
+{
+    $trust = max(0, min(100, $trust));
+
+    switch (true) {
+        case $trust <= 20:
+            return "Hostile";
+
+        case $trust <= 40:
+            return "Wary";
+
+        case $trust <= 59:
+            return "Neutral";
+
+        case $trust <= 79:
+            return "Cooperative";
+
+        case $trust <= 89:
+            return "Trusted";
+
+        default:
+            return "Fully Trusted";
+    }
+}
+
+
+/**
+ * Retrieve the relationship status of a rival champion.
+ *
+ * Returns null if the target is invalid or
+ * belongs to the player's own faction.
+ */
+function getRivalRelationshipStatus(array $champion, string $target): ?string {
+    $playerFaction = $champion["faction"] ?? null;
+
+    if (!is_string($playerFaction)) {
+        return null;
+    }
+
+    $rivalFaction = resolveRelationshipTarget(
+        $target,
+        $playerFaction
+    );
+
+    // Reject invalid targets and the player's own faction.
+    if (
+        $rivalFaction === null ||
+        $rivalFaction === $playerFaction
+    ) {
+        return null;
+    }
+
+    // Retrieve the stored relationship value.
+    $trust = $champion["relationships"][$rivalFaction] ?? null;
+
+    if (!is_numeric($trust)) {
+        return null;
+    }
+
+    // Convert the hidden number into a visible tier.
+    return getRelationshipTier((int) $trust);
+}
+
+
+/**
+ * Apply story flag changes caused by player choices.
+ *
+ * True means an event occurred.
+ * False means the event was cleared or reversed.
+ */
+function applyFlagEffects(array $flags, array $effects): array {
+    foreach ($effects as $flag => $value) {
+        if (
+            !is_string($flag) ||
+            $flag === "" ||
+            !is_bool($value)
+        ) {
+            continue;
+        }
+        $flags[$flag] = $value;
+    }
+
+    return $flags;
+}
+
+
+
+
 
 
 

@@ -44,6 +44,13 @@
         $_SESSION["inventory"] = [];
     }
 
+
+    // Initialize persistent story flags.
+    if (!isset($_SESSION["story_flags"])) {
+        $_SESSION["story_flags"] = [];
+    }
+
+
     // Initialize the player's story position if needed.
     if (!isset($_SESSION["story_node"])) {
         $_SESSION["story_node"] = "introduction";
@@ -105,11 +112,13 @@
                     $updatedState = applyStoryConsequences(
                         $_SESSION["champion"],
                         $_SESSION["inventory"],
+                        $_SESSION["story_flags"],
                         $effects
                     );
 
                     $_SESSION["champion"] = $updatedState["champion"];
                     $_SESSION["inventory"] = $updatedState["inventory"];
+                    $_SESSION["story_flags"] = $updatedState["flags"];
                 }
                 // Initialize the decision history if necessary.
                 if (
