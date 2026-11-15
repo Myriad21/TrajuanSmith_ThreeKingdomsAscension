@@ -11,7 +11,6 @@ $username = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
-    $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
     $confirmPassword = $_POST['confirm_password'] ?? '';
 
@@ -44,8 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             foreach ($users as $user) {
                 if (
-                    strcasecmp($user['username'], $username) === 0 ||
-                    strcasecmp($user['email'], $email) === 0
+                    strcasecmp($user['username'], $username) === 0
                 ) {
                     $errors[] = "Username is already registered.";
                     break;
@@ -58,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $newUser = [
             'id' => count($users) + 1,
             'username' => $username,
-            'email' => $email,
             'password' => password_hash(
                 $password,
                 PASSWORD_DEFAULT
