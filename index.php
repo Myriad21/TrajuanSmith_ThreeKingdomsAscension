@@ -44,7 +44,7 @@ session_start();
         <!-- Hero section with Register and Login button -->
         <div class="hero-section">
             <div class="title-section">
-                <img src="images/scroll-banner.png">
+                <img src="assets/images/scroll-banner.png">
                 <h1>Three Kingdoms Ascension</h1>
                 <p>Three Kingdoms. Three Champions. One Legendary Artifact.</p>
             </div>
@@ -69,15 +69,15 @@ session_start();
             
             <div class="faction-section">
                 <div class="interactive-card" id="warrior-faction">
-                    <img src="images/factions/warrior-symbol.jpg">
+                    <img src="assets/images/factions/warrior-symbol.jpg">
                     <h3>Warriors</h3>
                 </div>
                 <div class="interactive-card" id="warrior-faction">
-                    <img src="images/factions/mage-symbol.jpg">
+                    <img src="assets/images/factions/mage-symbol.jpg">
                     <h3>Mages</h3>
                 </div>
                 <div class="interactive-card" id="warrior-faction">
-                    <img src="images/factions/rogue-symbol.jpg">
+                    <img src="assets/images/factions/rogue-symbol.jpg">
                     <h3>Rogues</h3>
                 </div>
             </div>

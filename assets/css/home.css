@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
 /* Body and main with flexbox layout and background*/
 body {
-  background-image: url('../../images/home-background.jpg');
+  background-image: url('../images/home-background.jpg');
   background-size: cover;
   background-repeat: no-repeat;
 }
