@@ -1,0 +1,121 @@
+/* =========================================
+   INSIGHT RELIC
+   Choice guidance and hover interactions
+   ========================================= */
+
+/* 1. Insight Relic panel */
+.insight-relic {
+    margin-top: 20px;
+    padding: 24px;
+    border: 1px solid rgba(184, 145, 97, 0.25);
+    border-radius: 12px;
+    background-color: #30363a;
+}
+
+/* 2. Header */
+.insight-relic__header h2 {
+    margin: 0 0 8px;
+    color: #b89161;
+    font-size: 1.5rem;
+}
+
+.insight-relic__header p {
+    margin: 0 0 20px;
+    color: #c9c9c9;
+    font-size: 0.95rem;
+}
+
+/* 3. Content */
+.insight-relic__content {
+    min-height: 55px;
+}
+
+.insight-relic__default {
+    display: block;
+    margin: 0;
+    color: #d6d6d6;
+    line-height: 1.7;
+}
+
+.insight-relic__advice {
+    display: none;
+}
+
+/* 4. Hide the default only when a matching choice is inspected.
+   The positional selectors below support up to six choices per node. */
+.game-interface:has(.game-choice:is(:hover, :focus-within))
+    .insight-relic__default {
+    display: none;
+}
+
+/* 5. Match choice position to advice position.
+   :nth-child(N of .game-choice) counts only choice elements,
+   regardless of other siblings in the choices container.
+   The advice selector likewise counts only advice elements. */
+.game-interface:has(.game-choice:nth-child(1 of .game-choice):is(:hover, :focus-within))
+    .insight-relic__advice:nth-child(1 of .insight-relic__advice),
+.game-interface:has(.game-choice:nth-child(2 of .game-choice):is(:hover, :focus-within))
+    .insight-relic__advice:nth-child(2 of .insight-relic__advice),
+.game-interface:has(.game-choice:nth-child(3 of .game-choice):is(:hover, :focus-within))
+    .insight-relic__advice:nth-child(3 of .insight-relic__advice),
+.game-interface:has(.game-choice:nth-child(4 of .game-choice):is(:hover, :focus-within))
+    .insight-relic__advice:nth-child(4 of .insight-relic__advice),
+.game-interface:has(.game-choice:nth-child(5 of .game-choice):is(:hover, :focus-within))
+    .insight-relic__advice:nth-child(5 of .insight-relic__advice),
+.game-interface:has(.game-choice:nth-child(6 of .game-choice):is(:hover, :focus-within))
+    .insight-relic__advice:nth-child(6 of .insight-relic__advice) {
+    display: block;
+}
+
+/* 6. Advice text */
+.insight-relic__custom {
+    margin: 0;
+    color: #f1e7d8;
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.insight-relic__automatic {
+    margin: 12px 0 0;
+    color: #d4b68a;
+    font-size: 0.9rem;
+    font-style: italic;
+    line-height: 1.6;
+}
+
+
+/* LOCKED CHOICE GUIDANCE */
+
+.insight-relic__locked {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background-color: rgba(239, 68, 68, 0.08);
+    border-left: 3px solid #ef4444;
+    border-radius: 6px;
+}
+
+.insight-relic__locked-title {
+    margin: 0 0 6px;
+    color: #fca5a5;
+    font-weight: 700;
+}
+
+.insight-relic__locked-detail {
+    margin: 0;
+    color: #d6d6d6;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+
+/* 7. Responsive design */
+@media (max-width: 600px) {
+    .insight-relic {
+        padding: 18px;
+        margin-top: 16px;
+    }
+
+    .insight-relic__header h2 {
+        font-size: 1.3rem;
+    }
+}
