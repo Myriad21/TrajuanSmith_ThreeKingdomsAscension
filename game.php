@@ -36,8 +36,8 @@
     $storyNodes = getStoryNodes();
 
     // TEMPORARY TEST RESET — REMOVE AFTER ONE REFRESH 
-    //$_SESSION["story_node"] = "introduction";
-    //$_SESSION["choices_log"] = [];
+    $_SESSION["story_node"] = "introduction";
+    $_SESSION["choices_log"] = [];
 
 
     if (!isset($_SESSION["inventory"])) {
@@ -109,8 +109,13 @@
                 // Retrieve the selected choice's stat effects.
                 $effects = $selectedChoice["effects"] ?? [];
 
+                $championBefore = $_SESSION["champion"];
+                $inventoryBefore = $_SESSION["inventory"];
+                $flagsBefore = $_SESSION["story_flags"];
+
                 // Apply valid effects to the champion.
                 if (is_array($effects)) {
+
                     $updatedState = applyStoryConsequences(
                         $_SESSION["champion"],
                         $_SESSION["inventory"],
@@ -122,6 +127,20 @@
                     $_SESSION["inventory"] = $updatedState["inventory"];
                     $_SESSION["story_flags"] = $updatedState["flags"];
                 }
+
+                // Save the player's state AFTER the decision.
+                $championAfter = $_SESSION["champion"];
+                $inventoryAfter = $_SESSION["inventory"];
+                $flagsAfter = $_SESSION["story_flags"];
+
+                // Generate a summary using the actual stat changes.
+                $consequenceSummary = getChoiceConsequenceSummary(
+                    $championBefore,
+                    $championAfter,
+                    $inventoryBefore,
+                    $inventoryAfter
+                );
+                
                 // Initialize the decision history if necessary.
                 if (
                     !isset($_SESSION["choices_log"]) ||
@@ -141,6 +160,12 @@
                         ?? $selectedChoice["text"]
                 ];
 
+
+                // Remember the latest decision and its consequences.
+                $_SESSION["last_choice_summary"] = [
+                    "choice" => $selectedChoice["text"],
+                    "consequences" => $consequenceSummary
+                ];
 
                 // Advance to the next scene.
                 $_SESSION["story_node"] = $nextNodeId;
@@ -271,6 +296,60 @@
                         <?php echo htmlspecialchars($currentNode["text"]); ?>
                     </p>
                 </div>
+
+                <!-- Post-Choice Consequence Summary -->
+               <?php
+                    // Retrieve the most recent decision summary.
+                    $lastChoiceSummary = $_SESSION["last_choice_summary"] ?? null;
+
+                    // Clear the pending notification after retrieving it.
+                    unset($_SESSION["last_choice_summary"]);
+                ?>
+
+
+                <?php if (is_array($lastChoiceSummary)): ?>
+                    <section
+                        class="game-consequences game-consequences--notification"
+                        id="consequence-notification"
+                        role="status"
+                        aria-label="Decision consequences">
+
+                        <div class="game-consequences__header">
+                            <h2>Decision Recorded</h2>
+                        </div>
+
+
+                        <p class="game-consequences__choice">
+                            You chose:
+                            <strong>
+                                <?= htmlspecialchars($lastChoiceSummary["choice"]) ?>
+                            </strong>
+                        </p>
+
+                        <?php if (!empty($lastChoiceSummary["consequences"])): ?>
+
+                            <div class="game-consequences__effects">
+
+                                <?php foreach ($lastChoiceSummary["consequences"] as $effect): ?>
+
+                                    <span class="game-consequences__effect game-consequences__effect--<?= htmlspecialchars($effect["type"]) ?>">
+                                        <?= htmlspecialchars($effect["text"]) ?>
+                                    </span>
+
+                                <?php endforeach; ?>
+
+                            </div>
+
+                        <?php else: ?>
+
+                            <p class="game-consequences__empty">
+                                Your decision has shaped the path ahead.
+                            </p>
+
+                        <?php endif; ?>
+
+                    </section>
+                <?php endif; ?>
 
                 <!-- Choices --->
                 <?php if (!empty($currentNode["choices"])): ?>

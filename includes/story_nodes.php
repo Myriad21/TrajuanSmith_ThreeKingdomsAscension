@@ -47,7 +47,7 @@ function getStoryNodes(): array
                         "stats" => [],
                         "inventory" => [
                             "add" => [],
-                            "remove" => []
+                            "remove" => ["Sowrd"]
                         ],
                         "trust" => [],
                         "flags" => []

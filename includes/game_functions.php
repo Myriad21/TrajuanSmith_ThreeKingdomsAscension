@@ -570,6 +570,138 @@ function getInsightRelicHint(array $effects): ?string
 }
 
 
+/**
+ * Generate a summary of the actual consequences
+ * caused by a player's story choice.
+ *
+ * Supports stats, inventory, and relationship changes.
+ */
+function getChoiceConsequenceSummary( array $championBefore,
+    array $championAfter,
+    array $inventoryBefore,
+    array $inventoryAfter
+): array {
+
+    $summary = [];
+
+    // 1. STAT CONSEQUENCES
+    $statNames = [
+        "hp" => "HP",
+        "strength" => "Strength",
+        "mana" => "Mana"
+    ];
+
+    // Compare actual stats before and after the decision.
+    foreach ($statNames as $stat => $displayName) {
+
+        $before = $championBefore[$stat] ?? null;
+        $after = $championAfter[$stat] ?? null;
+
+        if (!is_numeric($before) || !is_numeric($after)) {
+            continue;
+        }
+
+        $change = $after - $before;
+
+        // Ignore stats that did not change.
+        if ($change == 0) {
+            continue;
+        }
+
+        $sign = $change > 0 ? "+" : "";
+
+        $summary[] = [
+            "text" => $sign . $change . " " . $displayName,
+            "type" => $change > 0 ? "positive" : "negative"
+        ];
+    }
+
+    // 2. INVENTORY CONSEQUENCES
+
+    // Count how many copies of each item existed.
+    $itemsBefore = array_count_values($inventoryBefore);
+    $itemsAfter = array_count_values($inventoryAfter);
+
+    // Collect all items from both inventories.
+    $allItems = array_unique(array_merge(
+        array_keys($itemsBefore),
+        array_keys($itemsAfter)
+    ));
+
+    foreach ($allItems as $itemId) {
+
+        $beforeCount = $itemsBefore[$itemId] ?? 0;
+        $afterCount = $itemsAfter[$itemId] ?? 0;
+
+        $change = $afterCount - $beforeCount;
+
+        // Ignore items whose quantities did not change.
+        if ($change === 0) {
+            continue;
+        }
+
+        // Convert item IDs into readable names.
+        $itemName = ucwords(str_replace("_", " ", $itemId));
+
+        $sign = $change > 0 ? "+" : "";
+
+        $summary[] = [
+            "text" => $sign . $change . " " . $itemName,
+            "type" => $change > 0 ? "positive" : "negative"
+        ];
+    }
+
+    // 3. RELATIONSHIP CONSEQUENCES
+
+    // Compare actual relationship values.
+    // Never display the hidden numerical values.
+
+    $relationshipsBefore = $championBefore["relationships"] ?? [];
+    $relationshipsAfter = $championAfter["relationships"] ?? [];
+
+    $hasPositiveChange = false;
+    $hasNegativeChange = false;
+
+    foreach ($relationshipsAfter as $faction => $afterTrust) {
+
+        $beforeTrust = $relationshipsBefore[$faction] ?? null;
+
+        if (
+            !is_numeric($beforeTrust) ||
+            !is_numeric($afterTrust)
+        ) {
+            continue;
+        }
+
+        $change = $afterTrust - $beforeTrust;
+
+        if ($change > 0) {
+            $hasPositiveChange = true;
+        } elseif ($change < 0) {
+            $hasNegativeChange = true;
+        }
+    }
+
+    if ($hasPositiveChange) {
+        $summary[] = [
+            "text" => "Your relationship has improved",
+            "type" => "positive"
+        ];
+    }
+
+    if ($hasNegativeChange) {
+        $summary[] = [
+            "text" => "Your relationship has worsened",
+            "type" => "negative"
+        ];
+    }
+
+    return $summary;
+}
+
+
+
+
 
 
 
