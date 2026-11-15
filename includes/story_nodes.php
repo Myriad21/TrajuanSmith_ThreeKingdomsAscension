@@ -31,6 +31,9 @@ function getStoryNodes(): array
                 "investigate" => [
                     "text" => "Investigate the rumors",
                     "description" => "Gather information before beginning your expedition.",
+                    
+                    "insight_text" => "Knowledge can reveal opportunities that strength alone cannot. Investigating these rumors may uncover valuable information about the artifact.",
+
                     "next" => "expedition_start",
                     
                     "requires" => [
@@ -58,6 +61,9 @@ function getStoryNodes(): array
                 "prepare" => [
                     "text" => "Prepare for the expedition",
                     "description" => "Strengthen your preparations before leaving the kingdom.",
+                    
+                    "insight_text" => "Preparation may improve your chances of surviving the dangers ahead. However, delaying your investigation could allow others to reach the artifact first.",
+                    
                     "next" => "expedition_start",
                     
                     "requires" => [

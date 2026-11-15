@@ -36,8 +36,8 @@
     $storyNodes = getStoryNodes();
 
     // TEMPORARY TEST RESET — REMOVE AFTER ONE REFRESH 
-    $_SESSION["story_node"] = "introduction";
-    $_SESSION["choices_log"] = [];
+    //$_SESSION["story_node"] = "introduction";
+    //$_SESSION["choices_log"] = [];
 
 
     if (!isset($_SESSION["inventory"])) {
@@ -279,7 +279,13 @@
 
                         <div class="game-choices__grid">
                             
+                            
+                            <?php $choiceIndex = 0; ?>
+
                             <?php foreach ($currentNode["choices"] as $choiceId => $choice): ?>
+
+                                <?php $choiceIndex++; ?>
+
 
                                 <?php
                                 // Retrieve this choice's requirements.
@@ -302,7 +308,7 @@
 
                                 ?>
 
-                                <form action="game.php" method="POST" class="game-choice">
+                                <form action="game.php" method="POST" class="game-choice" style="--choice-index: <?= $choiceIndex ?>">
                                     <input
                                         type="hidden"
                                         name="choice"
@@ -381,6 +387,181 @@
                         
                     </section>
                 <?php endif; ?>
+
+
+                <!-- Insight Relic Adviser -->
+                <section class="insight-relic" aria-labelledby="insight-relic-heading">
+
+                    <div class="insight-relic__header">
+                        <h2 id="insight-relic-heading">Insight Relic</h2>
+                        <p>Ancient guidance for the path ahead</p>
+                    </div>
+
+                    <div class="insight-relic__content">
+
+                        <!-- Default message -->
+                        <p class="insight-relic__default">
+                            The relic hums softly. Examine a possible path
+                            to reveal its guidance.
+                        </p>
+
+                        <!-- Choice-specific guidance -->
+                        <?php $adviceIndex = 0; ?>
+
+                        <?php foreach ($currentNode["choices"] ?? [] as $choiceId => $choice): ?>
+
+                            <?php $adviceIndex++; ?>
+
+
+                            <?php
+                                $customInsight = $choice["insight_text"] ?? "";
+
+                                $automaticInsight = getInsightRelicHint(
+                                    $choice["effects"] ?? []
+                                );
+
+                                $requirements = $choice["requires"] ?? [];
+
+                                $isInsightUnlocked = meetsChoiceRequirements(
+                                    $champion,
+                                    $_SESSION["inventory"],
+                                    $_SESSION["story_flags"],
+                                    $requirements
+                                );
+
+                            ?>
+
+                            <div class="insight-relic__advice"
+                                data-choice="<?= htmlspecialchars($choiceId) ?>"
+                                style="--advice-index: <?= $adviceIndex ?>"
+                                >
+
+                                <?php if ($customInsight !== ""): ?>
+                                    <p class="insight-relic__custom">
+                                        <?= htmlspecialchars($customInsight) ?>
+                                    </p>
+                                <?php endif; ?>
+
+                                <?php if ($automaticInsight !== null): ?>
+                                    <p class="insight-relic__automatic">
+                                        <?= htmlspecialchars($automaticInsight) ?>
+                                    </p>
+                                <?php endif; ?>
+
+                                <?php if (!$isInsightUnlocked): ?>
+                                    <div class="insight-relic__locked">
+                                        <p class="insight-relic__locked-title">
+                                            Path Currently Unavailable
+                                        </p>
+
+                                        <?php foreach (($requirements["stats"] ?? []) as $stat => $minimum): ?>
+                                            <?php
+                                                $current = $champion[$stat] ?? 0;
+
+                                                if (!is_numeric($minimum) || $current >= $minimum) {
+                                                    continue;
+                                                }
+
+                                                $missing = $minimum - $current;
+                                                $statName = ucfirst($stat);
+                                            ?>
+
+                                            <p class="insight-relic__locked-detail">
+                                                Requires <?= htmlspecialchars((string) $minimum) ?>
+                                                <?= htmlspecialchars($statName) ?>.
+                                                Your current <?= htmlspecialchars($statName) ?>
+                                                is <?= htmlspecialchars((string) $current) ?>,
+                                                so you need <?= htmlspecialchars((string) $missing) ?> more.
+                                            </p>
+                                        <?php endforeach; ?>
+
+                                        <?php foreach (($requirements["inventory"] ?? []) as $itemId): ?>
+
+                                            <?php
+                                                if (
+                                                    !is_string($itemId) ||
+                                                    in_array($itemId, $_SESSION["inventory"], true)
+                                                ) {
+                                                    continue;
+                                                }
+
+                                                // Convert item IDs into readable names.
+                                                $itemName = ucwords(
+                                                    str_replace("_", " ", $itemId)
+                                                );
+                                            ?>
+
+                                            <p class="insight-relic__locked-detail">
+                                                This path requires
+                                                <?= htmlspecialchars($itemName) ?>,
+                                                which is not currently in your inventory.
+                                            </p>
+
+                                        <?php endforeach; ?>
+
+                                        <?php
+                                            $missingStoryCondition = false;
+
+                                            foreach (($requirements["flags"] ?? []) as $flag => $expected) {
+
+                                                if (
+                                                    !is_string($flag) ||
+                                                    !is_bool($expected) ||
+                                                    ($_SESSION["story_flags"][$flag] ?? false) !== $expected
+                                                ) {
+                                                    $missingStoryCondition = true;
+                                                    break;
+                                                }
+                                            }
+                                        ?>
+
+                                        <?php if ($missingStoryCondition): ?>
+                                            <p class="insight-relic__locked-detail">
+                                                This path depends on an earlier discovery
+                                                or decision that has not been fulfilled.
+                                            </p>
+                                        <?php endif; ?>
+
+                                        <?php
+                                            $missingTrustRequirement = false;
+
+                                            foreach (($requirements["trust"] ?? []) as $target => $minimumTrust) {
+
+                                                $resolvedTarget = resolveRelationshipTarget(
+                                                    $target,
+                                                    $champion['faction']
+                                                );
+
+                                                $currentTrust = $champion["relationships"][$resolvedTarget] ?? 0;
+
+                                                if ($currentTrust < $minimumTrust) {
+                                                    $missingTrustRequirement = true;
+                                                    break;
+                                                }
+                                            }
+                                        ?>
+
+                                        <?php if ($missingTrustRequirement): ?>
+                                            <p class="insight-relic__locked-detail">
+                                                This path requires a stronger relationship
+                                                with another champion. Build their trust
+                                                through your decisions before attempting it.
+                                            </p>
+                                        <?php endif; ?>
+
+
+                                    </div>
+                                <?php endif; ?>
+
+
+                            </div>
+
+                        <?php endforeach; ?>
+
+                    </div>
+
+                </section>
+
 
             </section>
 

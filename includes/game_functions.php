@@ -524,6 +524,52 @@ function getChoiceStatPreviews(array $effects): array
 }
 
 
+/**
+ * Generate Insight Relic guidance for a story choice.
+ *
+ * Relationship changes are described narratively.
+ * Exact trust values remain hidden.
+ */
+function getInsightRelicHint(array $effects): ?string
+{
+    $trustEffects = $effects["trust"] ?? [];
+
+    if (!is_array($trustEffects) || empty($trustEffects)) {
+        return null;
+    }
+
+    $hasPositiveChange = false;
+    $hasNegativeChange = false;
+
+    foreach ($trustEffects as $change) {
+
+        if (!is_numeric($change)) {
+            continue;
+        }
+
+        if ($change > 0) {
+            $hasPositiveChange = true;
+        } elseif ($change < 0) {
+            $hasNegativeChange = true;
+        }
+    }
+
+    if ($hasPositiveChange && $hasNegativeChange) {
+        return "This decision may strengthen some alliances while straining others.";
+    }
+
+    if ($hasPositiveChange) {
+        return "This decision may improve your relationship with another champion.";
+    }
+
+    if ($hasNegativeChange) {
+        return "This decision may damage your relationship with another champion.";
+    }
+
+    return null;
+}
+
+
 
 
 
