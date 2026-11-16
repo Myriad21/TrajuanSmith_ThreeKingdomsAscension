@@ -1,0 +1,715 @@
+
+/* Combat Page Layout */
+
+
+main.combat-main {
+    width: calc(100% - 64px);
+    max-width: 1600px;
+    margin: 32px auto 60px;
+}
+
+.combat-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: 24px;
+    align-items: start;
+}
+
+.combat-interface {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+
+}
+
+
+/* Champion Information */
+
+.combat-champion {
+    background: var(--bg-panel);
+    border: 1px solid var(--border-default);
+    border-radius: 12px;
+    padding: 16px 24px;
+}
+
+.combat-champion__identity {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.combat-champion__identity h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: var(--text-primary);
+}
+
+.combat-champion__identity p {
+    margin: 0;
+    color: var(--text-secondary);
+}
+
+
+.combat-champion__stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.combat-champion__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+
+    padding: 10px 16px;
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    background-color: var(--bg-primary);
+}
+
+.combat-champion__stat span {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.combat-champion__stat strong {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+}
+
+
+/* Battle Encounter */
+
+.combat-battle {
+    background: #303539;
+    border: 1px solid #454b50;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.combat-battle__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.combat-battle__heading h2 {
+    margin: 0;
+    color: #b99468;
+    font-size: 1.65rem;
+}
+
+.combat-battle__heading span {
+    color: #c9c9c9;
+    font-size: 0.95rem;
+}
+
+.combat-battle__fighters {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+/* Combatant Cards */
+
+.combat-fighter {
+    background: #1b1d20;
+    border: 1px solid #44494e;
+    border-radius: 10px;
+    padding: 24px 18px;
+    text-align: center;
+}
+
+.combat-fighter h3 {
+    margin: 0 0 10px;
+    color: #f1eeee;
+    font-size: 1.25rem;
+}
+
+.combat-fighter p {
+    color: #bcbcbc;
+    font-size: 0.95rem;
+}
+
+.combat-fighter__health {
+    width: 100%;
+    height: 12px;
+    margin-top: 20px;
+
+    background: #414347;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.combat-fighter__health-fill {
+    height: 100%;
+    border-radius: inherit;
+    transition: width 0.3s ease;
+}
+
+.combat-fighter--player .combat-fighter__health-fill {
+    background: #549b77;
+}
+
+.combat-fighter--enemy .combat-fighter__health-fill {
+    background: #bd6965;
+}
+
+.combat-fighter__health-text {
+    margin: 10px 0 0;
+    font-weight: 600;
+}
+
+
+/* Combat Actions */
+
+.combat-actions {
+    background: #303539;
+    border: 1px solid #454b50;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.combat-actions h2 {
+    margin: 0 0 20px;
+    color: #b99468;
+    font-size: 1.65rem;
+}
+
+.combat-actions__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.combat-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    min-height: 105px;
+    padding: 18px;
+
+    background: #1b1d20;
+    border: 1px solid #44494e;
+    border-radius: 10px;
+
+    color: #f1eeee;
+    font: inherit;
+    text-align: center;
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.combat-action:hover {
+    background: #292d31;
+    border-color: #b99468;
+    transform: translateY(-2px);
+}
+
+
+.combat-action:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.combat-action:disabled:hover {
+    transform: none;
+}
+
+
+.combat-action:focus-visible {
+    outline: 2px solid #b99468;
+    outline-offset: 3px;
+}
+
+.combat-action__title {
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.combat-action__description {
+    color: #bcbcbc;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+
+/*
+   Special Abilities Panel
+ */
+
+
+.combat-specials {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    display: none;
+
+    padding: 22px;
+    background: #25292d;
+    border: 1px solid #454b50;
+    border-radius: 12px;
+}
+
+
+.combat-specials h3 {
+    margin: 0 0 18px;
+
+    color: #b99468;
+    font-size: 1.35rem;
+}
+
+.combat-specials__ability {
+    padding: 20px;
+    margin-bottom: 14px;
+
+    background: #1b1d20;
+    border: 1px solid #44494e;
+    border-radius: 10px;
+}
+
+.combat-specials__ability:last-child {
+    margin-bottom: 0;
+}
+
+.combat-specials__ability h4 {
+    margin: 0 0 10px;
+
+    color: #f0e4d4;
+    font-size: 1.2rem;
+}
+
+.combat-specials__ability p {
+    margin: 0 0 12px;
+
+    color: #c9c9c9;
+    line-height: 1.6;
+}
+
+.combat-specials__ability form {
+    margin-top: 16px;
+}
+
+.combat-specials__ability .combat-action {
+    width: 100%;
+    text-align: center;
+}
+
+
+
+/* 
+   Combat Results
+    */
+
+.combat-result__message {
+    margin: 0 0 12px;
+    padding: 16px 20px;
+
+    background: var(--bg-primary);
+    border: 1px solid var(--border-default);
+    border-left: 4px solid var(--accent-secondary);
+    border-radius: 8px;
+
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.6;
+}
+
+.combat-result__description {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+
+
+/* 
+   Combat Log
+ */
+
+.combat-log {
+    background: #303539;
+    border: 1px solid #454b50;
+    border-radius: 12px;
+    padding: 24px;
+    min-width: 0;
+
+}
+
+.combat-log h2 {
+    margin: 0 0 18px;
+    color: #b99468;
+    font-size: 1.65rem;
+}
+
+
+.combat-log__entries {
+    background: #1b1d20;
+    border: 1px solid #44494e;
+    border-radius: 10px;
+    padding: 6px 18px;
+
+    max-height: 420px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.combat-log__entry {
+    margin: 0;
+    padding: 14px 0;
+    color: #dedede;
+    line-height: 1.6;
+}
+
+.combat-log__entry + .combat-log__entry {
+    border-top: 1px solid #383d42;
+}
+
+
+/*
+   Rogue Special Ability Theme
+ */
+
+.combat-specials__ability--rogue {
+    background: linear-gradient(
+        135deg,
+        #282135 0%,
+        #211d2b 55%,
+        #1b1d20 100%
+    );
+
+    border: 1px solid #59466e;
+}
+
+.combat-specials__ability--rogue h4 {
+    color: #d8b9f2;
+}
+
+.combat-specials__ability--rogue p {
+    color: #c9bfd4;
+}
+
+.combat-specials__ability--rogue .combat-action {
+    border-color: #67517d;
+}
+
+
+/* Shadow Strike ability button */
+
+.combat-action--shadow_strike {
+    background-image:
+        linear-gradient(
+            rgba(22, 13, 32, 0.68),
+            rgba(22, 13, 32, 0.82)
+        ),
+        url("../images/abilities/shadow-strike.jpeg");
+
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    border-color: #80629c;
+    color: #f1e5ff;
+}
+
+.combat-action--shadow_strike:hover {
+    background-image:
+        linear-gradient(
+            rgba(22, 13, 32, 0.48),
+            rgba(22, 13, 32, 0.65)
+        ),
+        url("../images/abilities/shadow-strike.jpg");
+
+    border-color: #b994d4;
+}
+
+.combat-action--shadow_strike:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+
+
+/* Special Abilities toggle */
+
+.combat-toggle-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.combat-specials-button {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+/* Show the panel when the checkbox is checked */
+.combat-actions__grid:has(#toggle-specials:checked)
+    .combat-specials {
+    display: block;
+}
+
+/* Highlight the toggle when expanded */
+.combat-actions__grid:has(#toggle-specials:checked)
+    .combat-specials-button {
+    border-color: #b99468;
+    background: #292d31;
+}
+
+.combat-toggle-input:focus-visible + .combat-specials-button {
+    outline: 2px solid #b99468;
+    outline-offset: 3px;
+}
+
+/* Make the action buttons fill their grid cells */
+.combat-actions__grid > form > .combat-action {
+    width: 100%;
+    height: 100%;
+}
+
+
+/* Use Item toggle position */
+.combat-items-button {
+    grid-column: 1;
+    grid-row: 2;
+    cursor: pointer;
+}
+
+/* Expandable inventory panel */
+.combat-items {
+    display: none;
+    grid-column: 1 / -1;
+    grid-row: 4;
+    padding: 20px;
+    border-radius: 14px;
+    background: rgba(12, 17, 32, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Display inventory when toggled */
+.combat-actions__grid:has(#toggle-items:checked) .combat-items {
+    display: block;
+}
+
+/* Individual consumable cards */
+.combat-items__item {
+    padding: 16px;
+    margin-top: 14px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    min-height: 180px;
+}
+
+.combat-items__item .combat-action {
+    width: auto;
+    min-height: 48px;
+    padding: 12px 20px;
+}
+
+/* Keep disabled item buttons visibly unavailable */
+.combat-items__item .combat-action:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.combat-items__item--healing_potion {
+    background:
+        linear-gradient(
+            rgba(12, 17, 32, 0.65),
+            rgba(12, 17, 32, 0.9)
+        ),
+        url("../images/Items/healing_potion.png")
+        center / cover no-repeat;
+
+    border: 1px solid rgba(220, 70, 85, 0.45);
+}
+
+
+.combat-result {
+    padding: 24px;
+    margin-top: 20px;
+    border: 1px solid rgba(190, 145, 90, 0.35);
+    border-radius: 14px;
+    background: rgba(30, 35, 40, 0.95);
+    text-align: center;
+}
+
+.combat-result h2 {
+    color: #c69a63;
+    margin-bottom: 12px;
+}
+
+.combat-result p {
+    margin-bottom: 14px;
+}
+
+.combat-result__button {
+    display: inline-block;
+    padding: 12px 24px;
+    margin-top: 10px;
+    border-radius: 10px;
+    background: #a77b4c;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s ease;
+}
+
+.combat-result__button:hover {
+    background: #c69a63;
+}
+
+
+/* Locked special ability card */
+.combat-specials__locked {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    padding: 28px 20px;
+    margin-top: 14px;
+    min-height: 190px;
+
+    text-align: center;
+    border-radius: 14px;
+
+    background: linear-gradient(
+        145deg,
+        rgba(30, 34, 48, 0.95),
+        rgba(12, 16, 28, 0.95)
+    );
+
+    border: 1px solid rgba(180, 185, 200, 0.2);
+    box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.25);
+
+    opacity: 0.8;
+}
+
+.combat-specials__lock-icon {
+    font-size: 32px;
+    line-height: 1;
+    filter: grayscale(1);
+}
+
+.combat-specials__locked h4 {
+    margin: 0;
+    color: #b8becb;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.combat-specials__locked p {
+    margin: 0;
+    max-width: 320px;
+    color: #949bad;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.combat-specials__requirement {
+    display: inline-block;
+    padding: 7px 14px;
+    margin-top: 4px;
+
+    border-radius: 20px;
+    border: 1px solid rgba(180, 185, 200, 0.25);
+
+    background: rgba(255, 255, 255, 0.04);
+    color: #aeb5c3;
+
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+
+/*  Responsive Layout */
+
+
+@media (max-width: 850px) {
+    .combat-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 650px) {
+    .combat-main {
+        width: 94%;
+        margin-top: 20px;
+    }
+
+    .combat-champion,
+    .combat-battle {
+        padding: 18px;
+    }
+
+    .combat-champion__stats {
+        grid-template-columns: 1fr;
+    }
+
+    .combat-battle__fighters {
+        grid-template-columns: 1fr;
+    }
+
+    .combat-battle__heading h2 {
+        font-size: 1.35rem;
+    }
+
+    .combat-actions {
+        padding: 18px;
+    }
+
+    .combat-actions__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .combat-log {
+        padding: 18px;
+    }
+
+    .combat-log__entries {
+        padding: 4px 12px;
+    }
+
+    /* Keep combat actions in one column on mobile */
+    .combat-specials-button {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .combat-specials {
+        grid-column: 1;
+        grid-row: 5;
+    }
+
+}
+
+@media (max-width: 600px) {
+    main.combat-main {
+        width: calc(100% - 24px);
+        margin: 20px auto;
+    }
+
+    .combat-layout {
+        gap: 16px;
+    }
+}
