@@ -152,6 +152,37 @@
             exit;
         }
 
+        // Escape
+        elseif ($combatAction === "escape") {
+
+            // Attempt to escape from the current enemy.
+            $escaped = attemptEscape(
+                $_SESSION["combat"],
+                $_SESSION["champion"]
+            );
+
+            // A failed escape from an active battle costs a turn.
+            if (
+                !$escaped &&
+                $_SESSION["combat"]["status"] === "active"
+            ) {
+                performEnemyAttack(
+                    $_SESSION["combat"],
+                    $_SESSION["champion"]
+                );
+
+                if ($_SESSION["combat"]["status"] === "active") {
+                    reduceSpecialCooldown($_SESSION["combat"]);
+                    $_SESSION["combat"]["turn"]++;
+                }
+            }
+
+            // Reload to display the updated combat state.
+            header("Location: combat.php#CI");
+            exit;
+        }
+
+
 
 
     }
@@ -335,6 +366,28 @@
 
                 </section>
 
+
+                <?php if ($combat["status"] === "escaped"): ?>
+                    <div class="combat-result">
+                        <h2>Successfully Escaped</h2>
+
+                        <p>
+                            You escaped from
+                            <?= htmlspecialchars($enemy["name"]) ?>.
+                        </p>
+
+                        <p>
+                            Your journey is not over.
+                            Return to the story to continue your adventure.
+                        </p>
+
+                        <a href="game.php" class="combat-result__button">
+                            Return to Story
+                        </a>
+                    </div>
+                <?php endif; ?>
+
+
                 <!-- Combat Actions -->
                 <section class="combat-actions" id="combat-actions">
 
@@ -402,19 +455,21 @@
 
 
                             <!-- Escape -->
-                            <button
-                                type="submit"
-                                name="combat_action"
-                                value="escape"
-                                class="combat-action">
-                                <span class="combat-action__title">
-                                    Escape
-                                </span>
+                            <form action="combat.php" method="POST">
+                                <button
+                                    type="submit"
+                                    name="combat_action"
+                                    value="escape"
+                                    class="combat-action"
+                                    <?= $combat["status"] !== "active" ? "disabled" : "" ?>
+                                >
+                                    <span class="combat-action__title">Escape</span>
+                                    <span class="combat-action__description">
+                                        Attempt to flee from the current encounter.
+                                    </span>
+                                </button>
+                            </form>
 
-                                <span class="combat-action__description">
-                                    Attempt to flee from the encounter.
-                                </span>
-                            </button>
 
                             <!-- Expandable Special Abilities Panel -->
                             <div class="combat-specials" id="special-abilities">
@@ -427,67 +482,89 @@
                                 );
                                 ?>
 
-                                <?php foreach ($abilities as $abilityId => $ability): ?>
 
-                                    <div class="combat-specials__ability combat-specials__ability--<?= htmlspecialchars($championFaction) ?>">
+                                <?php if ($championLevel < 2): ?>
 
-                                        <h4>
-                                            <?= htmlspecialchars($ability["name"]) ?>
-                                        </h4>
+                                    <div class="combat-specials__locked">
+                                        <span class="combat-specials__lock-icon" aria-hidden="true">
+                                            🔒
+                                        </span>
 
-                                        <p>
-                                            <?= htmlspecialchars($ability["description"]) ?>
-                                        </p>
+                                        <h4>Special Ability Locked</h4>
 
                                         <p>
-                                            Mana Cost: <?= (int) $ability["mana_cost"] ?>
-                                            | Damage Bonus: +<?= (int) $ability["damage_bonus"] ?>
+                                            Reach Level 2 to unlock your first
+                                            special ability.
                                         </p>
-
-                                        <form action="combat.php" method="POST">
-                                            <input
-                                                type="hidden"
-                                                name="ability_id"
-                                                value="<?= htmlspecialchars($abilityId) ?>"
-                                            >
-
-                                           
-                                            <?php
-                                                $cooldown = (int) ($combat["special_cooldown"] ?? 0);
-
-                                                $hasEnoughMana = $championMana >= $ability["mana_cost"];
-
-                                                $abilityDisabled = $cooldown > 0 || !$hasEnoughMana;
-                                            ?>
-
-                                            <button
-                                                type="submit"
-                                                name="combat_action"
-                                                value="use_special"
-                                                class="combat-action combat-action--<?= htmlspecialchars($abilityId) ?>"
-                                                <?= $abilityDisabled ? "disabled" : "" ?>
-                                            >
-                                                <?php if ($cooldown > 0): ?>
-
-                                                    <?= htmlspecialchars($ability["name"]) ?>
-                                                    — Cooldown: <?= $cooldown ?> turn<?= $cooldown === 1 ? "" : "s" ?>
-
-                                                <?php elseif (!$hasEnoughMana): ?>
-
-                                                    Insufficient Mana
-
-                                                <?php else: ?>
-
-                                                    Use <?= htmlspecialchars($ability["name"]) ?>
-
-                                                <?php endif; ?>
-                                            </button>
-
-                                        </form>
 
                                     </div>
 
-                                <?php endforeach; ?>
+                                <?php else: ?>
+
+
+                                    <?php foreach ($abilities as $abilityId => $ability): ?>
+
+                                        <div class="combat-specials__ability combat-specials__ability--<?= htmlspecialchars($championFaction) ?>">
+
+                                            <h4>
+                                                <?= htmlspecialchars($ability["name"]) ?>
+                                            </h4>
+
+                                            <p>
+                                                <?= htmlspecialchars($ability["description"]) ?>
+                                            </p>
+
+                                            <p>
+                                                Mana Cost: <?= (int) $ability["mana_cost"] ?>
+                                                | Damage Bonus: +<?= (int) $ability["damage_bonus"] ?>
+                                            </p>
+
+                                            <form action="combat.php" method="POST">
+                                                <input
+                                                    type="hidden"
+                                                    name="ability_id"
+                                                    value="<?= htmlspecialchars($abilityId) ?>"
+                                                >
+
+                                            
+                                                <?php
+                                                    $cooldown = (int) ($combat["special_cooldown"] ?? 0);
+
+                                                    $hasEnoughMana = $championMana >= $ability["mana_cost"];
+
+                                                    $abilityDisabled = $cooldown > 0 || !$hasEnoughMana;
+                                                ?>
+
+                                                <button
+                                                    type="submit"
+                                                    name="combat_action"
+                                                    value="use_special"
+                                                    class="combat-action combat-action--<?= htmlspecialchars($abilityId) ?>"
+                                                    <?= $abilityDisabled ? "disabled" : "" ?>
+                                                >
+                                                    <?php if ($cooldown > 0): ?>
+
+                                                        <?= htmlspecialchars($ability["name"]) ?>
+                                                        — Cooldown: <?= $cooldown ?> turn<?= $cooldown === 1 ? "" : "s" ?>
+
+                                                    <?php elseif (!$hasEnoughMana): ?>
+
+                                                        Insufficient Mana
+
+                                                    <?php else: ?>
+
+                                                        Use <?= htmlspecialchars($ability["name"]) ?>
+
+                                                    <?php endif; ?>
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+
+                                    <?php endforeach; ?>
+
+                                <?php endif; ?>
 
                             </div>
 

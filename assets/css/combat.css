@@ -541,6 +541,107 @@ main.combat-main {
     border: 1px solid rgba(220, 70, 85, 0.45);
 }
 
+
+.combat-result {
+    padding: 24px;
+    margin-top: 20px;
+    border: 1px solid rgba(190, 145, 90, 0.35);
+    border-radius: 14px;
+    background: rgba(30, 35, 40, 0.95);
+    text-align: center;
+}
+
+.combat-result h2 {
+    color: #c69a63;
+    margin-bottom: 12px;
+}
+
+.combat-result p {
+    margin-bottom: 14px;
+}
+
+.combat-result__button {
+    display: inline-block;
+    padding: 12px 24px;
+    margin-top: 10px;
+    border-radius: 10px;
+    background: #a77b4c;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s ease;
+}
+
+.combat-result__button:hover {
+    background: #c69a63;
+}
+
+
+/* Locked special ability card */
+.combat-specials__locked {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    padding: 28px 20px;
+    margin-top: 14px;
+    min-height: 190px;
+
+    text-align: center;
+    border-radius: 14px;
+
+    background: linear-gradient(
+        145deg,
+        rgba(30, 34, 48, 0.95),
+        rgba(12, 16, 28, 0.95)
+    );
+
+    border: 1px solid rgba(180, 185, 200, 0.2);
+    box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.25);
+
+    opacity: 0.8;
+}
+
+.combat-specials__lock-icon {
+    font-size: 32px;
+    line-height: 1;
+    filter: grayscale(1);
+}
+
+.combat-specials__locked h4 {
+    margin: 0;
+    color: #b8becb;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.combat-specials__locked p {
+    margin: 0;
+    max-width: 320px;
+    color: #949bad;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.combat-specials__requirement {
+    display: inline-block;
+    padding: 7px 14px;
+    margin-top: 4px;
+
+    border-radius: 20px;
+    border: 1px solid rgba(180, 185, 200, 0.25);
+
+    background: rgba(255, 255, 255, 0.04);
+    color: #aeb5c3;
+
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+
 /*  Responsive Layout */
 
 

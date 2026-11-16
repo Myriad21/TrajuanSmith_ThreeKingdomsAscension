@@ -10,7 +10,9 @@ function initializeCombat(string $enemyId): array
             "level" => 1,
             "hp" => 136,
             "max_hp" => 136,
-            "strength" => 6
+            "strength" => 6,
+            "is_boss" => false,
+
         ]
     ];
 
@@ -64,7 +66,6 @@ function calculateBasicDamage(
 
     return max(1, $damage);
 }
-
 
 
 function performBasicAttack(array &$combat, array $champion, int $weaponBonus = 0): void {
@@ -206,9 +207,9 @@ function performSpecialAttack(
     $ability = $abilities[$abilityId];
 
     // Check the required champion level.
-   // if ($champion["level"] < $ability["required_level"]) {
-     //   return false;
-    //}
+    if ($champion["level"] < $ability["required_level"]) {
+       return false;
+    }
 
     // Check available mana.
     if ($champion["mana"] < $ability["mana_cost"]) {
@@ -271,6 +272,7 @@ function reduceSpecialCooldown(array &$combat): void
     }
 }
 
+
 function healChampion(array &$champion, int $healingAmount): int
 {
     // Healing cannot restore a negative amount.
@@ -294,6 +296,7 @@ function healChampion(array &$champion, int $healingAmount): int
     // Return the amount of HP actually restored.
     return $champion["hp"] - $previousHP;
 }
+
 
 function normalizeChampionHP(array &$champion): void
 {
@@ -356,6 +359,35 @@ function useCombatItem(array &$combat, array &$champion, array &$inventory, stri
         " and restored " .
         $healedAmount .
         " HP.";
+
+    return true;
+}
+
+
+function attemptEscape(array &$combat, array $champion): bool
+{
+    // Escaping is only possible during active combat.
+    if ($combat["status"] !== "active") {
+        return false;
+    }
+
+    // Boss encounters cannot be escaped.
+    if ($combat["enemy"]["is_boss"] ?? false) {
+        $combat["log"][] =
+            "Escape failed! You cannot flee from this battle.";
+
+        return false;
+    }
+
+    // Ordinary encounters allow guaranteed escape.
+    $combat["status"] = "escaped";
+
+    // Record the successful escape.
+    $combat["log"][] =
+        $champion["name"] .
+        " successfully escaped from " .
+        $combat["enemy"]["name"] .
+        ".";
 
     return true;
 }
