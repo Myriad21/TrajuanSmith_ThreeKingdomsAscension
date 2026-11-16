@@ -1,35 +1,57 @@
 
 /* Combat Page Layout */
 
-.combat-main {
-    width: min(1100px, 94%);
-    margin: 32px auto 60px;
 
+main.combat-main {
+    width: calc(100% - 64px);
+    max-width: 1600px;
+    margin: 32px auto 60px;
+}
+
+.combat-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: 24px;
+    align-items: start;
+}
+
+.combat-interface {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
+    min-width: 0;
+
 }
+
 
 /* Champion Information */
 
 .combat-champion {
-    background: #303539;
-    border: 1px solid #454b50;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-default);
     border-radius: 12px;
-    padding: 24px;
-    
+    padding: 16px 24px;
+}
+
+.combat-champion__identity {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 16px;
 }
 
 .combat-champion__identity h2 {
-    margin: 0 0 8px;
-    color: #b99468;
-    font-size: 1.65rem;
+    margin: 0;
+    font-size: 1.4rem;
+    color: var(--text-primary);
 }
 
 .combat-champion__identity p {
-    margin: 0 0 18px;
-    color: #c9c9c9;
+    margin: 0;
+    color: var(--text-secondary);
 }
+
 
 .combat-champion__stats {
     display: grid;
@@ -38,26 +60,27 @@
 }
 
 .combat-champion__stat {
-    background: #1b1d20;
-    border: 1px solid #44494e;
-    border-radius: 8px;
-    padding: 14px;
-    text-align: center;
-
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    align-items: center;
+    gap: 4px;
+
+    padding: 10px 16px;
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    background-color: var(--bg-primary);
 }
 
 .combat-champion__stat span {
-    color: #bcbcbc;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
 }
 
 .combat-champion__stat strong {
-    color: #f1eeee;
-    font-size: 1.3rem;
+    font-size: 1.25rem;
+    color: var(--text-primary);
 }
+
 
 /* Battle Encounter */
 
@@ -196,6 +219,18 @@
     transform: translateY(-2px);
 }
 
+
+.combat-action:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.combat-action:disabled:hover {
+    transform: none;
+}
+
+
 .combat-action:focus-visible {
     outline: 2px solid #b99468;
     outline-offset: 3px;
@@ -213,15 +248,107 @@
 }
 
 
-/* =========================================
+/*
+   Special Abilities Panel
+ */
+
+
+.combat-specials {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    display: none;
+
+    padding: 22px;
+    background: #25292d;
+    border: 1px solid #454b50;
+    border-radius: 12px;
+}
+
+
+.combat-specials h3 {
+    margin: 0 0 18px;
+
+    color: #b99468;
+    font-size: 1.35rem;
+}
+
+.combat-specials__ability {
+    padding: 20px;
+    margin-bottom: 14px;
+
+    background: #1b1d20;
+    border: 1px solid #44494e;
+    border-radius: 10px;
+}
+
+.combat-specials__ability:last-child {
+    margin-bottom: 0;
+}
+
+.combat-specials__ability h4 {
+    margin: 0 0 10px;
+
+    color: #f0e4d4;
+    font-size: 1.2rem;
+}
+
+.combat-specials__ability p {
+    margin: 0 0 12px;
+
+    color: #c9c9c9;
+    line-height: 1.6;
+}
+
+.combat-specials__ability form {
+    margin-top: 16px;
+}
+
+.combat-specials__ability .combat-action {
+    width: 100%;
+    text-align: center;
+}
+
+
+
+/* 
+   Combat Results
+    */
+
+.combat-result__message {
+    margin: 0 0 12px;
+    padding: 16px 20px;
+
+    background: var(--bg-primary);
+    border: 1px solid var(--border-default);
+    border-left: 4px solid var(--accent-secondary);
+    border-radius: 8px;
+
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.6;
+}
+
+.combat-result__description {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+
+
+/* 
    Combat Log
-========================================= */
+ */
 
 .combat-log {
     background: #303539;
     border: 1px solid #454b50;
     border-radius: 12px;
     padding: 24px;
+    min-width: 0;
+
 }
 
 .combat-log h2 {
@@ -230,11 +357,16 @@
     font-size: 1.65rem;
 }
 
+
 .combat-log__entries {
     background: #1b1d20;
     border: 1px solid #44494e;
     border-radius: 10px;
     padding: 6px 18px;
+
+    max-height: 420px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 .combat-log__entry {
@@ -248,7 +380,175 @@
     border-top: 1px solid #383d42;
 }
 
+
+/*
+   Rogue Special Ability Theme
+ */
+
+.combat-specials__ability--rogue {
+    background: linear-gradient(
+        135deg,
+        #282135 0%,
+        #211d2b 55%,
+        #1b1d20 100%
+    );
+
+    border: 1px solid #59466e;
+}
+
+.combat-specials__ability--rogue h4 {
+    color: #d8b9f2;
+}
+
+.combat-specials__ability--rogue p {
+    color: #c9bfd4;
+}
+
+.combat-specials__ability--rogue .combat-action {
+    border-color: #67517d;
+}
+
+
+/* Shadow Strike ability button */
+
+.combat-action--shadow_strike {
+    background-image:
+        linear-gradient(
+            rgba(22, 13, 32, 0.68),
+            rgba(22, 13, 32, 0.82)
+        ),
+        url("../images/abilities/shadow-strike.jpeg");
+
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    border-color: #80629c;
+    color: #f1e5ff;
+}
+
+.combat-action--shadow_strike:hover {
+    background-image:
+        linear-gradient(
+            rgba(22, 13, 32, 0.48),
+            rgba(22, 13, 32, 0.65)
+        ),
+        url("../images/abilities/shadow-strike.jpg");
+
+    border-color: #b994d4;
+}
+
+.combat-action--shadow_strike:disabled {
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+
+
+/* Special Abilities toggle */
+
+.combat-toggle-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.combat-specials-button {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+/* Show the panel when the checkbox is checked */
+.combat-actions__grid:has(#toggle-specials:checked)
+    .combat-specials {
+    display: block;
+}
+
+/* Highlight the toggle when expanded */
+.combat-actions__grid:has(#toggle-specials:checked)
+    .combat-specials-button {
+    border-color: #b99468;
+    background: #292d31;
+}
+
+.combat-toggle-input:focus-visible + .combat-specials-button {
+    outline: 2px solid #b99468;
+    outline-offset: 3px;
+}
+
+/* Make the action buttons fill their grid cells */
+.combat-actions__grid > form > .combat-action {
+    width: 100%;
+    height: 100%;
+}
+
+
+/* Use Item toggle position */
+.combat-items-button {
+    grid-column: 1;
+    grid-row: 2;
+    cursor: pointer;
+}
+
+/* Expandable inventory panel */
+.combat-items {
+    display: none;
+    grid-column: 1 / -1;
+    grid-row: 4;
+    padding: 20px;
+    border-radius: 14px;
+    background: rgba(12, 17, 32, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Display inventory when toggled */
+.combat-actions__grid:has(#toggle-items:checked) .combat-items {
+    display: block;
+}
+
+/* Individual consumable cards */
+.combat-items__item {
+    padding: 16px;
+    margin-top: 14px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    min-height: 180px;
+}
+
+.combat-items__item .combat-action {
+    width: auto;
+    min-height: 48px;
+    padding: 12px 20px;
+}
+
+/* Keep disabled item buttons visibly unavailable */
+.combat-items__item .combat-action:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.combat-items__item--healing_potion {
+    background:
+        linear-gradient(
+            rgba(12, 17, 32, 0.65),
+            rgba(12, 17, 32, 0.9)
+        ),
+        url("../images/Items/healing_potion.png")
+        center / cover no-repeat;
+
+    border: 1px solid rgba(220, 70, 85, 0.45);
+}
+
 /*  Responsive Layout */
+
+
+@media (max-width: 850px) {
+    .combat-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
 
 @media (max-width: 650px) {
     .combat-main {
@@ -287,5 +587,28 @@
 
     .combat-log__entries {
         padding: 4px 12px;
+    }
+
+    /* Keep combat actions in one column on mobile */
+    .combat-specials-button {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .combat-specials {
+        grid-column: 1;
+        grid-row: 5;
+    }
+
+}
+
+@media (max-width: 600px) {
+    main.combat-main {
+        width: calc(100% - 24px);
+        margin: 20px auto;
+    }
+
+    .combat-layout {
+        gap: 16px;
     }
 }

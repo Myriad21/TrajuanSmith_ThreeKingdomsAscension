@@ -7,17 +7,17 @@ function getStartingStats(): array
         "warrior" => [
             "hp" => 120,
             "strength" => 15,
-            "mana" => 8
+            "mana" => 40
         ],
         "mage" => [
             "hp" => 85,
             "strength" => 7,
-            "mana" => 20
+            "mana" => 100
         ],
         "rogue" => [
             "hp" => 85,
             "strength" => 13,
-            "mana" => 12
+            "mana" => 70
         ]
     ];
 }
@@ -698,6 +698,20 @@ function getChoiceConsequenceSummary( array $championBefore,
 
     return $summary;
 }
+
+
+function getConsumableItems(): array
+{
+    return [
+        "healing_potion" => [
+            "name" => "Healing Potion",
+            "description" => "Restores up to 30 HP.",
+            "type" => "consumable",
+            "heal_amount" => 30
+        ]
+    ];
+}
+
 
 
 
