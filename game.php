@@ -36,8 +36,8 @@
     $storyNodes = getStoryNodes();
 
     // TEMPORARY TEST RESET — REMOVE AFTER ONE REFRESH 
-    $_SESSION["story_node"] = "introduction";
-    $_SESSION["choices_log"] = [];
+    //$_SESSION["story_node"] = "introduction";
+    //$_SESSION["choices_log"] = [];
 
 
     if (!isset($_SESSION["inventory"])) {
@@ -284,21 +284,65 @@
                     </div>
 
                 </div>
-
-                
+               
                 <!-- Dynamic Story Narration -->
                 <div class="game-story">
                     <h2>
-                        <?php echo htmlspecialchars($currentNode["title"]); ?>
+                        <?= htmlspecialchars($currentNode["title"]) ?>
                     </h2>
 
+                    <!-- Conditional narration based on previous decisions -->
+                    <?php foreach ($currentNode["conditional_text"] ?? [] as $entry): ?>
+                        <?php
+                            $requiredFlags = $entry["requires"]["flags"] ?? [];
+                            $matches = true;
+
+                            foreach ($requiredFlags as $flagName => $expectedValue) {
+                                if (
+                                    !array_key_exists($flagName, $_SESSION["story_flags"] ?? []) ||
+                                    $_SESSION["story_flags"][$flagName] !== $expectedValue
+                                ) {
+                                    $matches = false;
+                                    break;
+                                }
+                            }
+                        ?>
+
+                        <?php if ($matches): ?>
+                            <p>
+                                <?= nl2br(htmlspecialchars($entry["text"])) ?>
+                            </p>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+
+                    <!-- Shared story narration -->
                     <p>
-                        <?php echo htmlspecialchars($currentNode["text"]); ?>
+                        <?= nl2br(htmlspecialchars($currentNode["text"])) ?>
                     </p>
+
+                    <!-- Faction-specific story narration -->
+                    <?php
+                        $factionNarration =
+                            $currentNode["faction_text"][$championFaction] ?? null;
+                    ?>
+
+                    <?php if (is_string($factionNarration) && $factionNarration !== ""): ?>
+                        <p>
+                            <?= nl2br(htmlspecialchars($factionNarration)) ?>
+                        </p>
+                    <?php endif; ?>
+
+                    <!-- Expedition companions narration -->
+                    <?php if (!empty($currentNode["companion_text"])): ?>
+                        <p>
+                            <?= nl2br(htmlspecialchars($currentNode["companion_text"])) ?>
+                        </p>
+                    <?php endif; ?>
+
                 </div>
 
                 <!-- Post-Choice Consequence Summary -->
-               <?php
+                <?php
                     // Retrieve the most recent decision summary.
                     $lastChoiceSummary = $_SESSION["last_choice_summary"] ?? null;
 
@@ -378,6 +422,25 @@
                                     $requirements
                                 );
 
+                                // Determine whether this exploration location was completed.
+                                $explorationFlags = [
+                                    "explored_markings",
+                                    "explored_path",
+                                    "explored_mana"
+                                ];
+
+                                $isAlreadyExplored = false;
+
+                                foreach ($explorationFlags as $flag) {
+                                    if (
+                                        isset($requirements["flags"][$flag]) &&
+                                        $requirements["flags"][$flag] === false &&
+                                        ($_SESSION["story_flags"][$flag] ?? false) === true
+                                    ) {
+                                        $isAlreadyExplored = true;
+                                        break;
+                                    }
+                                }
 
                                 $choiceEffects = $choice["effects"] ?? [];
 
@@ -444,15 +507,25 @@
 
                                                 <?php endforeach; ?>
 
-                                                <?php if (
+                                               
+                                                <?php if ($isAlreadyExplored): ?>
+
+                                                    <span class="game-choice__requirement-detail">
+                                                        This location has already been explored.
+                                                    </span>
+
+                                                <?php elseif (
                                                     !empty($requirements["inventory"]) ||
                                                     !empty($requirements["flags"]) ||
                                                     !empty($requirements["trust"])
                                                 ): ?>
+
                                                     <span class="game-choice__requirement-detail">
-                                                        <br>Additional story conditions may be required.
+                                                        Additional story conditions may be required.
                                                     </span>
+
                                                 <?php endif; ?>
+
 
                                             </span>
                                         <?php endif; ?>
@@ -527,11 +600,47 @@
                                     </p>
                                 <?php endif; ?>
 
+                                <?php
+                                    $isCompletedExploration = false;
+
+                                    foreach ([
+                                        "explored_markings",
+                                        "explored_path",
+                                        "explored_mana"
+                                    ] as $flag) {
+                                        if (
+                                            isset($requirements["flags"][$flag]) &&
+                                            $requirements["flags"][$flag] === false &&
+                                            ($_SESSION["story_flags"][$flag] ?? false) === true
+                                        ) {
+                                            $isCompletedExploration = true;
+                                            break;
+                                        }
+                                    }
+                                ?>
+
+                              
                                 <?php if (!$isInsightUnlocked): ?>
                                     <div class="insight-relic__locked">
-                                        <p class="insight-relic__locked-title">
-                                            Path Currently Unavailable
-                                        </p>
+
+                                        <?php if ($isCompletedExploration): ?>
+
+                                            <p class="insight-relic__locked-title">
+                                                Location Already Explored
+                                            </p>
+
+                                            <p class="insight-relic__locked-detail">
+                                                You have already investigated this location.
+                                                There is nothing more to discover here.
+                                            </p>
+
+                                        <?php else: ?>
+
+                                            <p class="insight-relic__locked-title">
+                                                Path Currently Unavailable
+                                            </p>
+                                        
+
 
                                         <?php foreach (($requirements["stats"] ?? []) as $stat => $minimum): ?>
                                             <?php
@@ -629,6 +738,7 @@
                                         <?php endif; ?>
 
 
+                                    <?php endif; ?>
                                     </div>
                                 <?php endif; ?>
 
@@ -640,7 +750,6 @@
                     </div>
 
                 </section>
-
 
             </section>
 
