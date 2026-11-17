@@ -1,8 +1,17 @@
-
 <?php
     session_start();
+
+    // Require authentication before accessing the game.
+    if (!isset($_SESSION["user"])) {
+        header("Location: login.php");
+        exit;
+    }
+
     require_once __DIR__ . "/includes/story_nodes.php";
     require_once __DIR__ . "/includes/game_functions.php";
+
+    $pageTitle = "Your Adventure";
+
 
     $pageTitle = "Your Adventure";
 
@@ -313,7 +322,8 @@
         <h1>Three Kingdoms Ascension</h1>
 
         <nav aria-label="Main navigation">
-            <!-- Navigation will be integrated with Hien's work. -->
+            <a href="leaderboard.php">Leaderboard</a>
+            <a href="logout.php">Logout</a>
         </nav>
     </header>
 

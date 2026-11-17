@@ -1,7 +1,14 @@
 <?php
 session_start();
 
+// Only authenticated users can create a champion.
+if (!isset($_SESSION["user"])) {
+    header("Location: login.php");
+    exit;
+}
+
 require_once __DIR__ . "/includes/game_functions.php";
+
 
 $pageTitle = "Character Creation";
 $errorMessage = "";

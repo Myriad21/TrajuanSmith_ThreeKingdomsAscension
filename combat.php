@@ -1,9 +1,15 @@
-
 <?php
     session_start();
 
+    // Require authentication before accessing combat.
+    if (!isset($_SESSION["user"])) {
+        header("Location: login.php");
+        exit;
+    }
+
     require_once __DIR__ . "/includes/game_functions.php";
     require_once __DIR__ . "/includes/combat_functions.php";
+
 
     $pageTitle = "Combat Encounter";
 
