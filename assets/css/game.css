@@ -581,6 +581,13 @@ main section.game-interface {
 }
 
 
+/* Gold Insight Relic predictions for cultivation breakthroughs */
+.insight-relic__automatic--cultivation {
+    color: rgb(105, 187, 105);
+    font-weight: 600;
+}
+
+
 
 /* AUTOMATIC CONSEQUENCE NOTIFICATION DISMISSAL */
 

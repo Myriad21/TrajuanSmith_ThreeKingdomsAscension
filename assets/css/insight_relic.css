@@ -107,6 +107,70 @@
     line-height: 1.6;
 }
 
+/* =========================================
+   INSIGHT RELIC RELATIONSHIP TIERS
+   ========================================= */
+
+.insight-relic__relationships {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.insight-relic__relationship {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+}
+
+.insight-relic__relationship-name {
+    color: #c9c9c9;
+}
+
+.insight-relic__relationship-tier {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    background: #555;
+    color: #fff;
+}
+
+/* Relationship tier colors */
+
+.insight-relic__relationship-tier[data-tier="Hostile"] {
+    background: #7f1d1d;
+    color: #fecaca;
+}
+
+.insight-relic__relationship-tier[data-tier="Wary"] {
+    background: #78350f;
+    color: #fde68a;
+}
+
+.insight-relic__relationship-tier[data-tier="Neutral"] {
+    background: #475569;
+    color: #e2e8f0;
+}
+
+.insight-relic__relationship-tier[data-tier="Cooperative"] {
+    background: #1e40af;
+    color: #bfdbfe;
+}
+
+.insight-relic__relationship-tier[data-tier="Trusted"] {
+    background: #6b21a8;
+    color: #e9d5ff;
+}
+
+.insight-relic__relationship-tier[data-tier="Fully Trusted"] {
+    background: #92400e;
+    color: #fef3c7;
+}
 
 /* 7. Responsive design */
 @media (max-width: 600px) {

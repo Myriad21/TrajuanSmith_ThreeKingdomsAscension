@@ -9,6 +9,8 @@
 
     require_once __DIR__ . "/includes/story_nodes.php";
     require_once __DIR__ . "/includes/game_functions.php";
+    require_once __DIR__ . "/includes/save_functions.php";
+    require_once __DIR__ . "/includes/combat_functions.php";
 
     $pageTitle = "Your Adventure";
 
@@ -50,6 +52,9 @@
             $_SESSION["last_choice_summary"],
             $_SESSION["combat"]
         );
+
+        // Overwrite the saved adventure with the reset state.
+        savePlayerProgress(collectPlayerProgress());
 
         // Redirect to prevent repeating the reset on refresh.
         header("Location: game.php");
@@ -111,6 +116,10 @@
         // Record that this encounter's ambush has been processed.
         $_SESSION["story_flags"]["wolf_ambush_resolved"] = true;
 
+        // Save the updated HP and ambush flag.
+        savePlayerProgress(collectPlayerProgress());
+
+
         // Refresh the displayed HP after updating the session.
         $championHP = $_SESSION["champion"]["hp"];
     }
@@ -132,6 +141,9 @@
             )
         ) {
             $_SESSION["champion"]["equipped_weapon"] = $weaponId;
+
+            // Save the champion's updated equipment selection.
+            savePlayerProgress(collectPlayerProgress());
         }
 
         // Prevent duplicate submissions on refresh.
@@ -218,6 +230,8 @@
                 $inventoryBefore = $_SESSION["inventory"];
                 $flagsBefore = $_SESSION["story_flags"];
 
+
+
                 // Apply valid effects to the champion.
                 if (is_array($effects)) {
 
@@ -276,6 +290,10 @@
                 // Advance to the next scene.
                 $_SESSION["story_node"] = $nextNodeId;
 
+                // Save the updated champion, inventory, story flags,
+                // and Story Path Tracker before redirecting.
+                savePlayerProgress(collectPlayerProgress());
+
                 // Start the wolf encounter when the player chooses to fight.
                 if (
                     $currentNodeId === "expedition_deeper" &&
@@ -288,6 +306,53 @@
                     header("Location: combat.php");
                     exit;
                 }
+
+
+                // Start the Act 1 rival champion encounter.
+                if (
+                    $currentNodeId === "rival_ambush" &&
+                    $choiceId === "fight_rival"
+                ) {
+                    // Determine the Act 1 rival based on the player's faction.
+                    $rivalFaction = getFirstRival(
+                        $_SESSION["champion"]["faction"]
+                    );
+
+                    if ($rivalFaction !== null) {
+
+                        // Check whether the player previously chose an ambush.
+                        $ambush = !empty(
+                            $_SESSION["story_flags"]["rival_surprise_attack"]
+                        );
+
+                        // Clear any previous battle.
+                        unset($_SESSION["combat"]);
+
+                        // Start the Level 2 rival encounter.
+                        startRivalCombat($rivalFaction, 2, $ambush);
+
+                        // Open the combat interface.
+                        header("Location: combat.php");
+                        exit;
+                    }
+                }
+
+                // Start a practice battle against the training dummy.
+                if (
+                    $currentNodeId === "act1_training_dummy" &&
+                    $choiceId === "begin_dummy_training"
+                ) {
+                    // Clear any previous battle so training starts fresh.
+                    unset($_SESSION["combat"]);
+
+                    // Initialize the harmless training dummy encounter.
+                    startCombat("training_dummy");
+
+                    // Open the existing combat interface.
+                    header("Location: combat.php");
+                    exit;
+                }
+
 
                 // Prevent duplicate form submissions.
                 header("Location: game.php");
@@ -774,11 +839,56 @@
                             <?php
                                 $customInsight = $choice["insight_text"] ?? "";
 
+                                // Retrieve the player's previous story decisions.
+                                $choicesLog = $_SESSION["choices_log"] ?? [];
+
+                                // Generate an Insight Relic prediction using
+                                // the current choice effects and decision history.
                                 $automaticInsight = getInsightRelicHint(
-                                    $choice["effects"] ?? []
+                                    $choice["effects"] ?? [],
+                                    $choicesLog
                                 );
 
                                 $requirements = $choice["requires"] ?? [];
+
+                                // Retrieve relationship changes for this choice.
+                                $trustEffects = $choice["effects"]["trust"] ?? [];
+
+                                // Store relationship tiers using actual faction names.
+                                $relationshipTiers = [];
+
+                                $playerFaction = $champion["faction"] ?? "";
+
+                                if (is_array($trustEffects)) {
+
+                                    foreach ($trustEffects as $target => $change) {
+
+                                        // Convert aliases such as first_rival
+                                        // into the actual faction name.
+                                        $rivalFaction = resolveRelationshipTarget(
+                                            $target,
+                                            $playerFaction
+                                        );
+
+                                        // Ignore invalid targets and the player's own faction.
+                                        if (
+                                            $rivalFaction === null ||
+                                            $rivalFaction === $playerFaction
+                                        ) {
+                                            continue;
+                                        }
+
+                                        // Retrieve the current relationship tier.
+                                        $currentTier = getRivalRelationshipStatus(
+                                            $champion,
+                                            $rivalFaction
+                                        );
+
+                                        if ($currentTier !== null) {
+                                            $relationshipTiers[$rivalFaction] = $currentTier;
+                                        }
+                                    }
+                                }
 
                                 $isInsightUnlocked = meetsChoiceRequirements(
                                     $champion,
@@ -794,6 +904,33 @@
                                 style="--advice-index: <?= $adviceIndex ?>"
                                 >
 
+                                <?php if (!empty($relationshipTiers)): ?>
+
+                                    <div class="insight-relic__relationships">
+
+                                        <?php foreach ($relationshipTiers as $target => $tier): ?>
+
+                                            <div class="insight-relic__relationship">
+
+                                                <span class="insight-relic__relationship-name">
+                                                    <?= htmlspecialchars(
+                                                        ucwords(str_replace("_", " ", $target))
+                                                    ) ?>
+                                                </span>
+
+                                                <span class="insight-relic__relationship-tier"
+                                                    data-tier="<?= htmlspecialchars($tier) ?>">
+                                                    <?= htmlspecialchars($tier) ?>
+                                                </span>
+
+                                            </div>
+
+                                        <?php endforeach; ?>
+
+                                    </div>
+
+                                <?php endif; ?>
+
                                 <?php if ($customInsight !== ""): ?>
                                     <p class="insight-relic__custom">
                                         <?= htmlspecialchars($customInsight) ?>
@@ -801,7 +938,12 @@
                                 <?php endif; ?>
 
                                 <?php if ($automaticInsight !== null): ?>
-                                    <p class="insight-relic__automatic">
+                                    <?php
+                                        $isCultivationPrediction =
+                                            (int) ($choice["effects"]["special"]["level_up"] ?? 0) > 0;
+                                    ?>
+
+                                    <p class="insight-relic__automatic<?= $isCultivationPrediction ? ' insight-relic__automatic--cultivation' : '' ?>">
                                         <?= htmlspecialchars($automaticInsight) ?>
                                     </p>
                                 <?php endif; ?>
