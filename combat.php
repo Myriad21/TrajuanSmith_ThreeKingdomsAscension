@@ -30,6 +30,17 @@
     $combat = $_SESSION["combat"];
 
 
+    // Record the wolf's defeat so the story
+    // can recognize that the encounter is complete.
+    if (
+        $combat["status"] === "victory" &&
+        ($combat["enemy_id"] ?? "mana_corrupted_wolf") === "mana_corrupted_wolf"
+    ) {
+        $_SESSION["story_flags"]["wolf_defeated"] = true;
+    }
+
+
+
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         $combatAction = $_POST["combat_action"] ?? "";
