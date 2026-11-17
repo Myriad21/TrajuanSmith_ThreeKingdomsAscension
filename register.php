@@ -96,10 +96,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="assets/css/navigation.css">
-    <link rel="stylesheet" href="assets/css/register.css">
+    <link rel="stylesheet" href="assets/css/auth.css">
 </head>
 
-<body>
+<body class="<?= !empty($errors) ? 'auth-error' : 'auth-default' ?>">
     <header class="site-header">
         <nav class="site-nav" aria-label="Main navigation">
             <a href="index.php" class="site-logo">

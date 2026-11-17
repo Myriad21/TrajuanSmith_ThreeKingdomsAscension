@@ -1,0 +1,215 @@
+body.auth-default,
+body.auth-error {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    transition: background-image 0.3s ease;
+}
+
+/* Normal authentication background */
+
+body.auth-default {
+    background-image:
+        linear-gradient(
+            rgba(15, 17, 20, 0.55),
+            rgba(15, 17, 20, 0.75)
+        ),
+        url("../images/auth-background.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+/* Error authentication background */
+
+body.auth-error {
+    background-image:
+        linear-gradient(
+            rgba(20, 8, 8, 0.65),
+            rgba(30, 8, 8, 0.80)
+        ),
+        url("../images/auth-error-background.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.register-section,
+.login-section {
+    background-color: rgba(48, 53, 58, 0.95);
+    backdrop-filter: blur(6px);
+}
+
+
+.register-section,
+.login-section {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 2.5rem;
+
+    background-color: var(--bg-panel);
+    border: 1px solid var(--border-default);
+    border-radius: var(--panel-radius);
+}
+
+.register-section h1,
+.login-section h1 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+
+    color: var(--accent-secondary);
+    font-size: 2rem;
+    font-weight: normal;
+    text-align: center;
+}
+
+.register-section > p,
+.login-section > p {
+    margin-bottom: 2rem;
+
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.register-section form,
+.login-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    color: var(--text-primary);
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem 1rem;
+
+    background-color: var(--bg-interactive);
+    color: var(--text-primary);
+
+    border: 1px solid var(--border-default);
+    border-radius: var(--panel-radius);
+
+    font: inherit;
+
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.form-group input:hover {
+    border-color: var(--accent-secondary);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--accent-secondary);
+
+    box-shadow: 0 0 0 2px rgba(180, 149, 112, 0.2);
+}
+
+.form-group input::placeholder {
+    color: var(--text-secondary);
+}
+
+.register-section button,
+.login-section button {
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+
+.error-message {
+    padding: 1rem 1.25rem;
+
+    background-color: rgba(158, 83, 74, 0.15);
+    border: 1px solid var(--accent-primary);
+    border-left: 4px solid var(--accent-primary);
+    border-radius: var(--panel-radius);
+}
+
+.error-message h2 {
+    margin: 0 0 0.75rem;
+
+    color: #D98276;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.error-message ul {
+    margin: 0;
+    padding-left: 1.25rem;
+
+    color: var(--text-primary);
+}
+
+.error-message li {
+    margin-bottom: 0.4rem;
+}
+
+.error-message li:last-child {
+    margin-bottom: 0;
+}
+
+.login-link,
+.register-link {
+    margin-top: 1.5rem;
+    margin-bottom: 0;
+
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.login-link a,
+.register-link a {
+    color: var(--accent-secondary);
+    font-weight: bold;
+    text-decoration: none;
+
+    transition: color 0.2s ease;
+}
+
+.login-link a:hover,
+.register-link a:hover {
+    color: var(--text-primary);
+    text-decoration: underline;
+}
+
+.login-link a:focus-visible,
+.register-link a:focus-visible {
+    outline: 2px solid var(--accent-secondary);
+    outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+    .register-section,
+    .login-section {
+        padding: 1.5rem;
+    }
+
+    .register-section h1,
+    .login-section h1 {
+        font-size: 1.7rem;
+    }
+
+    .error-message {
+        padding: 0.9rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .form-group input,
+    .login-link a,
+    .register-link a {
+        transition: none;
+    }
+}
