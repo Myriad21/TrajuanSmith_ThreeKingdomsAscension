@@ -107,8 +107,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </a>
 
             <ul class="nav-links">
-                <li><a href="index.php" aria-current="page">Home</a></li>
+                <li><a href="index.php">Home</a></li>
                 <li><a href="leaderboard.php">Leaderboard</a></li>
+                <li><a href="register.php" aria-current="page">Register</a></li>
                 <li><a href="login.php">Login</a></li>
             </ul>
         </nav>

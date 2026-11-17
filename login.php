@@ -87,6 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <li><a href="index.php">Home</a></li>
                 <li><a href="leaderboard.php">Leaderboard</a></li>
                 <li><a href="register.php">Register</a></li>
+                <li><a href="login.php" aria-current="page">Login</a></li>
             </ul>
         </nav>
     </header>
