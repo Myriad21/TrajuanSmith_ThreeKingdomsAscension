@@ -1,0 +1,324 @@
+{
+    "1": {
+        "champion": {
+            "name": "Kael",
+            "faction": "warrior",
+            "hp": 160,
+            "max_hp": 160,
+            "strength": 25,
+            "mana": 30,
+            "max_mana": 60,
+            "level": 3,
+            "inventory": [],
+            "act": 1,
+            "story_node": "act1_start",
+            "choices_log": [],
+            "relationships": {
+                "warrior": 100,
+                "mage": 50,
+                "rogue": 30
+            },
+            "defeated_rivals": [],
+            "artifact_knowledge": false,
+            "ending": null,
+            "equipped_weapon": "reinforced_sword"
+        },
+        "story_node": "act1_training_dummy",
+        "story_flags": {
+            "artifact_rival_warning": true,
+            "path_weapon_collected": true,
+            "explored_path": true,
+            "explored_mana": true,
+            "mana_beast_warning": true,
+            "wolf_ambush_resolved": true,
+            "wolf_defeated": true,
+            "wolf_crystal_absorbed": true,
+            "rival_surprise_attack": true,
+            "approached_rivals_first": false,
+            "defeated_rivals": [
+                "rogue"
+            ],
+            "injured_rivals": [
+                "rogue"
+            ],
+            "act1_rival_defeated": true,
+            "act1_rival_retreated": true,
+            "ancient_mana_absorbed": true,
+            "act1_expedition_completed": true,
+            "act1_returned_home": true,
+            "learned_rogue_history": true,
+            "learned_warrior_history": true,
+            "learned_mage_history": true,
+            "act1_kingdom_report_completed": true
+        },
+        "inventory": [
+            "reinforced_sword"
+        ],
+        "choices_log": [
+            {
+                "scene": "introduction",
+                "act": null,
+                "scene_title": "Investigating the Rumors",
+                "choice": "investigate",
+                "choice_text": "You decided to investigate the rumors surrounding the ancient artifact."
+            },
+            {
+                "scene": "expedition_start",
+                "act": 1,
+                "scene_title": "Exploring the Overgrown Path",
+                "choice": "explore_path",
+                "choice_text": "You ventured beyond the main ruins to investigate a forgotten trail concealed by the surrounding forest."
+            },
+            {
+                "scene": "explore_path",
+                "act": 1,
+                "scene_title": "Recovering Forgotten Equipment",
+                "choice": "take_weapon",
+                "choice_text": "You recovered a weapon from the abandoned campsite."
+            },
+            {
+                "scene": "explore_path",
+                "act": 1,
+                "scene_title": "Discovering Forgotten Equipment",
+                "choice": "return_to_exploration",
+                "choice_text": "You discovered an abandoned campsite containing a well-preserved cultivator weapon, potentially superior to your starting equipment."
+            },
+            {
+                "scene": "expedition_start",
+                "act": 1,
+                "scene_title": "Investigating the Mana Disturbance",
+                "choice": "investigate_mana",
+                "choice_text": "You chose to investigate the unusual mana fluctuations surrounding the ancient ruins."
+            },
+            {
+                "scene": "explore_mana",
+                "act": 1,
+                "scene_title": "Discovering Signs of Danger",
+                "choice": "return_to_exploration",
+                "choice_text": "You discovered evidence that unstable mana may be affecting the local wildlife, suggesting that a dangerous creature could be roaming the ruins."
+            },
+            {
+                "scene": "expedition_start",
+                "act": 1,
+                "scene_title": "Continuing the Expedition",
+                "choice": "continue_expedition",
+                "choice_text": "You decided to leave the exploration area behind and proceed deeper into the ruins, abandoning any remaining discoveries."
+            },
+            {
+                "scene": "expedition_deeper",
+                "act": 1,
+                "scene_title": "Confronting the Corrupted Wolf",
+                "choice": "fight_wolf",
+                "choice_text": "You prepared to battle the Mana-Corrupted Wolf."
+            },
+            {
+                "scene": "expedition_deeper",
+                "act": 1,
+                "scene_title": "Wolf Defeated",
+                "choice": "continue_after_wolf",
+                "choice_text": "You defeated the Mana-Corrupted Wolf and secured the expedition's path."
+            },
+            {
+                "scene": "wolf_aftermath",
+                "act": 1,
+                "scene_title": "First Cultivation Breakthrough",
+                "choice": "absorb_wolf_crystal",
+                "choice_text": "You absorbed the Mana-Corrupted Wolf's crystal and advanced to Level 2."
+            },
+            {
+                "scene": "wolf_breakthrough",
+                "act": 1,
+                "scene_title": "Exploring the Ancient Ruins",
+                "choice": "continue_exploration",
+                "choice_text": "After reaching Level 2, you continued the expedition alongside your two Level 4 senior companions."
+            },
+            {
+                "scene": "ruins_deeper_exploration",
+                "act": 1,
+                "scene_title": "Scouting the Ancient Ruins",
+                "choice": "scout_surroundings",
+                "choice_text": "Remembering the intelligence reports, you decided to investigate the surrounding area before approaching the ancient structure."
+            },
+            {
+                "scene": "rival_scouting",
+                "act": 1,
+                "scene_title": "Ambushing the Rival Champion",
+                "choice": "surprise_attack_rival",
+                "choice_text": "You launched a surprise attack against the unsuspecting rival champion, damaging relations with their kingdom."
+            },
+            {
+                "scene": "rival_ambush",
+                "act": 1,
+                "scene_title": "Battling the Rival Champion",
+                "choice": "fight_rival",
+                "choice_text": "After landing a successful ambush, you prepared to fight the wounded Level 2 rival champion."
+            },
+            {
+                "scene": "rival_retreat",
+                "act": 1,
+                "scene_title": "Victory Over the Rival",
+                "choice": "investigate_ruins",
+                "choice_text": "Defeated the rival champion and continued exploring the ancient ruins."
+            },
+            {
+                "scene": "rival_victory_ruins",
+                "act": 1,
+                "scene_title": "Questions About the Artifact",
+                "choice": "ask_about_fluctuations",
+                "choice_text": "Asked the senior cultivators about the strange mana fluctuations."
+            },
+            {
+                "scene": "minor_fluctuation_explanation",
+                "act": 1,
+                "scene_title": "Ancient Ruins",
+                "choice": "return_to_ruins",
+                "choice_text": "You've learnt about the mysterious fluctuations."
+            },
+            {
+                "scene": "rival_victory_ruins",
+                "act": 1,
+                "scene_title": "Liquid Mana Discovered",
+                "choice": "absorb_ancient_mana",
+                "choice_text": "Discovered a rare pool of liquid mana within the ancient ruins and began a cultivation breakthrough."
+            },
+            {
+                "scene": "act1_cultivation_breakthrough",
+                "act": 1,
+                "scene_title": "Reaching Level 3",
+                "choice": "speak_to_companions",
+                "choice_text": "You absorbed the ancient liquid mana, achieved your second cultivation breakthrough, and advanced to Level 3."
+            },
+            {
+                "scene": "act1_companion_congratulations",
+                "act": 1,
+                "scene_title": "Returning Home",
+                "choice": "return_to_kingdom",
+                "choice_text": "After reaching Level 3, you received congratulations from your senior companions and began the journey back to your kingdom."
+            },
+            {
+                "scene": "act1_kingdom_return",
+                "act": 1,
+                "scene_title": "Studying the Rogue Kingdom",
+                "choice": "learn_rogue_history",
+                "choice_text": "You chose to learn about the history and covert traditions of the Rogue Kingdom."
+            },
+            {
+                "scene": "rogue_kingdom_lore",
+                "act": 1,
+                "scene_title": "Rogue Kingdom History",
+                "choice": "return_from_rogue_lore",
+                "choice_text": "You studied the Rogue Kingdom's origins, intelligence networks, and philosophy of precision-based cultivation."
+            },
+            {
+                "scene": "act1_kingdom_return",
+                "act": 1,
+                "scene_title": "Studying the Warrior Kingdom",
+                "choice": "learn_warrior_history",
+                "choice_text": "You chose to learn about the history and traditions of the Warrior Kingdom."
+            },
+            {
+                "scene": "warrior_kingdom_lore",
+                "act": 1,
+                "scene_title": "Warrior Kingdom History",
+                "choice": "return_from_warrior_lore",
+                "choice_text": "You studied the Warrior Kingdom's origins, military traditions, and philosophy of physical cultivation."
+            },
+            {
+                "scene": "act1_kingdom_return",
+                "act": 1,
+                "scene_title": "Studying the Mage Kingdom",
+                "choice": "learn_mage_history",
+                "choice_text": "You chose to learn about the history and magical traditions of the Mage Kingdom."
+            },
+            {
+                "scene": "mage_kingdom_lore",
+                "act": 1,
+                "scene_title": "Mage Kingdom History",
+                "choice": "return_from_mage_lore",
+                "choice_text": "You studied the Mage Kingdom's origins, magical research institutions, and philosophy of spiritual cultivation."
+            },
+            {
+                "scene": "act1_kingdom_return",
+                "act": 1,
+                "scene_title": "A New Chapter",
+                "choice": "continue_after_return",
+                "choice_text": "After reporting your expedition's discoveries to your kingdom's leadership, you prepared for the next stage of your journey."
+            },
+            {
+                "scene": "act1_recovery_training",
+                "act": 1,
+                "scene_title": "Combat Training",
+                "choice": "practice_training_dummy",
+                "choice_text": "You entered the training grounds to practice your combat techniques against a reinforced training dummy."
+            },
+            {
+                "scene": "act1_training_dummy",
+                "act": 1,
+                "scene_title": "Combat Training",
+                "choice": "begin_dummy_training",
+                "choice_text": "You practiced your combat techniques against a reinforced training dummy."
+            },
+            {
+                "scene": "act1_training_dummy",
+                "act": 1,
+                "scene_title": "Combat Training",
+                "choice": "begin_dummy_training",
+                "choice_text": "You practiced your combat techniques against a reinforced training dummy."
+            }
+        ],
+        "last_choice_summary": {
+            "choice": "Begin Combat Training",
+            "consequences": []
+        }
+    },
+    "2": {
+        "champion": {
+            "name": "Billy",
+            "faction": "rogue",
+            "hp": 85,
+            "max_hp": 85,
+            "strength": 13,
+            "mana": 70,
+            "max_mana": 70,
+            "level": 1,
+            "inventory": [],
+            "act": 1,
+            "story_node": "act1_start",
+            "choices_log": [],
+            "relationships": {
+                "warrior": 50,
+                "mage": 50,
+                "rogue": 100
+            },
+            "defeated_rivals": [],
+            "artifact_knowledge": false,
+            "ending": null,
+            "adventure_started": true
+        },
+        "story_node": "expedition_start",
+        "story_flags": {
+            "artifact_rival_warning": false
+        },
+        "inventory": [
+            "healing_potion"
+        ],
+        "choices_log": [
+            {
+                "scene": "introduction",
+                "act": null,
+                "scene_title": "Preparing for the Expedition",
+                "choice": "prepare",
+                "choice_text": "You decided to prepare for the expedition before leaving your kingdom."
+            }
+        ],
+        "last_choice_summary": {
+            "choice": "Prepare for the expedition",
+            "consequences": [
+                {
+                    "text": "+1 Healing Potion",
+                    "type": "positive"
+                }
+            ]
+        }
+    }
+}
