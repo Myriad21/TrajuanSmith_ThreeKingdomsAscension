@@ -1,11 +1,18 @@
-
 <?php
 session_start();
 
-if (!isset($_SESSION["champion"])) {
+// Require authentication before viewing champion details.
+if (!isset($_SESSION["user"])) {
+    header("Location: login.php");
+    exit;
+}
+
+// Require an existing champion.
+if (!isset($_SESSION["champion"]) || !is_array($_SESSION["champion"])) {
     header("Location: character.php");
     exit;
 }
+
 
 $champion = $_SESSION["champion"];
 ?>
