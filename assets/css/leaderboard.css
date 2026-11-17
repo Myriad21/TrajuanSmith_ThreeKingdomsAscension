@@ -1,0 +1,166 @@
+body {
+    background-image: url("../images/leaderboard-background.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.leaderboard-section {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2.5rem;
+}
+
+.leaderboard-section h1 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+
+    color: var(--accent-secondary);
+    font-size: 2.4rem;
+    font-weight: normal;
+    text-align: center;
+}
+
+.leaderboard-description {
+    margin-bottom: 2rem;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.leaderboard-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+
+    border: 1px solid var(--border-default);
+    border-radius: var(--panel-radius);
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    background-color: var(--bg-interactive);
+    color: var(--text-primary);
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+    padding: 1rem 1.25rem;
+    text-align: center;
+
+    border-bottom: 1px solid var(--border-default);
+}
+
+.leaderboard-table th {
+    background-color: var(--bg-panel);
+    color: var(--accent-secondary);
+
+    font-weight: bold;
+    letter-spacing: 0.04em;
+}
+
+.leaderboard-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.leaderboard-table tbody tr:hover {
+    background-color: var(--bg-panel);
+}
+
+.leaderboard-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.leaderboard-table tbody tr:nth-child(1) td:first-child {
+    color: #D9B45B;
+    font-weight: bold;
+}
+
+.leaderboard-table tbody tr:nth-child(2) td:first-child {
+    color: #B8C1C9;
+    font-weight: bold;
+}
+
+.leaderboard-table tbody tr:nth-child(3) td:first-child {
+    color: #B98255;
+    font-weight: bold;
+}
+
+.leaderboard-table td:nth-child(3) {
+    font-weight: bold;
+}
+
+.leaderboard-table tr td:nth-child(3) {
+    color: var(--text-secondary);
+}
+
+.kingdom-warrior {
+    color: var(--faction-warrior) !important;
+}
+
+.kingdom-mage {
+    color: var(--faction-mage) !important;
+}
+
+.kingdom-rogue {
+    color: var(--faction-rogue) !important;
+}
+
+.league-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+}
+
+.league-badge img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+
+.league-badge span {
+    font-weight: bold;
+    color: var(--text-primary);
+}
+
+.empty-leaderboard {
+    padding: 2rem;
+
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .league-badge {
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+    .league-badge img {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media (max-width: 600px) {
+    .leaderboard-section {
+        padding: 1.25rem;
+    }
+
+    .leaderboard-section h1 {
+        font-size: 1.8rem;
+    }
+
+    .leaderboard-table th,
+    .leaderboard-table td {
+        padding: 0.75rem 0.6rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .leaderboard-table tbody tr {
+        transition: none;
+    }
+}

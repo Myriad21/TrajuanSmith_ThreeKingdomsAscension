@@ -1,0 +1,26 @@
+[
+    {
+        "user_id": 1,
+        "champion_name": "Sword Master",
+        "kingdom": "Warrior",
+        "level": 25
+    },
+    {
+        "user_id": 2,
+        "champion_name": "Grand Maester",
+        "kingdom": "Mage",
+        "level": 20
+    },
+    {
+        "user_id": 3,
+        "champion_name": "Shadow Lord",
+        "kingdom": "Rogue",
+        "level": 10
+    },
+    {
+        "user_id": 4,
+        "champion_name": "Shadow Emperor",
+        "kingdom": "Rogue",
+        "level": 40
+    }
+]
