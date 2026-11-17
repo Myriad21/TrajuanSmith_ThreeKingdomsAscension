@@ -12,8 +12,18 @@ function initializeCombat(string $enemyId): array
             "max_hp" => 36,
             "strength" => 6,
             "is_boss" => false,
+        ],
 
+        "first_rival" => [
+            "id" => "first_rival",
+            "name" => "Rival Champion",
+            "level" => 2,
+            "hp" => 200,
+            "max_hp" => 200,
+            "strength" => 12,
+            "is_boss" => true,
         ]
+
     ];
 
     if (!isset($enemies[$enemyId])) {

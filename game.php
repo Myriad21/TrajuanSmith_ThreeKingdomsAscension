@@ -82,6 +82,31 @@
         $_SESSION["story_flags"] = [];
     }
 
+
+    // Apply the wolf ambush only once when entering the encounter.
+    if (
+        ($_SESSION["story_node"] ?? null) === "expedition_deeper" &&
+        empty($_SESSION["story_flags"]["wolf_ambush_resolved"])
+    ) {
+        $wasWarned = !empty(
+            $_SESSION["story_flags"]["mana_beast_warning"]
+        );
+
+        if (!$wasWarned) {
+            $_SESSION["champion"]["hp"] = max(
+                0,
+                (int) $_SESSION["champion"]["hp"] - 12
+            );
+        }
+
+        // Record that this encounter's ambush has been processed.
+        $_SESSION["story_flags"]["wolf_ambush_resolved"] = true;
+
+        // Refresh the displayed HP after updating the session.
+        $championHP = $_SESSION["champion"]["hp"];
+    }
+
+
     // Equip an owned weapon without advancing the story.
     if (
         $_SERVER["REQUEST_METHOD"] === "POST" &&
@@ -238,12 +263,27 @@
                     "consequences" => $consequenceSummary
                 ];
 
+                
                 // Advance to the next scene.
                 $_SESSION["story_node"] = $nextNodeId;
+
+                // Start the wolf encounter when the player chooses to fight.
+                if (
+                    $currentNodeId === "expedition_deeper" &&
+                    $choiceId === "fight_wolf"
+                ) {
+                    // Clear any previous combat session.
+                    unset($_SESSION["combat"]);
+
+                    // Redirect to the combat interface.
+                    header("Location: combat.php");
+                    exit;
+                }
 
                 // Prevent duplicate form submissions.
                 header("Location: game.php");
                 exit;
+
             }
 
         }
@@ -456,8 +496,7 @@
 
                             foreach ($requiredFlags as $flagName => $expectedValue) {
                                 if (
-                                    !array_key_exists($flagName, $_SESSION["story_flags"] ?? []) ||
-                                    $_SESSION["story_flags"][$flagName] !== $expectedValue
+                                    ($_SESSION["story_flags"][$flagName] ?? false) !== $expectedValue
                                 ) {
                                     $matches = false;
                                     break;
