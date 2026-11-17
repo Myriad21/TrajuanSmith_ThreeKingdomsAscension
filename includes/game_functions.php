@@ -257,6 +257,23 @@ function applyStoryConsequences( array $champion, array $inventory, array $flags
         );
     }
 
+    // Apply reusable special effects.
+    $specialEffects = $effects["special"] ?? [];
+
+    if (
+        is_array($specialEffects) &&
+        !empty($specialEffects["level_up"])
+    ) {
+        $levels = (int) $specialEffects["level_up"];
+
+        $champion = levelUpChampion(
+            $champion,
+            $levels
+        );
+    }
+
+
+
 
     return [
         "champion" => $champion,
@@ -491,15 +508,18 @@ function getChoiceStatPreviews(array $effects): array
     $previews = [];
 
     $allowedStats = [
+        "level" => "Level",
+        "max_hp" => "Max HP",
         "hp" => "HP",
         "strength" => "Strength",
+        "max_mana" => "Max Mana",
         "mana" => "Mana"
     ];
 
     $statEffects = $effects["stats"] ?? [];
 
     if (!is_array($statEffects)) {
-        return $previews;
+        $statEffects = [];
     }
 
     foreach ($statEffects as $stat => $change) {
@@ -520,6 +540,18 @@ function getChoiceStatPreviews(array $effects): array
         ];
     }
 
+
+    // Preview level increases from reusable special effects.
+    $levelIncrease = (int) ($effects["special"]["level_up"] ?? 0);
+
+    if ($levelIncrease > 0) {
+        $previews[] = [
+            "text" => "+" . $levelIncrease . " Level",
+            "type" => "positive"
+        ];
+    }
+
+
     return $previews;
 }
 
@@ -530,12 +562,45 @@ function getChoiceStatPreviews(array $effects): array
  * Relationship changes are described narratively.
  * Exact trust values remain hidden.
  */
-function getInsightRelicHint(array $effects): ?string
+function getInsightRelicHint(array $effects, array $choicesLog = []): ?string
 {
+    
+    // Predict cultivation breakthroughs from special effects.
+    $levelIncrease = (int) ($effects["special"]["level_up"] ?? 0);
+
+    if ($levelIncrease > 0) {
+        if ($levelIncrease === 1) {
+            return "This choice may increase your cultivation level by 1, strengthening your abilities and unlocking new combat techniques.";
+        }
+
+        return "This choice may increase your cultivation level by up to {$levelIncrease} levels, strengthening your abilities and unlocking new combat techniques.";
+    }
+
+
     $trustEffects = $effects["trust"] ?? [];
 
     if (!is_array($trustEffects) || empty($trustEffects)) {
         return null;
+    }
+
+    // Track specific decisions from the player's story history.
+    $attackedRivals = false;
+    $approachedRivals = false;
+
+    foreach ($choicesLog as $previousChoice) {
+
+        $previousScene = $previousChoice["scene"] ?? "";
+        $previousChoiceId = $previousChoice["choice"] ?? "";
+
+        // Check whether the player launched a surprise attack.
+        if ($previousChoiceId === "surprise_attack_rival") {
+            $attackedRivals = true;
+        }
+
+        // Check whether the player approached peacefully.
+        if ($previousChoiceId === "approach_rivals") {
+            $approachedRivals = true;
+        }
     }
 
     $hasPositiveChange = false;
@@ -559,10 +624,28 @@ function getInsightRelicHint(array $effects): ?string
     }
 
     if ($hasPositiveChange) {
+
+        if ($attackedRivals) {
+            return "Your earlier surprise attack damaged relations with the rival expedition. This decision may help rebuild trust, although past hostility may not be easily forgotten.";
+        }
+
+        if ($approachedRivals) {
+            return "You previously chose diplomacy over aggression. This decision may further strengthen your relationships with other champions.";
+        }
+
         return "This decision may improve your relationship with another champion.";
     }
 
-    if ($hasNegativeChange) {
+   if ($hasNegativeChange) {
+
+        if ($attackedRivals) {
+            return "Your earlier surprise attack has already created hostility. This decision may further worsen your image.";
+        }
+
+        if ($approachedRivals) {
+            return "Although you previously approached the rival expedition peacefully, this decision may undermine the goodwill established through diplomacy.";
+        }
+
         return "This decision may damage your relationship with another champion.";
     }
 
@@ -586,8 +669,11 @@ function getChoiceConsequenceSummary( array $championBefore,
 
     // 1. STAT CONSEQUENCES
     $statNames = [
+        "level" => "Level",
+        "max_hp" => "Max HP",
         "hp" => "HP",
         "strength" => "Strength",
+        "max_mana" => "Max Mana",
         "mana" => "Mana"
     ];
 
@@ -812,6 +898,80 @@ function getEquippedWeaponBonus(
 
     return (int) ($weapon["damage_bonus"] ?? 0);
 }
+
+
+/**
+ * Level up a champion using faction-specific stat gains.
+ * Champions cannot exceed Level 5 with this function.
+ */
+function levelUpChampion(array $champion, int $levels = 1): array
+{
+    $statGains = [
+        "warrior" => [
+            "max_hp" => 20,
+            "strength" => 5,
+            "max_mana" => 10
+        ],
+        "mage" => [
+            "max_hp" => 10,
+            "strength" => 3,
+            "max_mana" => 22
+        ],
+        "rogue" => [
+            "max_hp" => 15,
+            "strength" => 4,
+            "max_mana" => 16
+        ]
+    ];
+
+    $faction = $champion["faction"] ?? "";
+
+    if (!isset($statGains[$faction]) || $levels <= 0) {
+        return $champion;
+    }
+
+    for ($i = 0; $i < $levels; $i++) {
+
+        if ($champion["level"] >= 5) {
+            break;
+        }
+
+        $champion["level"]++;
+
+        $champion["max_hp"] += $statGains[$faction]["max_hp"];
+        $champion["strength"] += $statGains[$faction]["strength"];
+        $champion["max_mana"] += $statGains[$faction]["max_mana"];
+
+        
+        // Fully restore HP after gaining a level.
+        $champion["hp"] = $champion["max_hp"];
+
+
+        $champion["mana"] = min(
+            $champion["max_mana"],
+            $champion["mana"] + $statGains[$faction]["max_mana"]
+        );
+    }
+
+    return $champion;
+}
+
+/**
+ * Zenith Boost - This is outside level stat specific increases 
+ * that do not increase level
+ * Only available in act II through sufficient exploration of Compound
+ * And its surrounding Area. Once a character
+ * 
+ * A set +5 increase in strenght for Warrior
+ * A set +5 increase in Mana for Mage
+ * A set +2 strength and +3 mana for Rogue
+ * 
+ * Achieve 3 Zenith boosts and Achieve Level 5 to fullfill one of the
+ * requirements for the 3 fold accord secret ending.
+ */
+
+function zenithBoost() {}
+
 
 
 

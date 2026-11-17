@@ -538,19 +538,117 @@ function getStoryNodes(): array
             ],
 
 
-            "text" => "The Mana-Corrupted Wolf collapses to the ground, its final growl fading into the silence of the surrounding forest.
+            "text" => "The Mana-Corrupted Wolf lies motionless as the dark energy surrounding its body slowly fades.
 
-            Your two senior companions approach curiously, examining the fallen creature. The dark mana surrounding its body slowly begins to dissipate, leaving behind traces of an unfamiliar corruption.
+            Your two Level 4 senior companions approach the fallen creature. One kneels beside it, examining the strange corruption lingering beneath its fur.
 
-            One of your companions kneels beside the beast, studying the lingering energy.
+            As they investigate, a faint glow emerges from a wound near the creature's chest.
 
-            'This corruption is no ordinary disturbance,' they warn. 'Something deeper within these ruins may be responsible.'
+            Hidden within its body is an extraordinarily small crystal, no larger than a grain of sand. Despite its size, the crystal radiates a surprising amount of concentrated mana.
 
-            The other senior turns toward the path ahead, their expression growing serious.
+            'Interesting,' one senior remarks. 'The creature must have absorbed this energy from somewhere within the ruins.'
 
-            Although the immediate threat has been eliminated, the encounter raises troubling questions about the forces affecting this region.
+            Your other companion studies the crystal before turning toward you.
 
-            With the path now clear, your expedition prepares to continue deeper into the ancient ruins.",
+            'Its energy is relatively weak, but for a Level 1 cultivator, it may be enough to trigger a breakthrough.'
+
+            The crystal pulses gently, its mana responding to your presence.",
+
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "absorb_wolf_crystal" => [
+                    "text" => "Absorb the Wolf's Mana Crystal",
+
+                    "description" => "Absorb the concentrated mana to strengthen your cultivation and advance to Level 2.",
+
+                    "insight_text" => "The crystal contains enough concentrated mana to trigger your first cultivation breakthrough. Absorbing it will permanently strengthen your body and unlock your faction's first special ability.",
+
+                    "next" => "wolf_breakthrough",
+
+                    "requires" => [
+                        "flags" => [
+                            "wolf_defeated" => true,
+                            "wolf_crystal_absorbed" => false
+                        ]
+                    ],
+
+                    "effects" => [
+                         "special" => [
+                            "level_up" => 1
+                        ],
+                        "flags" => [
+                            "wolf_crystal_absorbed" => true
+                        ],
+                    ],
+
+                    "tracker_title" => "First Cultivation Breakthrough",
+
+                    "tracker_text" => "You absorbed the Mana-Corrupted Wolf's crystal and advanced to Level 2."
+                ]
+
+            ]
+
+        ],
+
+
+        "wolf_breakthrough" => [
+            "title" => "Your First Cultivation Breakthrough",
+            "act" => 1,
+
+            "text" => "You carefully absorb the tiny mana crystal.
+
+                The concentrated energy enters your body, spreading through your meridians. For a moment, the pressure becomes overwhelming as your cultivation approaches its limit.
+
+                Then, something within you gives way.
+
+                The barrier separating Level 1 from Level 2 shatters, and a new current of mana surges through your body.",
+
+            "faction_text" => [
+                "warrior" => "The energy rushes into your muscles and bones, reinforcing your body from within.
+
+                                Your heartbeat grows stronger as your physical endurance increases. You tighten your grip around your weapon, surprised by how effortlessly you can now control its weight.
+
+                                Instinctively, you channel mana through your arms and into your weapon. A powerful force gathers around its edge, revealing a new combat technique that had previously been beyond your abilities.
+
+                                Your strength and durability have increased significantly.
+
+                                You have successfully reached Level 2, awakening your Warrior special ability.",
+
+                "mage" => "The concentrated mana flows toward your spiritual core, gathering into a brilliant sphere of magical energy.
+
+                            Your core expands as the crystal's power merges with your own. The surrounding mana, once difficult to distinguish, now feels remarkably clear.
+
+                            You extend your hand, and magical energy gathers around your fingertips. Without consciously forming a spell, you begin manipulating the mana into a concentrated arcane technique.
+
+                            Your magical capacity has expanded significantly.
+
+                            You have successfully reached Level 2, awakening your Mage special ability.",
+
+                "rogue" => "The crystal's energy spreads through your nerves and muscles, sharpening your senses almost instantly.
+
+                            Your surroundings seem to slow as your perception becomes more precise. Every movement feels lighter, and even the smallest shifts in your balance become effortless to control.
+
+                            You instinctively channel mana through your weapon. For an instant, your movements become nearly impossible to follow as you execute a rapid, precise strike.
+
+                            Your physical control and combat precision have improved significantly.
+
+                            You have successfully reached Level 2, awakening your Rogue special ability: Shadow Strike."
+            ],
+
+            "companion_text" => "Your two Level 4 senior companions exchange surprised glances.
+
+                                    'Already a breakthrough?' one remarks. 'That crystal was small, but your body absorbed its energy remarkably well.'
+
+                                    The other senior nods.
+
+                                    'You've reached Level 2, but don't become overconfident. There are far more dangerous creatures deeper within these ruins.'
+
+                                    With your cultivation strengthened, the expedition prepares to continue.",
 
             "backgrounds" => [
                 "page" => null,
@@ -563,21 +661,25 @@ function getStoryNodes(): array
 
                     "description" => "Continue investigating the ancient ruins alongside your senior companions.",
 
-                    "insight_text" => "The wolf's corruption suggests that something unusual is affecting this region. Continuing the investigation may reveal its source.",
+                    "insight_text" => "Your cultivation has advanced, but the source of the wolf's corruption remains unknown. Continuing deeper may reveal what is affecting these ruins.",
 
                     "next" => "ruins_deeper_exploration",
 
-                    "requires" => [],
+                    "requires" => [
+                        "stats" => [
+                            "level" => 2
+                        ]
+                    ],
 
                     "effects" => [],
 
                     "tracker_title" => "Exploring the Ancient Ruins",
 
-                    "tracker_text" => "You continued the expedition alongside your two Level 4 senior companions."
+                    "tracker_text" => "After reaching Level 2, you continued the expedition alongside your two Level 4 senior companions."
                 ]
             ]
-
         ],
+
 
 
         "ruins_deeper_exploration" => [
@@ -598,7 +700,9 @@ function getStoryNodes(): array
 
             Such is the power of a Level 4 cultivator.
 
-            Compared to your own Level 1 cultivation, the difference is overwhelming. The mana flowing through their bodies is far denser and more refined than anything you can currently control. Even their simplest techniques demonstrate a level of mastery that remains far beyond your reach.
+            Despite your recent breakthrough to Level 2, the difference between your cultivation and that of your Level 4 companions remains overwhelming.
+
+            The mana flowing through their bodies is far denser and more refined than anything you can currently control. Although the wolf's crystal has strengthened your abilities, even the simplest techniques demonstrated by your seniors reveal how much further you have yet to progress.
 
             As the expedition continues, the seniors uncover fragments of ancient inscriptions, damaged formations, and remnants of structures that once channeled extraordinary quantities of mana.
 
@@ -628,7 +732,7 @@ function getStoryNodes(): array
 
                     "insight_text" => "The structure may contain valuable information about the artifact. However, approaching immediately means leaving the surrounding area unexplored.",
 
-                    "next" => "first_rival_encounter",
+                    "next" => "ancient_structure_approach",
 
                     "requires" => [],
 
@@ -669,276 +773,1184 @@ function getStoryNodes(): array
         ],
 
 
+        "ancient_structure_approach" => [
+            "title" => "Shadows Among the Ruins",
+            "act" => 1,
 
-    "ancient_structure_approach" => [
-        "title" => "Shadows Among the Ruins",
-        "act" => 1,
+            "text" => "You and your two senior companions begin approaching the ancient structure.
 
-        "text" => "You and your two senior companions begin approaching the ancient structure.
+            As you draw closer, the mana surrounding the ruins grows increasingly intense. Intricate formations carved into the stone walls emit a faint glow, suggesting that some of the structure's ancient mechanisms remain active.
 
-        As you draw closer, the mana surrounding the ruins grows increasingly intense. Intricate formations carved into the stone walls emit a faint glow, suggesting that some of the structure's ancient mechanisms remain active.
+            The entrance stands beyond a series of enormous stone pillars. Although much of the surrounding area has fallen into disrepair, the path leading toward the entrance appears unusually clear.
 
-        The entrance stands beyond a series of enormous stone pillars. Although much of the surrounding area has fallen into disrepair, the path leading toward the entrance appears unusually clear.
+            Your senior companions slow their pace, carefully examining the powerful energy radiating from within the structure.",
 
-        Your senior companions slow their pace, carefully examining the powerful energy radiating from within the structure.",
+            "conditional_text" => [
+                [
+                    "requires" => [
+                        "flags" => [
+                            "artifact_rival_warning" => true
+                        ]
+                    ],
 
-        "conditional_text" => [
-            [
-                "requires" => [
-                    "flags" => [
-                        "artifact_rival_warning" => true
-                    ]
+                    "text" => "As you examine the surrounding ruins, you remember the intelligence reports you investigated before leaving your kingdom.
+
+                    Rival agents had reportedly been sighted traveling toward this region. Given the extraordinary mana surrounding the ancient structure, you suspect that your expedition may not be the first to discover it.
+
+                    Rather than focusing entirely on the entrance, you carefully survey the surrounding pillars and damaged structures.
+
+                    Your caution proves worthwhile.
+
+                    Beyond a partially collapsed wall, you notice several figures moving through the ruins. Their movements are deliberate, and the mana surrounding them is unmistakably that of trained cultivators.
+
+                    You quickly alert your senior companions.
+
+                    From your concealed position, you identify a rival expedition consisting of three cultivators. Two possess mana signatures comparable to those of your Level 4 companions, while the third appears to be a younger champion.
+
+                    The rival expedition has not yet noticed your presence.
+
+                    You have an opportunity to approach them on your own terms."
                 ],
 
-                "text" => "As you examine the surrounding ruins, you remember the intelligence reports you investigated before leaving your kingdom.
+                [
+                    "requires" => [
+                        "flags" => [
+                            "artifact_rival_warning" => false
+                        ]
+                    ],
 
-                Rival agents had reportedly been sighted traveling toward this region. Given the extraordinary mana surrounding the ancient structure, you suspect that your expedition may not be the first to discover it.
+                    "text" => "Your attention remains fixed on the extraordinary mana emanating from the ancient structure.
 
-                Rather than focusing entirely on the entrance, you carefully survey the surrounding pillars and damaged structures.
+                    Unaware that other expeditions may be searching the region, you fail to notice the movement taking place among the surrounding ruins.
 
-                Your caution proves worthwhile.
+                    Before your group can reach the entrance, a powerful voice suddenly echoes from behind a nearby stone pillar.
 
-                Beyond a partially collapsed wall, you notice several figures moving through the ruins. Their movements are deliberate, and the mana surrounding them is unmistakably that of trained cultivators.
+                    'Hold your position.'
 
-                You quickly alert your senior companions.
+                    Three figures emerge from the ruins, blocking your expedition's approach.
 
-                From your concealed position, you identify a rival expedition consisting of three cultivators. Two possess mana signatures comparable to those of your Level 4 companions, while the third appears to be a younger champion.
+                    Two of them radiate the unmistakable pressure of Level 4 cultivators. Between them stands a younger champion whose attention immediately settles upon you.
 
-                The rival expedition has not yet noticed your presence.
+                    Your senior companions step forward, their expressions growing serious.
 
-                You have an opportunity to approach them on your own terms."
+                    The rival expedition has discovered you first."
+                ]
             ],
 
-            [
-                "requires" => [
-                    "flags" => [
-                        "artifact_rival_warning" => false
-                    ]
-                ],
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
 
-                "text" => "Your attention remains fixed on the extraordinary mana emanating from the ancient structure.
+            "choices" => [
+                "approach_rivals" => [
+                    "text" => "Approach the Rival Expedition",
 
-                Unaware that other expeditions may be searching the region, you fail to notice the movement taking place among the surrounding ruins.
+                    "description" => "Reveal your presence and initiate contact with the rival cultivators.",
 
-                Before your group can reach the entrance, a powerful voice suddenly echoes from behind a nearby stone pillar.
+                    "insight_text" => "Your earlier investigation allowed you to discover the rival expedition before they noticed you. Approaching voluntarily may help establish a more favorable first impression.",
 
-                'Hold your position.'
+                    "next" => "first_rival_encounter",
 
-                Three figures emerge from the ruins, blocking your expedition's approach.
+                    "requires" => [
+                        "flags" => [
+                            "artifact_rival_warning" => true
+                        ]
+                    ],
 
-                Two of them radiate the unmistakable pressure of Level 4 cultivators. Between them stands a younger champion whose attention immediately settles upon you.
+                    "effects" => [
+                        "flags" => [
+                            "approached_rivals_first" => true
+                        ]
+                    ],
 
-                Your senior companions step forward, their expressions growing serious.
+                    "tracker_title" => "Discovering the Rival Expedition",
 
-                The rival expedition has discovered you first."
+                    "tracker_text" => "You identified the rival expedition before they discovered your presence and chose to approach them."
+                ]
             ]
         ],
 
-        "backgrounds" => [
-            "page" => null,
-            "scene" => null
-        ],
 
-        "choices" => [
-            "approach_rivals" => [
-                "text" => "Approach the Rival Expedition",
+        "rival_scouting" => [
+            "title" => "An Unexpected Discovery",
+            "act" => 1,
 
-                "description" => "Reveal your presence and initiate contact with the rival cultivators.",
+            
+            "text" => "Remembering the intelligence reports you investigated before leaving your kingdom, you decide to scout the surrounding ruins before approaching the ancient structure.
 
-                "insight_text" => "Your earlier investigation allowed you to discover the rival expedition before they noticed you. Approaching voluntarily may help establish a more favorable first impression.",
+                Your two senior companions agree, and together you move carefully between the enormous stone pillars.
 
-                "next" => "first_rival_encounter",
+                Before long, you notice movement beyond a partially collapsed wall. You signal your companions to stop, observing the figures from a concealed position.
 
-                "requires" => [
-                    "flags" => [
-                        "artifact_rival_warning" => true
-                    ]
-                ],
+                Fortunately, the strangers have not noticed your presence.",
 
-                "effects" => [
-                    "flags" => [
-                        "approached_rivals_first" => true
-                    ]
-                ],
+            "faction_text" => [
+                "warrior" => "You recognize the distinctive robes and arcane equipment of the Mage Kingdom.
 
-                "tracker_title" => "Discovering the Rival Expedition",
+                The expedition consists of two Level 4 senior cultivators and a Level 2 champion carrying a staff. Faint magical energy gathers around the younger cultivator's hands.",
 
-                "tracker_text" => "You identified the rival expedition before they discovered your presence and chose to approach them."
-            ]
-        ]
-    ],
+                "mage" => "You recognize the armor and military insignia of the Warrior Kingdom.
 
+                The expedition consists of two Level 4 senior cultivators and a Level 2 champion carrying a sword. The younger cultivator moves with the discipline of a trained soldier.",
 
-    "rival_scouting" => [
-        "title" => "An Unexpected Discovery",
-        "act" => 1,
+                "rogue" => "You recognize the dark equipment and concealed weapons of the Rogue Kingdom.
 
-        "text" => "Remembering the intelligence reports you investigated before leaving your kingdom, you decide to examine the surrounding ruins before approaching the ancient structure.
-
-        Your two senior companions initially appear more interested in the powerful mana emanating from the structure, but they agree that investigating the surrounding area would be a sensible precaution.
-
-        Moving carefully between the enormous stone pillars, your group searches for signs of recent activity.
-
-        It does not take long for your caution to prove worthwhile.
-
-        Beyond a partially collapsed wall, you notice several figures moving through the ruins. Their movements are deliberate, and their equipment appears far too well maintained for ordinary travelers.
-
-        You quietly alert your senior companions.
-
-        One of them raises a hand, signaling for everyone to remain still. A faint wave of mana spreads outward from their position as the senior examines the distant figures.
-
-        Their expression changes almost immediately.
-
-        'Three cultivators,' the senior whispers. 'Two of them have reached Level 4. The third is considerably weaker, but their cultivation is still developing.'
-
-        Your other companion studies the figures carefully before turning toward you.
-
-        'It appears another kingdom has sent an expedition of its own. They must have followed the same rumors that brought us here.'
-
-        You observe the distant group more closely.
-
-        The two senior cultivators move with the confidence of experienced powerhouses, occasionally examining the ancient structures with techniques similar to those demonstrated by your own companions.
-
-        Between them stands a younger cultivator, apparently accompanying the expedition in much the same capacity as you.
-
-        Although you cannot yet determine their intentions, their presence confirms that the search for the ancient artifact is no longer limited to your kingdom.
-
-        Fortunately, the rival expedition remains unaware of your presence.
-
-        Your senior companions turn toward you, waiting to see how you wish to proceed.
-
-        For the moment, you possess an advantage that the rival champion does not: you know they are here, but they do not know about you.",
-
-        "backgrounds" => [
-            "page" => null,
-            "scene" => null
-        ],
-
-        "choices" => [
-            "approach_rivals" => [
-                "text" => "Approach the Rival Expedition",
-
-                "description" => "Reveal your presence and initiate contact with the rival cultivators.",
-
-                "insight_text" => "Your earlier investigation allowed you to discover the rival expedition first. Approaching them voluntarily may create a more favorable first impression, although their intentions remain unknown.",
-
-                "next" => "first_rival_encounter",
-
-                "requires" => [],
-
-                "effects" => [
-                    "flags" => [
-                        "approached_rivals_first" => true
-                    ]
-                ],
-
-                "tracker_title" => "Approaching the Rival Expedition",
-
-                "tracker_text" => "After discovering the rival expedition before being noticed, you chose to reveal your presence and initiate contact."
+                The expedition consists of two Level 4 senior cultivators and a Level 2 champion carrying a dagger. The younger cultivator moves with remarkable precision."
             ],
 
+            "companion_text" => "One of your seniors studies the rival expedition before turning toward you.
 
-            "surprise_attack_rival" => [
-                "text" => "Launch a Surprise Attack",
+                'Their seniors are as strong as we are. However, their champion is at your level.'
 
-                "description" => "Attack the unsuspecting rival champion before their expedition can react.",
+                Your other companion nods.
 
-                "insight_text" => "The rival expedition has not noticed your presence. A surprise attack could deal 40 damage before combat begins, but such an aggressive action will severely damage relations between your kingdoms.",
+                'This expedition is also a test of your judgment. How we approach them is up to you.'
 
-                "next" => "rival_scouting",
+                'The decision is yours. If things get out of hand, we'll intervene.'
 
-                "requires" => [],
+                Both seniors wait for your response.",
 
-                "effects" => [
-                    "flags" => [
-                        "rival_surprise_attack" => true
+
+           
+                "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "approach_rivals" => [
+                    "text" => "Approach the Rival Expedition",
+
+                    "description" => "Reveal your presence and initiate contact with the rival cultivators.",
+
+                    "insight_text" => "Your earlier investigation allowed you to discover the rival expedition first. Approaching them voluntarily may create a more favorable first impression, although their intentions remain unknown.",
+
+                    "next" => "first_rival_encounter",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "flags" => [
+                            "approached_rivals_first" => true
+                        ]
                     ],
-                    "trust" => [
-                        "first_rival" => -20
+
+                    "tracker_title" => "Approaching the Rival Expedition",
+
+                    "tracker_text" => "After discovering the rival expedition before being noticed, you chose to reveal your presence and initiate contact."
+                ],
+                
+                "surprise_attack_rival" => [
+                    "text" => "Launch a Surprise Attack",
+
+                    "description" => "Attack the unsuspecting rival champion before their expedition can react.",
+
+                    "insight_text" => "The rival expedition is unaware of your presence. A surprise attack may give you an advantage in combat, but attacking without warning could severely damage relations between your kingdoms.",
+
+                    "next" => "rival_ambush",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "flags" => [
+                            "rival_surprise_attack" => true,
+                            "approached_rivals_first" => false
+                        ],
+                        "trust" => [
+                            "first_rival" => -20
+                        ]
                     ],
+
+                    "tracker_title" => "Ambushing the Rival Champion",
+
+                    "tracker_text" => "You launched a surprise attack against the unsuspecting rival champion, damaging relations with their kingdom."
+                ],
+
+            ]
+        ],
+
+
+        "rival_ambush" => [
+            "title" => "A Sudden Ambush",
+            "act" => 1,
+
+            "text" => "You signal your companions and launch your attack before the rival expedition can react.
+
+                Your two Level 4 seniors immediately intercept the opposing seniors, forcing them into a confrontation of their own.",
+
+            "faction_text" => [
+                "warrior" => "With the stronger cultivators occupied, you rush toward the unsuspecting rival Rogue champion and land a clean strike.
+
+                The Rogue champion staggers backward, wounded by the unexpected attack.
+
+                'The warrior kingdom, you really picked your moment.' injured but not too surprised by your presence, they draw their weapon.
+
+                The element of surprise has given you an advantage, but your opponent is far from defeated.
+                
+                The Rogue champion tightens their grip on their dagger, shifting into a guarded stance as they prepare to retaliate.",
+
+               
+                "mage" => "With the stronger cultivators occupied, fire a MANA BOLT toward the unsuspecting rival Warrior champion and land a clean strike.
+
+                The Rogue champion staggers backward, wounded by the unexpected attack.
+
+                'Ofcourse its you filthy book worms!!' they roar, drawing their weapon.
+
+                The element of surprise has given you an advantage, but your opponent is far from defeated.
+                
+                The Warrior champion steadies their sword, their expression hardening as they prepare to retaliate.",
+
+                
+                "rogue" => "With the stronger cultivators occupied, you rush toward the unsuspecting rival Warrior champion and land a clean strike from the shadows.
+
+                The Rogue champion staggers backward, wounded by the unexpected attack.
+
+                'Rogues?! I should've known you'd be here!' they exclaim, drawing their weapon.
+
+                The element of surprise has given you an advantage, but your opponent is far from defeated.
+                
+                The Mage champion raises their staff, gathering arcane energy as they prepare to retaliate.",
+            ],
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "fight_rival" => [
+                    "text" => "Confront the Rival Champion",
+
+                    "description" => "Prepare to battle the wounded rival champion.",
+
+                    "insight_text" => "Your surprise attack has weakened the rival champion, but they remain dangerous. Both of you have reached Level 2, and your opponent may possess techniques you have not encountered before.",
+
+                    "next" => "rival_ambush",
+
+                    "requires" => [
+                        "flags" => [
+                            "rival_surprise_attack" => true,
+                            "rival_defeated" => false
+                        ]
+                    ],
+
+                    "effects" => [],
+
+                    "tracker_title" => "Battling the Rival Champion",
+
+                    "tracker_text" => "After landing a successful ambush, you prepared to fight the wounded Level 2 rival champion."
+                ]
+            ]
+        ],
+
+
+        "rival_retreat" => [
+            "act" => 1,
+            "title" => "Victory — The Rival Retreats",
+
+            
+            "text" => "The battle reaches its conclusion. With the opposing champion defeated, the balance of the confrontation shifts decisively in your favor.
+
+                For a brief moment, the battlefield falls into uneasy silence as both expeditions recognize the outcome.",
+
+
+            "faction_text" => [
+                "warrior" => "The Rogue Champion drops to one knee, their movements noticeably slower than before.
+
+                    'You caught me off guard,' they mutter, gripping their wounded side. 'Don't expect that to happen again.'
+
+                    Their senior companion helps them retreat into the shadows.
+
+                    Your Warrior seniors approach, acknowledging your victory. The Rogue Champion has survived, but their injuries will prevent them from showing up again anytime soon.",
+
+                "mage" => "The Warrior Champion struggles to lift their weapon, their armor cracked from your final attack.
+
+                    'This isn't finished,' they declare, even as their senior companion orders them to withdraw.
+
+                    The Warrior reluctantly lowers their weapon and retreats.
+
+                    Your Mage seniors regroup around you. The opposing champion has been defeated and seriously injured, but their companions have ensured their survival.",
+
+                "rogue" => "The Mage Champion's magical barrier shatters under your final strike. They stumble backward, their remaining mana flickering uncontrollably.
+
+                        'Impossible...' they whisper, staring at you.
+
+                        Before they can recover, their senior companion raises a protective barrier and escorts them away.
+
+                        Your Rogue seniors emerge from the battlefield. The Mage Champion has survived, but their injuries will keep them away from future expeditions for some time."
+            ],
+
+            "companion_text" => "With the opposing expedition gone, your senior companions turn their attention toward the ancient ruins.
+
+                The immediate threat has passed, but the unstable mana surrounding the area suggests that something valuable may still be hidden nearby.",
+
+            "choices" => [
+                "investigate_ruins" => [
+                    "text" => "Investigate the Ancient Ruins",
+                    "description" => "Explore the ruins with your companions and search for the source of the unusual mana.",
+
+                    "insight_text" => "With the rival expedition forced to retreat, you can investigate the ruins without interference. The unusually concentrated mana suggests that something valuable may lie deeper within.",
+                    "next" => "rival_victory_ruins",
+
+                    "tracker_title" => "Victory Over the Rival",
+                    "tracker_text" => "Defeated the rival champion and continued exploring the ancient ruins.",
+
+                    "requires" => [
+                        "flags" => [
+                            "act1_rival_defeated" => true
+                        ]
+                    ],
+
+                    "effects" => []
+                ]
+            ]
+        ],
+
+
+
+        "rival_victory_ruins" => [
+            "act" => 1,
+            "title" => "The Ancient Ruins",
+
+        
+            "text" => "With the opposing expedition gone, your group finally has an opportunity to investigate the ruins without interference.
+
+                The deeper you travel, the stronger the surrounding mana becomes. Ancient stone pillars line the passage, their surfaces covered in markings that have survived for centuries.
+
+                The remains of collapsed buildings and weathered statues suggest that this place once served as a gathering ground for an ancient organization of powerful cultivators. Whatever became of them, their presence has long since faded into history.
+
+                Eventually, the passage opens into a large underground chamber. At its center lies an 50 meter stone basin filled with shimmering liquid. The surrounding mana is so concentrated that even breathing feels different.",
+
+
+            "faction_text" => [
+                "warrior" => "Your Warrior companions examine the chamber cautiously.
+
+                    One of the senior cultivators kneels beside the basin, studying the shimmering liquid.
+
+                    'An entire pool of liquid mana...' they say, their usually steady voice betraying disbelief. 'When ambient mana becomes dense enough, it can condense into a liquid state. It's extraordinarily pure.'
+
+                    They examine the ancient surroundings before continuing.
+
+                    'Places like this once housed cultivators far beyond our current strength. Their presence may have left the surrounding mana unusually concentrated.'
+
+                    Another senior cultivator looks toward the basin.
+
+                    'These fluctuations... they're remarkably similar to the ones our kingdom detected from the mysterious artifact. I doubt that's a coincidence.'",
+
+                "mage" => "Your Mage companions immediately begin examining the unusual energy surrounding the basin.
+
+                        One of the senior cultivators studies the liquid with growing disbelief.
+
+                        'An entire pool... This is liquid mana. Ambient mana compressed to such an extraordinary density that it has taken physical form. The purity is remarkable.'
+
+                        They glance toward the ancient pillars surrounding the chamber.
+
+                        'An organization of powerful cultivators may have gathered here centuries ago. Their prolonged cultivation could explain why the ambient mana remains so concentrated.'
+
+                        Another Mage senior closes their eyes, sensing the energy.
+
+                        'Interesting... the mana fluctuations here closely resemble the readings associated with the artifact. Whatever is happening to the world's mana, these two phenomena may be connected.'",
+
+                "rogue" => "Your Rogue companions spread out, checking the chamber for hidden mechanisms and possible traps.
+
+                        One of the senior cultivators approaches the basin and freezes.
+
+                        'You've got to be kidding me... An entire pool?'
+
+                        They gesture toward the shimmering liquid.
+
+                        'Liquid mana. Ordinary mana is all around us, but when enough of it gathers in one place, it can become dense enough to liquefy. And this stuff is almost perfectly pure.'
+
+                        They glance around at the ruined structures.
+
+                        'An ancient organization probably used this place. Judging by what's left, its members weren't ordinary cultivators.'
+
+                        Another Rogue senior studies the surrounding energy.
+
+                        'You know what's strange? These fluctuations feel almost identical to what our kingdom detected from that artifact. Something tells me we didn't stumble across this place by accident.'"
+            ],
+
+            "companion_text" => "One of your senior companions explains that liquid mana is exceptionally rare. Even a small quantity could take centuries to accumulate naturally.
+
+                    The Three Kingdoms have maintained much of their cultivation superiority through access to extraordinary resources like this. Their most advanced facilities can even condense ambient mana into small quantities of liquid mana over several decades, although the process requires enormous resources.
+
+                    Your companions exchange glances before turning toward you.
+
+                    'You should take a handful. It may seem small but for you, it could make an enormous difference.'
+
+                    They step away from the basin.
+
+                    'Go ahead. Absorb it carefully. This may be an opportunity you won't encounter again for a very long time.'",
+
+            "choices" => [
+                "absorb_ancient_mana" => [
+                    "text" => "Absorb the Liquid Mana",
+                    "description" => "Carefully absorb the exceptionally pure liquid mana to strengthen your cultivation.",
+
+                    "insight_text" => "Even a small portion of this exceptionally pure liquid mana could trigger a cultivation breakthrough.",
+
+                    "next" => "act1_cultivation_breakthrough",
+
+                    "tracker_title" => "Liquid Mana Discovered",
+                    "tracker_text" => "Discovered a rare pool of liquid mana within the ancient ruins and began a cultivation breakthrough.",
+
+                    "requires" => [
+                        "flags" => [
+                            "act1_rival_defeated" => true
+                        ]
+                    ],
+
+                    "effects" => [
+                        "flags" => [
+                            "ancient_mana_absorbed" => true
+                        ],
+                        "special" => [
+                            "level_up" => 1
+                        ],
+                    ]
+                ],
+
+
+                "ask_about_fluctuations" => [
+                    "text" => "Fluctuations?",
+                    "description" => "Ask your senior companions why the mana fluctuations in these ruins seem familiar.",
+
+                    "insight_text" => "Your companions have noticed similarities between the mana fluctuations here and those associated with the mysterious artifact. Asking about them may reveal why your kingdom sent this expedition.",
+
+                    "next" => "minor_fluctuation_explanation",
+
+                    "tracker_title" => "Questions About the Artifact",
+                    "tracker_text" => "Asked the senior cultivators about the strange mana fluctuations.",
+
+                    "effects" => []
+                ]
+
+            ]
+        ],
+
+
+        "minor_fluctuation_explanation" => [
+            "act" => 1,
+            "title" => "The Mysterious Fluctuations",
+
+            "text" => "You turn toward your senior companions, remembering their earlier remarks about the unusual mana surrounding the ruins.
+
+                'Fluctuations?' you ask.
+
+                One of the seniors nods, realizing that you haven't been told the full reason behind the expedition.",
+
+            "faction_text" => [
+                "warrior" => "A Warrior senior folds their arms before explaining.
+
+                    'As we mentioned before setting out, all Three Kingdoms detected an extraordinary disturbance in the world's mana. The fluctuations were unlike anything our observers had recorded.'
+
+                    'Our kingdom suspects that some ancient artifact, perhaps a relic of a forgotten civilization, is gradually being uncovered.'
+
+                    They gesture toward the ruins.
+
+                    'We detected a much weaker fluctuation coming from this region. Its pattern resembled the greater disturbance, so we were ordered to investigate.'
+
+                    They glance back toward the pool.
+
+                    'And now we've discovered an entire reservoir of liquid mana. Whatever caused those fluctuations, this expedition has already proven worthwhile.'",
+
+                "mage" => "One of the Mage seniors begins explaining, clearly pleased to have an opportunity to discuss the phenomenon.
+
+                    'The Three Kingdoms have all detected a massive, unusual fluctuation in ambient mana. Our scholars believe an ancient artifact may be responsible, although its location and nature remain unknown.'
+
+                    'The energy signature coming from this region was considerably weaker, but its characteristics were remarkably similar.'
+
+                    They gesture toward the liquid mana.
+
+                    'That similarity is precisely why we were sent here. We hoped to find evidence connected to the greater disturbance.'
+
+                    Their expression brightens.
+
+                    'Instead, we've found an entire natural reservoir of liquid mana. Even if we learn nothing more about the artifact, this discovery alone could justify the expedition many times over.'",
+
+                "rogue" => "A Rogue senior gives you an amused look.
+
+                        'You really weren't paying attention before we left, were you?'
+
+                        They lean against a nearby pillar.
+
+                        'All Three Kingdoms picked up a massive disturbance in the world's mana. Nobody knows exactly what's causing it, but the leading theory is that some ancient artifact is resurfacing.'
+
+                        'Our scouts detected a smaller fluctuation coming from this area. Much weaker, sure, but similar enough that the kingdom decided it was worth investigating.'
+
+                        They glance toward the pool with a grin.
+
+                        'And would you look at that? An entire pool of liquid mana. Even if this place has nothing to do with the artifact, we've just brought home a fortune.'"
+            ],
+
+            "companion_text" => "Your companions explain that the source of the greater disturbance remains unidentified. The Three Kingdoms continue searching for answers, and expeditions like this one are part of that effort.
+
+                now, however, the extraordinary discovery within these ruins demands their immediate attention.",
+
+            "choices" => [
+                "return_to_ruins" => [
+                    "text" => "Go Back",
+                    "description" => "Return your attention to the liquid mana and the expedition.",
+
+                    "insight_text" => "You've learned why the Three Kingdoms are investigating unusual mana disturbances.",
                     
-                ],
+                    "next" => "rival_victory_ruins",
 
-                "tracker_title" => "Ambushing the Rival Champion",
+                    "tracker_title" => "Ancient Ruins",
+                    "tracker_text" => "You've learnt about the mysterious fluctuations.",
 
-                "tracker_text" => "You chose to launch a surprise attack against the unsuspecting rival expedition."
+                    "effects" => []
+                ]
             ]
-
-        ]
-    ],
+        ],
 
 
-    "first_rival_encounter" => [
-        "title" => "The Rival Expedition",
-        "act" => 1,
+        "act1_cultivation_breakthrough" => [
+            "title" => "A Second Cultivation Breakthrough",
+            "act" => 1,
 
-        "conditional_text" => [
-            [
-                "requires" => [
-                    "flags" => [
-                        "approached_rivals_first" => true
-                    ]
-                ],
+            "text" => "You kneel beside the ancient basin and carefully draw a small portion of liquid mana into your body.
 
-                "text" => "Having discovered the rival expedition before being noticed, you and your two senior companions step out from behind the ancient stone pillars.
+                The extraordinary purity of the energy immediately surpasses anything you have experienced before.
 
-                The distant cultivators immediately turn toward your group. Their two senior members move forward cautiously, positioning themselves between you and the younger champion.
+                As the mana circulates through your meridians, the barrier restricting your cultivation begins to weaken.
 
-                'We mean no harm,' one of your companions announces. 'We are investigating these ruins and wish to speak with you.'
+                With one final surge of energy, the barrier shatters.
 
-                The rival expedition exchanges surprised glances. They clearly had not expected another group to approach them so openly.
+                You have successfully advanced to Level 3.",
 
-                For the moment, you have taken the initiative in this encounter."
+            "faction_text" => [
+                "warrior" => "The concentrated mana reinforces your muscles, bones, and meridians. Your physical strength rises dramatically, and your body becomes capable of withstanding far greater punishment.
+
+                    Your control over weapon techniques improves as your Warrior cultivation reaches Level 3.",
+
+                "mage" => "The liquid mana flows into your spiritual core, expanding its capacity and refining the energy within.
+
+                    Your ability to manipulate ambient mana becomes considerably more precise. Spells that once required intense concentration now feel increasingly natural as your Mage cultivation reaches Level 3.",
+
+                "rogue" => "The concentrated mana spreads through your nerves and meridians, sharpening your perception and strengthening your physical control.
+
+                    Your movements become faster and more precise. Even the slightest disturbances in the surrounding mana become easier to detect as your Rogue cultivation reaches Level 3."
             ],
 
-            [
-                "requires" => [
-                    "flags" => [
-                        "approached_rivals_first" => false
-                    ]
-                ],
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
 
-                "text" => "As you and your senior companions approach the ancient structure, a powerful voice suddenly echoes from behind a nearby stone pillar.
+            "choices" => [
+                "speak_to_companions" => [
+                    "text" => "Speak to Your Companions",
+                    "description" => "Turn toward your senior companions after successfully reaching Level 3.",
 
-                'Hold your position.'
+                    "insight_text" => "Your breakthrough has attracted the attention of your senior companions. Speaking with them may reveal their thoughts on your rapid advancement.",
 
-                Three figures emerge from the surrounding ruins, blocking your expedition's path.
+                    "next" => "act1_companion_congratulations",
 
-                Two of them radiate the unmistakable pressure of Level 4 cultivators. Between them stands a younger champion whose attention immediately settles upon you.
+                    "requires" => [
+                        "stats" => [
+                            "level" => 3
+                        ]
+                    ],
 
-                Your senior companions step forward, carefully observing the unexpected visitors.
+                    "effects" => [],
 
-                The rival expedition has discovered you first, leaving you little opportunity to determine their intentions before the confrontation begins."
+                    "tracker_title" => "Reaching Level 3",
+                    "tracker_text" => "You absorbed the ancient liquid mana, achieved your second cultivation breakthrough, and advanced to Level 3."
+                ]
             ]
         ],
 
-        "text" => "For several moments, neither expedition makes another move.
+        "act1_companion_congratulations" => [
+            "title" => "Recognition of a Champion",
+            "act" => 1,
 
-        The two groups carefully assess one another, their senior cultivators exchanging measured glances.
+            "text" => "You rise from beside the ancient basin, the newly refined mana flowing steadily through your body.
 
-        Although no weapons have been drawn, the concentration of mana gathering around the experienced cultivators makes the tension unmistakable.
+                Your two senior companions approach, having witnessed your remarkable breakthrough.
 
-        One of your senior companions finally breaks the silence.
+                One of them studies you for a moment before breaking into a proud smile.
 
-        'It appears we are not the only ones investigating this place.'
+                'Level 3 already, and at such a young age. Remarkable. You truly deserve to be called our kingdom's champion.'
 
-        A senior from the opposing expedition responds with a cautious nod.
+                The other senior nods approvingly.
 
-        'Indeed. We have traveled a considerable distance to reach these ruins. It seems our kingdoms have developed an interest in the same mystery.'
+                'The times are changing. To think that someone of your generation could advance so quickly. Perhaps the future of our kingdom is brighter than we imagined.'
 
-        The younger rival champion steps forward, studying you with an expression that is difficult to interpret.
+                They exchange a glance before turning their attention toward the ancient chamber.
 
-        Despite belonging to different kingdoms, the two of you occupy remarkably similar positions. Each has been entrusted with accompanying powerful senior cultivators on a mission that may influence the future of your homeland.
+                'You've done well. Congratulations on your breakthrough.'
 
-        Whatever happens next, this encounter may shape the relationship between your kingdoms.",
+                After gathering their findings and securing the expedition's discoveries, your companions prepare to leave.
 
-        "backgrounds" => [
-            "page" => null,
-            "scene" => null
+                'Our investigation here is complete. We should return to the kingdom and report what we've discovered.'
+
+                With your cultivation strengthened and the expedition concluded, the journey home awaits.",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "return_to_kingdom" => [
+                    "text" => "Return to Your Kingdom",
+
+                    "description" => "Accompany your senior companions home and report the expedition's discoveries.",
+
+                    "insight_text" => "Your expedition has uncovered an extraordinary reservoir of liquid mana. Returning home will allow your kingdom's leaders to evaluate the discovery and prepare for what lies ahead.",
+
+                    "next" => "act1_kingdom_return",
+
+                    "requires" => [
+                        "stats" => [
+                            "level" => 3
+                        ]
+                    ],
+
+                    "effects" => [
+                        "flags" => [
+                            "act1_expedition_completed" => true,
+                            "act1_returned_home" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Returning Home",
+
+                    "tracker_text" => "After reaching Level 3, you received congratulations from your senior companions and began the journey back to your kingdom."
+                ]
+            ]
         ],
 
-        "choices" => []
-    ],
+        "act1_kingdom_return" => [
+            "title" => "Return to the Kingdom",
+            "act" => 1,
+
+            "text" => "After several days of travel, you and your senior companions finally return to your home kingdom.
+
+                News of your successful expedition has already reached the kingdom's leadership. You are summoned to report your discoveries and the events that unfolded within the ancient ruins.",
+
+            "faction_text" => [
+                "warrior" => "You enter the Warrior Kingdom's fortified capital, where towering stone walls and disciplined soldiers reflect generations of military tradition.
+
+                    Within the kingdom's grand command hall, several high-ranking commanders await your arrival.
+
+                    Your senior companions report the discovery of the ancient liquid mana reservoir and your victory over the rival champion.
+
+                    One commander studies you with approval.
+
+                    'You departed as a promising young cultivator and returned having reached Level 3. Your progress brings honor to the Warrior Kingdom.'
+
+                    The commanders acknowledge your achievements before dismissing you to recover from the expedition.",
+
+                "mage" => "You return to the Mage Kingdom's magnificent capital, where towering academies and enchanted structures stand as monuments to generations of magical research.
+
+                    Within the Grand Arcane Council's chambers, senior scholars gather to hear your expedition's findings.
+
+                    Your companions describe the ancient ruins, the extraordinary liquid mana reservoir, and your victory over the rival champion.
+
+                    One of the council's senior mages regards you with considerable interest.
+
+                    'To reach Level 3 during a single expedition is an extraordinary achievement. Your talent may one day surpass even our greatest scholars.'
+
+                    The council acknowledges your progress and grants you time to recover from your journey.",
+
+                "rogue" => "You return to the Rogue Kingdom's concealed capital, where hidden passageways and guarded strongholds protect the kingdom's most valuable secrets.
+
+                    Within the headquarters of the kingdom's intelligence leadership, several senior operatives await your report.
+
+                    Your companions describe the discovery of the ancient liquid mana reservoir and your victory over the rival champion.
+
+                    One of the senior operatives gives a satisfied nod.
+
+                    'Level 3 already? Impressive. Your enemies will soon learn that the Rogue Kingdom's next generation is not to be underestimated.'
+
+                    With your achievements acknowledged, you are dismissed to recover and prepare for future assignments."
+            ],
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "learn_warrior_history" => [
+                    "text" => "Learn About the Warrior Kingdom",
+
+                    "description" => "Explore the history, traditions, and military philosophy of the Warrior Kingdom.",
+
+                    "insight_text" => "Understanding the Warrior Kingdom's traditions may provide valuable insight into its military strength and political ambitions.",
+
+                    "next" => "warrior_kingdom_lore",
+
+                    "requires" => [
+                        "flags" => [
+                            "learned_warrior_history" => false
+                        ]
+                    ],
+
+                    "effects" => [],
+
+                    "tracker_title" => "Studying the Warrior Kingdom",
+
+                    "tracker_text" => "You chose to learn about the history and traditions of the Warrior Kingdom."
+                ],
+
+                "learn_mage_history" => [
+                    "text" => "Learn About the Mage Kingdom",
+
+                    "description" => "Study the Mage Kingdom's history, magical traditions, and cultivation practices.",
+
+                    "insight_text" => "The Mage Kingdom's understanding of mana may offer clues about the mysterious artifact and the unusual disturbances spreading across the world.",
+
+                    "next" => "mage_kingdom_lore",
+
+                    "requires" => [
+                        "flags" => [
+                            "learned_mage_history" => false
+                        ]
+                    ],
+
+                    "effects" => [],
+
+                    "tracker_title" => "Studying the Mage Kingdom",
+
+                    "tracker_text" => "You chose to learn about the history and magical traditions of the Mage Kingdom."
+                ],
+
+                "learn_rogue_history" => [
+                    "text" => "Learn About the Rogue Kingdom",
+
+                    "description" => "Discover the Rogue Kingdom's history, intelligence networks, and covert traditions.",
+
+                    "insight_text" => "Learning about the Rogue Kingdom may help you understand its methods of gathering intelligence and protecting its interests.",
+
+                    "next" => "rogue_kingdom_lore",
+
+                    "requires" => [
+                        "flags" => [
+                            "learned_rogue_history" => false
+                        ]
+                    ],
+
+                    "effects" => [],
+
+                    "tracker_title" => "Studying the Rogue Kingdom",
+
+                    "tracker_text" => "You chose to learn about the history and covert traditions of the Rogue Kingdom."
+                ],
+
+                "continue_after_return" => [
+                    "text" => "Continue Your Journey",
+
+                    "description" => "Leave the kingdom's leadership chambers and spend some time recovering from the expedition.",
+
+                    "insight_text" => "Your expedition has concluded successfully. Continuing will allow you to recover, train, and prepare for whatever challenges await.",
+
+                    "next" => "act1_recovery_training",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "flags" => [
+                            "act1_kingdom_report_completed" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "A New Chapter",
+
+                    "tracker_text" => "After reporting your expedition's discoveries to your kingdom's leadership, you prepared for the next stage of your journey."
+                ]
+            ]
+        ],
+
+
+        "act1_recovery_training" => [
+            "title" => "A Period of Recovery",
+            "act" => 1,
+
+            "text" => "Several weeks pass following your return from the ancient ruins.
+
+                With your expedition successfully completed, you spend your time recovering from the battles and refining the cultivation strength you gained during your journey.
+
+                Having reached Level 3, you discover that your control over mana has improved considerably. Techniques that once demanded intense concentration now feel increasingly natural.
+
+                During your recovery, you are granted access to your kingdom's training facilities, where cultivators regularly practice their techniques and test their combat abilities.
+
+                Among the equipment available is a reinforced training dummy designed to withstand attacks from cultivators.
+
+                You may use it to practice your abilities as often as you wish.
+
+                However, your peaceful recovery is interrupted by troubling reports.
+
+                Rumors have begun spreading about an extraordinary mana disturbance near the Mage Kingdom. Some reports describe unstable mana surges, while others suggest that entire regions have begun experiencing dangerous fluctuations.
+
+                Although the details remain uncertain, the scale of the disturbance has attracted the attention of all three kingdoms.
+
+                Your kingdom's leadership is expected to announce a new expedition soon.",
+
+            "faction_text" => [
+                "warrior" => "Within the Warrior Kingdom's training grounds, soldiers and cultivators exchange increasingly troubling reports.
+
+                    Senior commanders have begun discussing an unprecedented mana disaster near the Mage Kingdom's borders. Several military units have been placed on alert as preparations for a possible expedition begin.",
+
+                "mage" => "Within the Mage Kingdom's academies, scholars are struggling to understand the increasingly unstable mana readings.
+
+                    Senior mages report that a potentially catastrophic disturbance has emerged near the kingdom's borders. Research teams are urgently attempting to determine its cause.",
+
+                "rogue" => "Within the Rogue Kingdom's intelligence headquarters, reports from covert operatives reveal disturbing developments.
+
+                    Senior agents have detected extraordinary mana fluctuations near the Mage Kingdom. Intelligence networks are being mobilized as the kingdom prepares to investigate the growing threat."
+            ],
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "practice_training_dummy" => [
+                    "text" => "Practice Against the Training Dummy",
+
+                    "description" => "Enter the training grounds and test your combat abilities against a harmless training dummy.",
+
+                    "insight_text" => "The training dummy cannot attack or injure you. Practicing against it allows you to experiment with your combat techniques without risking defeat.",
+
+                    "next" => "act1_training_dummy",
+
+                    "requires" => [],
+
+                    "effects" => [],
+
+                    "tracker_title" => "Combat Training",
+
+                    "tracker_text" => "You entered the training grounds to practice your combat techniques against a reinforced training dummy."
+                ],
+
+                "investigate_mana_disaster" => [
+                    "text" => "Mana Disaster?",
+
+                    "description" => "Learn more about the extraordinary mana disturbance reported near the Mage Kingdom.",
+
+                    "insight_text" => "The reports describe mana fluctuations far beyond those encountered during your previous expedition. Investigating the situation may reveal a threat affecting all three kingdoms.",
+
+                    "next" => "act1_mana_disaster_briefing",
+
+                    "requires" => [],
+
+                    "effects" => [],
+
+                    "tracker_title" => "Reports of a Mana Disaster",
+
+                    "tracker_text" => "After recovering from the ancient ruins expedition, you sought information about an unprecedented mana disaster near the Mage Kingdom."
+                ]
+            ]
+        ],
+
+
+        "first_rival_encounter" => [
+            "title" => "The Rival Expedition",
+            "act" => 1,
+
+            "conditional_text" => [
+                [
+                    "requires" => [
+                        "flags" => [
+                            "approached_rivals_first" => true
+                        ]
+                    ],
+
+                    "text" => "Having discovered the rival expedition before being noticed, you and your two senior companions step out from behind the ancient stone pillars.
+
+                    The distant cultivators immediately turn toward your group. Their two senior members move forward cautiously, positioning themselves between you and the younger champion.
+
+                    'We mean no harm,' one of your companions announces. 'We are investigating these ruins and wish to speak with you.'
+
+                    The rival expedition exchanges surprised glances. They clearly had not expected another group to approach them so openly.
+
+                    For the moment, you have taken the initiative in this encounter."
+                ],
+
+                [
+                    "requires" => [
+                        "flags" => [
+                            "approached_rivals_first" => false
+                        ]
+                    ],
+
+                    "text" => "As you and your senior companions approach the ancient structure, a powerful voice suddenly echoes from behind a nearby stone pillar.
+
+                    'Hold your position.'
+
+                    Three figures emerge from the surrounding ruins, blocking your expedition's path.
+
+                    Two of them radiate the unmistakable pressure of Level 4 cultivators. Between them stands a younger champion whose attention immediately settles upon you.
+
+                    Your senior companions step forward, carefully observing the unexpected visitors.
+
+                    The rival expedition has discovered you first, leaving you little opportunity to determine their intentions before the confrontation begins."
+                ]
+            ],
+
+            "text" => "For several moments, neither expedition makes another move.
+
+            The two groups carefully assess one another, their senior cultivators exchanging measured glances.
+
+            Although no weapons have been drawn, the concentration of mana gathering around the experienced cultivators makes the tension unmistakable.
+
+            One of your senior companions finally breaks the silence.
+
+            'It appears we are not the only ones investigating this place.'
+
+            A senior from the opposing expedition responds with a cautious nod.
+
+            'Indeed. We have traveled a considerable distance to reach these ruins. It seems our kingdoms have developed an interest in the same mystery.'
+
+            The younger rival champion steps forward, studying you with an expression that is difficult to interpret.
+
+            Despite belonging to different kingdoms, the two of you occupy remarkably similar positions. Each has been entrusted with accompanying powerful senior cultivators on a mission that may influence the future of your homeland.
+
+            Whatever happens next, this encounter may shape the relationship between your kingdoms.",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => []
+        ],
+
+        "act1_training_dummy" => [
+            "title" => "The Training Grounds",
+            "act" => 1,
+
+            "text" => "You make your way toward the kingdom's training grounds, where cultivators practice their techniques and refine their combat abilities.
+
+                Near the center of the training area stands a reinforced training dummy, constructed from durable materials and strengthened with protective mana formations.
+
+                Unlike a living opponent, the dummy cannot retaliate. Its purpose is simply to withstand attacks while allowing cultivators to evaluate their strength, accuracy, and control.
+
+                With your recent advancement to Level 3, this is an excellent opportunity to test how much your abilities have improved.
+
+                You approach the dummy and prepare to begin.",
+
+            "faction_text" => [
+                "warrior" => "You tighten your grip on your weapon, preparing to test the physical strength and refined combat techniques gained from your recent breakthrough.",
+
+                "mage" => "You gather mana within your spiritual core, preparing to measure the power and precision of your newly strengthened spells.",
+
+                "rogue" => "You study the dummy's structure, identifying potential weak points before preparing to test your improved speed and precision."
+            ],
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "begin_dummy_training" => [
+                    "text" => "Begin Combat Training",
+
+                    "description" => "Practice your attacks and special abilities against the reinforced training dummy.",
+
+                    "insight_text" => "The training dummy cannot retaliate, making it a safe opportunity to test your combat abilities. Training provides no experience, levels, or leaderboard points.",
+
+                    "next" => "act1_training_dummy",
+
+                    "requires" => [],
+
+                    "effects" => [],
+
+                    "tracker_title" => "Combat Training",
+
+                    "tracker_text" => "You practiced your combat techniques against a reinforced training dummy."
+                ],
+
+                "investigate_mana_disaster" => [
+                    "text" => "Investigate the Mana Fluctuations",
+
+                    "description" => "Leave the training grounds and learn more about the unprecedented mana disaster near the Mage Kingdom.",
+
+                    "insight_text" => "Reports suggest that the mana fluctuations are far more dangerous than those encountered during your previous expedition. Investigating them will advance the main story.",
+
+                    "next" => "act1_mana_disaster_briefing",
+
+                    "requires" => [],
+
+                    "effects" => [],
+
+                    "tracker_title" => "An Unprecedented Mana Disaster",
+
+                    "tracker_text" => "After spending time training, you turned your attention toward reports of dangerous mana fluctuations near the Mage Kingdom."
+                ]
+            ]
+        ],
+
+        
+
+
+
+        // Lore
+
+         // Three Kingdoms Lore
+        "warrior_kingdom_lore" => [
+            "title" => "The Warrior Kingdom",
+            "act" => 1,
+
+            "text" => "The Warrior Kingdom was founded upon the belief that strength, discipline, and perseverance are the foundations of lasting prosperity.
+
+                During the early age of cultivation, powerful warrior clans united their territories under a single military command. Their alliance eventually developed into the kingdom that exists today.
+
+                Unlike Mages who rely primarily on complex magical techniques, Warrior cultivators focus on strengthening their bodies, refining their weapons, and mastering the flow of mana through physical combat.
+
+                The kingdom's military academies train cultivators from a young age, emphasizing endurance, loyalty, and the responsibility that accompanies great strength.
+
+                Throughout its history, the Warrior Kingdom has defended its borders against rival factions and dangerous mana-corrupted creatures.
+
+                Its leaders believe that maintaining military superiority is essential to protecting their people.
+
+                However, this philosophy has also contributed to tensions with the Mage and Rogue Kingdoms, whose methods of cultivation and governance differ considerably.
+
+                Despite these differences, the Warrior Kingdom remains one of the three great powers maintaining the world's fragile balance.",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "return_from_warrior_lore" => [
+                    "text" => "Return to the Kingdom",
+
+                    "description" => "Finish studying the Warrior Kingdom's history and return to your previous activities.",
+
+                    "insight_text" => "You have gained a better understanding of the Warrior Kingdom's military traditions and cultivation philosophy.",
+
+                    "next" => "act1_kingdom_return",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "flags" => [
+                            "learned_warrior_history" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Warrior Kingdom History",
+
+                    "tracker_text" => "You studied the Warrior Kingdom's origins, military traditions, and philosophy of physical cultivation."
+                ]
+            ]
+        ],
+        "mage_kingdom_lore" => [
+            "title" => "The Mage Kingdom",
+            "act" => 1,
+
+            "text" => "The Mage Kingdom traces its origins to ancient scholars who devoted their lives to understanding the mysterious energy known as mana.
+
+                These early researchers discovered that mana could be manipulated through carefully constructed techniques, allowing cultivators to produce extraordinary effects without relying entirely on physical strength.
+
+                Over generations, their discoveries led to the establishment of magical academies, research institutions, and powerful cultivation organizations.
+
+                Eventually, these institutions united to form the Mage Kingdom.
+
+                Unlike the Warrior Kingdom, which emphasizes physical refinement, Mage cultivators focus on expanding their spiritual cores, increasing their mana capacity, and mastering increasingly complex magical techniques.
+
+                The kingdom's greatest scholars study ancient artifacts, forgotten civilizations, and the fundamental principles governing the world's mana.
+
+                Their research has produced remarkable advances in magical formations, defensive barriers, and methods of concentrating ambient mana.
+
+                However, the Mage Kingdom's pursuit of knowledge has occasionally brought it into conflict with the other kingdoms, particularly when powerful artifacts or rare cultivation resources are discovered.
+
+                Its leaders believe that understanding the nature of mana is essential to securing the future of civilization.
+
+                Today, the Mage Kingdom remains one of the world's three great powers, balancing extraordinary magical knowledge against the military strength and covert influence of its rivals.",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "return_from_mage_lore" => [
+                    "text" => "Return to the Kingdom",
+
+                    "description" => "Finish studying the Mage Kingdom's history and return to your previous activities.",
+
+                    "insight_text" => "Understanding the Mage Kingdom's research traditions may provide valuable context for the mysterious mana fluctuations affecting the world.",
+
+                    "next" => "act1_kingdom_return",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "flags" => [
+                            "learned_mage_history" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Mage Kingdom History",
+
+                    "tracker_text" => "You studied the Mage Kingdom's origins, magical research institutions, and philosophy of spiritual cultivation."
+                ]
+            ]
+        ],
+        "rogue_kingdom_lore" => [
+            "title" => "The Rogue Kingdom",
+            "act" => 1,
+
+            "text" => "The Rogue Kingdom emerged from an alliance of independent clans that survived through secrecy, intelligence, and precise military operations.
+
+                During the early age of cultivation, these clans occupied territories that lacked the military resources of the Warrior Kingdom and the magical institutions of the Mage Kingdom.
+
+                Rather than confronting stronger opponents directly, they developed techniques emphasizing speed, concealment, and the ability to strike at an enemy's weaknesses.
+
+                Over time, their cooperation evolved into an organized kingdom supported by extensive intelligence networks and highly trained covert operatives.
+
+                Rogue cultivators specialize in agility, precision, and controlling mana through rapid, carefully executed movements.
+
+                Their training emphasizes awareness, adaptability, and the importance of choosing the right moment to act.
+
+                The kingdom's intelligence organizations gather information about rival factions, dangerous creatures, and unusual disturbances in the world's mana.
+
+                Although outsiders frequently associate the Rogue Kingdom with assassination and deception, its leaders view intelligence and secrecy as necessary tools for protecting their independence.
+
+                The kingdom's methods have occasionally created distrust among the other factions, particularly when its operatives are discovered investigating sensitive territories.
+
+                Nevertheless, the Rogue Kingdom has maintained its position as one of the world's three great powers.
+
+                Its continued independence demonstrates that knowledge, precision, and strategy can rival overwhelming physical or magical strength.",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "return_from_rogue_lore" => [
+                    "text" => "Return to the Kingdom",
+
+                    "description" => "Finish studying the Rogue Kingdom's history and return to your previous activities.",
+
+                    "insight_text" => "You have gained a better understanding of the Rogue Kingdom's intelligence networks and covert cultivation techniques.",
+
+                    "next" => "act1_kingdom_return",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "flags" => [
+                            "learned_rogue_history" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Rogue Kingdom History",
+
+                    "tracker_text" => "You studied the Rogue Kingdom's origins, intelligence networks, and philosophy of precision-based cultivation."
+                ]
+            ]
+        ],
 
 
 
