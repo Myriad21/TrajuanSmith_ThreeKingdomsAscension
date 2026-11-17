@@ -40,10 +40,18 @@
             // Only process actions while combat is active.
             if ($_SESSION["combat"]["status"] === "active") {
 
-                // Player attacks the enemy.
+                
+                // Calculate the bonus from the champion's equipped weapon.
+                $weaponBonus = getEquippedWeaponBonus(
+                    $_SESSION["champion"],
+                    $_SESSION["inventory"] ?? []
+                );
+
+                // Player attacks the enemy with their weapon bonus.
                 performBasicAttack(
                     $_SESSION["combat"],
-                    $_SESSION["champion"]
+                    $_SESSION["champion"],
+                    $weaponBonus
                 );
 
                 // Enemy counterattacks if it survived.
@@ -76,12 +84,21 @@
             // Identify which special ability the player selected.
             $abilityId = $_POST["ability_id"] ?? "";
 
+            
             // Attempt to perform the special attack.
+            
+            $weaponBonus = getEquippedWeaponBonus(
+                $_SESSION["champion"],
+                $_SESSION["inventory"] ?? []
+            );
+
             $attackSuccessful = performSpecialAttack(
                 $_SESSION["combat"],
                 $_SESSION["champion"],
-                $abilityId
+                $abilityId,
+                $weaponBonus
             );
+
 
             // Only allow an enemy counterattack if the special attack
             // succeeded and the enemy is still alive.
@@ -657,6 +674,11 @@
                         <p class="combat-result__description">
                             You've emerged victorious.
                         </p>
+
+                        <a href="game.php" class="combat-result__button">
+                            Return to Story
+                        </a>
+
 
                     <?php elseif ($combat["status"] === "defeat"): ?>
 

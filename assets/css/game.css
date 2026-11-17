@@ -552,6 +552,36 @@ main section.game-interface {
 }
 
 
+/* Adventure Reset Button */
+.game-reset-form {
+    margin: 0;
+}
+
+.game-reset-button {
+    padding: 12px 18px;
+    border: 1px solid rgba(210, 95, 95, 0.55);
+    border-radius: 10px;
+    background: rgba(110, 35, 40, 0.2);
+    color: #f0b7b7;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.game-reset-button:hover {
+    background: rgba(150, 45, 50, 0.35);
+    border-color: rgba(230, 110, 110, 0.8);
+}
+
+.game-reset-button:focus-visible {
+    outline: 2px solid #f0b7b7;
+    outline-offset: 3px;
+}
+
+
+
 /* AUTOMATIC CONSEQUENCE NOTIFICATION DISMISSAL */
 
 .game-consequences--notification {

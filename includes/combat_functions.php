@@ -8,8 +8,8 @@ function initializeCombat(string $enemyId): array
             "id" => "mana_corrupted_wolf",
             "name" => "Mana-Corrupted Wolf",
             "level" => 1,
-            "hp" => 136,
-            "max_hp" => 136,
+            "hp" => 36,
+            "max_hp" => 36,
             "strength" => 6,
             "is_boss" => false,
 
@@ -188,7 +188,8 @@ function getSpecialAbilities(string $faction): array
 function performSpecialAttack(
     array &$combat,
     array &$champion,
-    string $abilityId
+    string $abilityId,
+    int $weaponBonus = 0
 ): bool {
 
     // Special attacks can only be used during active combat.
@@ -226,10 +227,12 @@ function performSpecialAttack(
 
     // Calculate damage using the same formula as Basic Attack.
     $damage = calculateBasicDamage(
-                (int) $champion["strength"],
-                (int) $champion["max_mana"],
-                $champion["faction"]
-            ) + (int) $ability["damage_bonus"];
+        (int) $champion["strength"],
+        (int) $champion["max_mana"],
+        $champion["faction"],
+        $weaponBonus
+    ) + (int) $ability["damage_bonus"];
+
 
     // Apply damage without allowing negative enemy HP.
     $combat["enemy"]["hp"] = max(

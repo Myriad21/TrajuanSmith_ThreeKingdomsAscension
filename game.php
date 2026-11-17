@@ -15,6 +15,43 @@
         exit;
     }
 
+
+
+
+    // Reset the adventure while preserving champion identity.
+    if (
+        $_SERVER["REQUEST_METHOD"] === "POST" &&
+        ($_POST["game_action"] ?? "") === "reset_adventure"
+    ) {
+        // Preserve the champion's original name and faction.
+        $name = $_SESSION["champion"]["name"];
+        $faction = $_SESSION["champion"]["faction"];
+
+        // Recreate the champion with starting stats and relationships.
+        $_SESSION["champion"] = createChampion($name, $faction);
+
+        // Reset all adventure progress.
+        $_SESSION["story_node"] = "introduction";
+        $_SESSION["story_flags"] = [];
+        $_SESSION["inventory"] = [];
+        $_SESSION["choices_log"] = [];
+
+        // Clear previous decisions and encounters.
+        unset(
+            $_SESSION["last_choice_summary"],
+            $_SESSION["combat"]
+        );
+
+        // Redirect to prevent repeating the reset on refresh.
+        header("Location: game.php");
+        exit;
+    }
+
+
+
+
+
+
     // Retrieve the champion's information.
     $champion = $_SESSION["champion"];
 
@@ -35,11 +72,6 @@
     // Load the story definitions.
     $storyNodes = getStoryNodes();
 
-    // TEMPORARY TEST RESET — REMOVE AFTER ONE REFRESH 
-    //$_SESSION["story_node"] = "introduction";
-    //$_SESSION["choices_log"] = [];
-
-
     if (!isset($_SESSION["inventory"])) {
         $_SESSION["inventory"] = [];
     }
@@ -48,6 +80,29 @@
     // Initialize persistent story flags.
     if (!isset($_SESSION["story_flags"])) {
         $_SESSION["story_flags"] = [];
+    }
+
+    // Equip an owned weapon without advancing the story.
+    if (
+        $_SERVER["REQUEST_METHOD"] === "POST" &&
+        ($_POST["game_action"] ?? "") === "equip_weapon"
+    ) {
+        $weaponId = $_POST["weapon_id"] ?? null;
+
+        if (
+            is_string($weaponId) &&
+            canEquipWeapon(
+                $weaponId,
+                $_SESSION["champion"]["faction"],
+                $_SESSION["inventory"]
+            )
+        ) {
+            $_SESSION["champion"]["equipped_weapon"] = $weaponId;
+        }
+
+        // Prevent duplicate submissions on refresh.
+        header("Location: game.php");
+        exit;
     }
 
 
@@ -108,6 +163,22 @@
             ) {
                 // Retrieve the selected choice's stat effects.
                 $effects = $selectedChoice["effects"] ?? [];
+
+                // Give the player their faction-specific expedition weapon.
+                if (
+                    $currentNodeId === "explore_path" &&
+                    $choiceId === "take_weapon" &&
+                    empty($_SESSION["story_flags"]["path_weapon_collected"])
+                ) {
+                    $weapon = getExpeditionWeapon(
+                        $_SESSION["champion"]["faction"]
+                    );
+
+                    if ($weapon !== null) {
+                        // Add the weapon through the existing inventory system.
+                        $effects["inventory"]["add"][] = $weapon["id"];
+                    }
+                }
 
                 $championBefore = $_SESSION["champion"];
                 $inventoryBefore = $_SESSION["inventory"];
@@ -229,6 +300,27 @@
                             </p>
                         </div>
 
+
+
+                        <!-- Adventure Reset -->
+                        <form
+                            action="game.php"
+                            method="POST"
+                            class="game-reset-form"
+                            onsubmit="return confirm('Reset your adventure? All story progress, inventory, and combat progress will be lost. Your champion name and faction will be preserved.');"
+                        >
+                            <input
+                                type="hidden"
+                                name="game_action"
+                                value="reset_adventure"
+                            >
+
+                            <button type="submit" class="game-reset-button">
+                                Reset Adventure
+                            </button>
+                        </form>
+
+
                         <!-- Inventory Display -->
                         <details class="inventory-dropdown">
                             <summary class="inventory-toggle">
@@ -241,13 +333,78 @@
                                 <?php if (empty($_SESSION["inventory"])): ?>
                                     <p>Your inventory is empty.</p>
                                 <?php else: ?>
-                                    <ul class="inventory-list">
-                                        <?php foreach ($_SESSION["inventory"] as $itemId): ?>
-                                            <li>
-                                                <?= htmlspecialchars($itemId) ?>
-                                            </li>
-                                        <?php endforeach; ?>
-                                    </ul>
+                                    
+                                <ul class="inventory-list">
+                                    <?php foreach ($_SESSION["inventory"] as $itemId): ?>
+                                        <?php
+                                            $weapon = getWeapon($itemId);
+
+                                            $isEquipped = (
+                                                $champion["equipped_weapon"] ?? null
+                                            ) === $itemId;
+                                        ?>
+
+                                        <li class="inventory-item">
+
+                                            <?php if ($weapon !== null): ?>
+
+                                                <div class="inventory-item__details">
+                                                    <strong>
+                                                        <?= htmlspecialchars($weapon["name"]) ?>
+                                                    </strong>
+
+                                                    <span>
+                                                        +<?= (int) $weapon["damage_bonus"] ?>
+                                                        Damage
+                                                    </span>
+                                                </div>
+
+                                                <?php if ($isEquipped): ?>
+
+                                                    <span class="inventory-item__equipped">
+                                                        Equipped
+                                                    </span>
+
+                                                <?php elseif (canEquipWeapon(
+                                                    $itemId,
+                                                    $championFaction,
+                                                    $_SESSION["inventory"]
+                                                )): ?>
+
+                                                    <form action="game.php" method="POST">
+                                                        <input
+                                                            type="hidden"
+                                                            name="game_action"
+                                                            value="equip_weapon"
+                                                        >
+
+                                                        <input
+                                                            type="hidden"
+                                                            name="weapon_id"
+                                                            value="<?= htmlspecialchars($itemId) ?>"
+                                                        >
+
+                                                        <button type="submit">
+                                                            Equip
+                                                        </button>
+                                                    </form>
+
+                                                <?php endif; ?>
+
+                                            <?php else: ?>
+
+                                                <span>
+                                                    <?= htmlspecialchars(
+                                                        ucwords(str_replace("_", " ", $itemId))
+                                                    ) ?>
+                                                </span>
+
+                                            <?php endif; ?>
+
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+
                                 <?php endif; ?>
                             </section>
                         </details>

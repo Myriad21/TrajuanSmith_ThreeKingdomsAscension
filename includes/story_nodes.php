@@ -309,9 +309,36 @@ function getStoryNodes(): array
             ],
 
             "choices" => [
+
+                "take_weapon" => [
+                    "text" => "Take Weapon",
+                    "description" => "Collect the weapon discovered at the abandoned campsite.",
+                    "insight_text" => "The weapon may prove useful during future battles.",
+
+                    "next" => "explore_path",
+
+                    "requires" => [
+                        "stats" => [],
+                        "inventory" => [],
+                        "flags" => [
+                            "path_weapon_collected" => false
+                        ],
+                        "trust" => []
+                    ],
+
+                    "effects" => [
+                        "flags" => [
+                            "path_weapon_collected" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Recovering Forgotten Equipment",
+                    "tracker_text" => "You recovered a weapon from the abandoned campsite."
+                ],
+
                 "return_to_exploration" => [
                     "text" => "Return to the Expedition",
-                    "description" => "Take your discovery and return to the main ruins.",
+                    "description" => "Leave the abandoned campsite and rejoin the expedition",
                     "insight_text" => "A stronger weapon may improve your chances of surviving future encounters.",
                     "next" => "expedition_start",
                     "requires" => [],
@@ -371,6 +398,44 @@ function getStoryNodes(): array
                 ]
             ]
         ],
+        
+        "expedition_deeper" => [
+            "title" => "A Disturbance in the Ruins",
+            "act" => 1,
+
+            "conditional_text" => [
+                [
+                    "requires" => [
+                        "flags" => [
+                            "mana_beast_warning" => true
+                        ]
+                    ],
+                    "text" => "As you prepare to leave the outer ruins, a familiar sensation catches your attention.
+
+                                The unstable mana you investigated earlier has grown noticeably stronger. Remembering the damaged vegetation and unusual tracks, you suspect that something dangerous is nearby.
+
+                                You warn your two senior companions to remain alert as the expedition moves forward."
+                ]
+            ],
+
+            "text" => "Leaving the outer ruins behind, you follow your two senior companions deeper into the forest.
+
+                    The vegetation grows increasingly dense, and the ancient structures become harder to recognize. An unnatural silence settles over the surrounding area.
+
+                    Suddenly, a violent surge of corrupted mana ripples through the trees. The bushes ahead begin to shake.
+
+                    A large wolf emerges from the vegetation. Dark mana flows across its body, and its eyes glow with an unnatural light.
+
+                    The Mana-Corrupted Wolf lowers its head and prepares to attack.",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => []
+        ],
+
 
 
 

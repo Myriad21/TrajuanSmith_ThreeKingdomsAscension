@@ -713,6 +713,110 @@ function getConsumableItems(): array
 }
 
 
+function getWeapons(): array
+{
+    return [
+        "reinforced_sword" => [
+            "name" => "Reinforced Sword",
+            "faction" => "warrior",
+            "damage_bonus" => 3,
+            "description" => "A sturdy sword recovered from an abandoned campsite."
+        ],
+
+        "enhanced_staff" => [
+            "name" => "Enhanced Staff",
+            "faction" => "mage",
+            "damage_bonus" => 3,
+            "description" => "A staff inscribed with symbols that enhance its combat power."
+        ],
+
+        "reinforced_dagger" => [
+            "name" => "Reinforced Dagger",
+            "faction" => "rogue",
+            "damage_bonus" => 3,
+            "description" => "A lightweight dagger with a reinforced, sharpened blade."
+        ]
+    ];
+}
+
+function getWeapon(string $weaponId): ?array
+{
+    $weapons = getWeapons();
+
+    if (!isset($weapons[$weaponId])) {
+        return null;
+    }
+
+    return array_merge(
+        ["id" => $weaponId],
+        $weapons[$weaponId]
+    );
+}
+
+function getExpeditionWeapon(string $faction): ?array
+{
+    $expeditionWeapons = [
+        "warrior" => "reinforced_sword",
+        "mage" => "enhanced_staff",
+        "rogue" => "reinforced_dagger"
+    ];
+
+    $weaponId = $expeditionWeapons[strtolower($faction)] ?? null;
+
+    return $weaponId !== null
+        ? getWeapon($weaponId)
+        : null;
+}
+
+
+function canEquipWeapon(
+    string $weaponId,
+    string $faction,
+    array $inventory
+): bool {
+    $weapon = getWeapon($weaponId);
+
+    if ($weapon === null) {
+        return false;
+    }
+
+    // The weapon must belong to the player's faction.
+    if ($weapon["faction"] !== strtolower($faction)) {
+        return false;
+    }
+
+    // The player must actually own the weapon.
+    return in_array($weaponId, $inventory, true);
+}
+
+
+function getEquippedWeaponBonus(
+    array $champion,
+    array $inventory
+): int {
+    $weaponId = $champion["equipped_weapon"] ?? null;
+
+    if (!is_string($weaponId)) {
+        return 0;
+    }
+
+    if (!canEquipWeapon(
+        $weaponId,
+        $champion["faction"],
+        $inventory
+    )) {
+        return 0;
+    }
+
+    $weapon = getWeapon($weaponId);
+
+    return (int) ($weapon["damage_bonus"] ?? 0);
+}
+
+
+
+
+
 
 
 
