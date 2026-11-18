@@ -123,14 +123,13 @@ $champion = $_SESSION["champion"];
                     </button>
                 </form>
 
-                <form action="start_adventure.php" method="post">
-                    <button
-                        type="submit"
-                        class="champion-confirmation__begin"
-                    >
-                        Begin Adventure
-                    </button>
-                </form>
+                
+                <a
+                    href="game.php"
+                    class="champion-confirmation__begin"
+                >
+                    Begin Adventure
+                </a>
 
             </div>
 

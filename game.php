@@ -699,7 +699,6 @@
                             action="game.php"
                             method="POST"
                             class="game-reset-form"
-                            onsubmit="return confirm('Reset your adventure? All story progress, inventory, and combat progress will be lost. Your champion name and faction will be preserved.');"
                         >
                             <input
                                 type="hidden"
@@ -1135,6 +1134,17 @@
                     </section>
                 <?php endif; ?>
 
+
+                <!-- Hero Summary Button for Completed Endings -->
+                <?php if (!empty($currentNode["is_ending"])): ?>
+
+                    <div class="ending-summary-action">
+                        <a href="hero_summary.php" class="ending-summary-button">
+                            View Your Hero Summary
+                        </a>
+                    </div>
+
+                <?php endif; ?>
 
                 <!-- Insight Relic Adviser -->
                 <section class="insight-relic" aria-labelledby="insight-relic-heading">

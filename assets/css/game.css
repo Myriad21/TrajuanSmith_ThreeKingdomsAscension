@@ -621,6 +621,44 @@ main section.game-interface {
     outline-offset: 3px;
 }
 
+
+/* =========================================
+   HERO SUMMARY ENDING BUTTON
+========================================= */
+
+.ending-summary-action {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.ending-summary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 12px 26px;
+    border: 1px solid #b99560;
+    border-radius: 9px;
+    background: #8b683d;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.ending-summary-button:hover {
+    background: #a47c48;
+    transform: translateY(-2px);
+}
+
+.ending-summary-button:focus-visible {
+    outline: 2px solid #f0ce92;
+    outline-offset: 3px;
+}
+
+
 @keyframes consequenceFadeOut {
     0%, 90% {
         opacity: 1;

@@ -132,3 +132,20 @@
 - Implement advanced choice requirements involving statistics, inventory, story flags, and trust.
 - Develop consequence previews and the Insight Relic adviser.
 - Continue building the remaining core story engine features before writing Act I.
+
+
+
+### November 18, 2026 — Leaderboard and Hero Summary Improvements
+
+**Work Completed:**
+
+- Updated the scoring system to calculate player points throughout the adventure instead of only after reaching an ending.
+- Connected the leaderboard to saved player progress.
+- Updated the leaderboard to display rank, champion, faction, level, ending achieved, and score.
+- Implemented automatic score-based rankings.
+- Added CSS animations for the Hero Summary, including a background glow-in, pulsing ending banner, and staggered content fade-in.
+
+**Testing:**
+
+Verified that the leaderboard correctly displays player information, ranks players by score, and updates scores as the story progresses.
+

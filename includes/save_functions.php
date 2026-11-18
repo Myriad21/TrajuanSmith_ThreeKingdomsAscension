@@ -196,7 +196,8 @@
             "inventory",
             "choices_log",
             "combat",
-            "last_choice_summary"
+            "last_choice_summary",
+            "final_score"
         ];
 
         $progress = [];
@@ -220,7 +221,8 @@
             "inventory",
             "choices_log",
             "combat",
-            "last_choice_summary"
+            "last_choice_summary",
+            "final_score"
         ];
 
         // Remove old game state before restoring a save.
