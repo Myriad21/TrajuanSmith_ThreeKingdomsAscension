@@ -26,6 +26,18 @@ function initializeCombat(string $enemyId): array
         ],
 
 
+        "corrupted_mana_beast" => [
+            "id" => "corrupted_mana_beast",
+            "name" => "Corrupted Mana Beast",
+            "level" => 4,
+            "hp" => 150,
+            "max_hp" => 150,
+            "strength" => 25,
+            "is_boss" => true,
+        ],
+
+
+
         // Rival Champions
         "warrior_level_1" => [
             "id" => "warrior_level_1",
@@ -440,11 +452,28 @@ function getSpecialAbilities(string $faction): array
             "arcane_burst" => [
                 "name" => "Arcane Burst",
                 "description" => "Unleash concentrated arcane energy.",
-                "mana_cost" => 15,
-                "damage_bonus" => 12,
+                "mana_cost" => 25,
+                "damage_bonus" => 25,
                 "required_level" => 2,
                 "unlock_type" => "level"
-            ]
+            ],
+            "arcane_Blast" => [
+                "name" => "Arcane Heal",
+                "description" => "Unleash concentrated Healing energy.",
+                "mana_cost" => 5,
+                "damage_bonus" => 12,
+                "required_level" => 3,
+                "unlock_type" => "level"
+            ],
+            "mana_Dominance" => [
+                "name" => "Mana Dominance",
+                "description" => "Dominate the area dealing crazy damage.",
+                "mana_cost" => 30,
+                "damage_bonus" => 45,
+                "required_level" => 5,
+                "unlock_type" => "level"
+            ],
+
         ],
 
         "rogue" => [
@@ -455,7 +484,23 @@ function getSpecialAbilities(string $faction): array
                 "damage_bonus" => 10,
                 "required_level" => 2,
                 "unlock_type" => "level"
-            ]
+            ],
+            "dagger_throw" => [
+                "name" => "Dagger Throw",
+                "description" => "Fling your dagger from the shadows to catch your enemy off guard",
+                "mana_cost" => 10,
+                "damage_bonus" => 15,
+                "required_level" => 3,
+                "unlock_type" => "level"
+            ],
+            "Shadow Domain" => [
+                "name" => "Shaow Domain",
+                "description" => "The shadows are yours. Make sure they know.",
+                "mana_cost" => 30,
+                "damage_bonus" => 30,
+                "required_level" => 4,
+                "unlock_type" => "level"
+            ],
         ]
     ];
 

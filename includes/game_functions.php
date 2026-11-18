@@ -74,7 +74,7 @@ function createChampion(string $name, string $faction): array
 function meetsChoiceRequirements(array $champion, array $inventory, array $flags, array $requirements): bool {
 
     // Rejects unsupported requirement categories.
-    $allowedCategories = ["stats", "inventory", "flags", "trust"];
+    $allowedCategories = ["stats", "inventory", "flags", "trust", "geyser_rival"];
 
     foreach ($requirements as $category => $value) {
         if (
@@ -146,6 +146,28 @@ function meetsChoiceRequirements(array $champion, array $inventory, array $flags
         }
     }
 
+
+    // 5. Check whether the geyser rival can be investigated.
+    if (array_key_exists("geyser_rival", $requirements)) {
+
+        $mustBeAvailable = $requirements["geyser_rival"]["available"] ?? null;
+
+        // Only explicitly supported values are accepted.
+        if (!is_bool($mustBeAvailable)) {
+            return false;
+        }
+
+        $isAvailable = canInvestigateGeyserRivals(
+            $champion,
+            $flags
+        );
+
+        if ($isAvailable !== $mustBeAvailable) {
+            return false;
+        }
+    }
+
+
     return true;
 }
 
@@ -156,54 +178,77 @@ function meetsChoiceRequirements(array $champion, array $inventory, array $flags
  * Positive values increase a stat.
  * Negative values decrease a stat.
  */
-function applyStatEffects(array $champion, array $effects): array {
-    // Only these Stats can be modified by this function.
+function applyStatEffects(array $champion, array $effects): array
+{
     $allowedStats = [
         "hp",
+        "max_hp",
         "strength",
-        "mana"
+        "mana",
+        "max_mana"
     ];
 
-    foreach ($effects as $stat => $change) {
-
-        // Ignore unsupported stats or invalid changes.
+    // Apply maximum stat changes first.
+    foreach (["max_hp", "max_mana"] as $stat) {
         if (
-            !in_array($stat, $allowedStats, true) ||
-            !is_numeric($change)
+            !isset($effects[$stat]) ||
+            !is_numeric($effects[$stat])
         ) {
             continue;
         }
 
-        // Apply the change.
-        $champion[$stat] += $change;
+        $change = $effects[$stat];
 
-        // Health cannot exceed maximum HP or fall below zero.
-        if ($stat === "hp") {
-            $champion["hp"] = max(
-                0,
-                min($champion["hp"], $champion["max_hp"])
-            );
-        }
+        // Update the maximum stat.
+        $champion[$stat] = max(
+            1,
+            $champion[$stat] + $change
+        );
 
-        // Mana cannot exceed maximum Mana or fall below zero.
-        if ($stat === "mana") {
-            $champion["mana"] = max(
-                0,
-                min($champion["mana"], $champion["max_mana"])
-            );
-        }
+        // Fully restore the corresponding current stat
+        // whenever its maximum increases.
+        if ($change > 0) {
+            if ($stat === "max_hp") {
+                $champion["hp"] = $champion["max_hp"];
+            }
 
-        // Strength cannot become negative.
-        if ($stat === "strength") {
-            $champion["strength"] = max(
-                0,
-                $champion["strength"]
-            );
+            if ($stat === "max_mana") {
+                $champion["mana"] = $champion["max_mana"];
+            }
         }
     }
 
+    // Apply changes to current stats and strength.
+    foreach (["hp", "strength", "mana"] as $stat) {
+        if (
+            !isset($effects[$stat]) ||
+            !is_numeric($effects[$stat])
+        ) {
+            continue;
+        }
+
+        $champion[$stat] += $effects[$stat];
+    }
+
+    // Enforce stat limits.
+    $champion["hp"] = max(
+        0,
+        min($champion["hp"], $champion["max_hp"])
+    );
+
+    $champion["mana"] = max(
+        0,
+        min($champion["mana"], $champion["max_mana"])
+    );
+
+    $champion["strength"] = max(
+        0,
+        $champion["strength"]
+    );
+
     return $champion;
 }
+
 
 
 /**
@@ -339,15 +384,78 @@ function getFirstRival(string $faction): ?string
 }
 
 
+
+/**
+ * Find the rival kingdom with the lowest trust.
+ *
+ * The player's own faction is excluded.
+ * Ties are resolved using a consistent faction order.
+ */
+function getLowestTrustFaction(array $champion): ?string
+{
+    $playerFaction = strtolower(
+        $champion["faction"] ?? ""
+    );
+
+    $relationships = $champion["relationships"] ?? [];
+
+    $factions = ["warrior", "mage", "rogue"];
+
+    $lowestFaction = null;
+    $lowestTrust = PHP_INT_MAX;
+
+    foreach ($factions as $faction) {
+
+        // Never select the player's own kingdom.
+        if ($faction === $playerFaction) {
+            continue;
+        }
+
+        if (!isset($relationships[$faction])) {
+            continue;
+        }
+
+        $trust = (int) $relationships[$faction];
+
+        if ($trust < $lowestTrust) {
+            $lowestTrust = $trust;
+            $lowestFaction = $faction;
+        }
+    }
+
+    return $lowestFaction;
+}
+
+
 /**
  * Resolve a relationship target based on
  * the player's selected faction.
  */
-function resolveRelationshipTarget( string $target, string $playerFaction): ?string {
+function resolveRelationshipTarget(string $target, string $playerFaction): ?string {
+
+    $playerFaction = strtolower($playerFaction);
+
+    // Resolve the original Act 1 rival.
     if ($target === "first_rival") {
         return getFirstRival($playerFaction);
     }
 
+    // Resolve the rival stationed at the Act 2 mana geyser.
+    if ($target === "geyser_rival") {
+        switch ($playerFaction) {
+            case "warrior":
+                return "rogue";
+
+            case "rogue":
+            case "mage":
+                return "warrior";
+
+            default:
+                return null;
+        }
+    }
+
+    // Allow direct references to valid factions.
     $validFactions = ["warrior", "mage", "rogue"];
 
     if (in_array($target, $validFactions, true)) {
@@ -356,6 +464,7 @@ function resolveRelationshipTarget( string $target, string $playerFaction): ?str
 
     return null;
 }
+
 
 
 /**
@@ -956,21 +1065,113 @@ function levelUpChampion(array $champion, int $levels = 1): array
     return $champion;
 }
 
-/**
- * Zenith Boost - This is outside level stat specific increases 
- * that do not increase level
- * Only available in act II through sufficient exploration of Compound
- * And its surrounding Area. Once a character
- * 
- * A set +5 increase in strenght for Warrior
- * A set +5 increase in Mana for Mage
- * A set +2 strength and +3 mana for Rogue
- * 
- * Achieve 3 Zenith boosts and Achieve Level 5 to fullfill one of the
- * requirements for the 3 fold accord secret ending.
- */
 
-function zenithBoost() {}
+
+function getAct2GeyserRivals(array $champion, array $flags): array
+{
+    $faction = strtolower($champion["faction"] ?? "");
+
+    $firstRivalDefeated = !empty(
+        $flags["act1_rival_defeated"]
+    );
+
+    switch ($faction) {
+
+        case "warrior":
+            // The Rogue was the Warrior's Act 1 rival.
+            // A defeated Rogue cannot return at the geyser.
+            return $firstRivalDefeated ? [] : ["rogue"];
+
+        case "mage":
+
+            return $firstRivalDefeated ? [] : ["warrior"];
+
+        case "rogue":
+            // The Warrior always occupies the geyser encounter.
+            // The Mage is handled in a separate later scene.
+            return ["warrior"];
+
+        default:
+            return [];
+    }
+}
+
+
+function canInvestigateGeyserRivals( array $champion, array $flags): bool {
+    // A rival must be eligible to appear at the geyser.
+    $rivals = getAct2GeyserRivals($champion, $flags);
+
+    if (empty($rivals)) {
+        return false;
+    }
+
+    // The player must have discovered the tracks earlier.
+    if (empty($flags["rival_location_discovered"])) {
+        return false;
+    }
+
+    // The player cannot investigate the same expedition twice.
+    if (!empty($flags["act2_geyser_rival_spotted"])) {
+        return false;
+    }
+
+    return true;
+}
+
+
+
+/**
+ * Check whether the champion qualifies for the
+ * Threefold Accord secret ending.
+ *
+ * Requirements:
+ * - Trust above 90 with all three kingdoms.
+ * - Complete the Zenith Path.
+ * - Absorb both Zenith crystals.
+ * - Defeat the Corrupted Mana Beast.
+ * - Reach at least Level 4.
+ */
+function meetsThreefoldAccordRequirements(
+    array $champion,
+    array $flags
+): bool {
+
+    // 1. Verify trust with all three kingdoms.
+    $relationships = $champion["relationships"] ?? [];
+
+    foreach (["warrior", "mage", "rogue"] as $faction) {
+        $trust = $relationships[$faction] ?? null;
+
+        if (!is_numeric($trust) || $trust < 90) {
+            return false;
+        }
+    }
+
+    // 2. Verify the full Zenith Path was completed.
+    $requiredFlags = [
+        "act2_zenith_path_completed",
+        "act2_first_zenith_absorbed",
+        "act2_second_zenith_absorbed",
+        "act3_mana_beast_defeated"
+    ];
+
+    foreach ($requiredFlags as $flag) {
+        if (($flags[$flag] ?? false) !== true) {
+            return false;
+        }
+    }
+
+    // 3. Verify the champion is at least Level 4.
+    if (($champion["level"] ?? 0) < 4) {
+        return false;
+    }
+
+    // All requirements satisfied.
+    return true;
+}
+
+
+
 
 
 

@@ -732,7 +732,7 @@ function getStoryNodes(): array
 
                     "insight_text" => "The structure may contain valuable information about the artifact. However, approaching immediately means leaving the surrounding area unexplored.",
 
-                    "next" => "ancient_structure_approach",
+                    "next" => "act1_rival_interception",
 
                     "requires" => [],
 
@@ -770,6 +770,38 @@ function getStoryNodes(): array
                 ]
             ]
 
+        ],
+
+
+        "act1_rival_interception" => [
+            "title" => "An Unexpected Interception",
+            "act" => 1,
+
+            "text" => "You lead your expedition toward the ancient structure without first scouting the surrounding ruins. The area seems unusually quiet, and the broken stone pathways offer little cover. Before your group can reach the entrance, movement suddenly erupts from the nearby rubble. A rival expedition has been watching your approach. You have walked directly into their position.",
+
+            "faction_text" => [
+                "warrior" => "Rogue cultivators emerge from the shadows surrounding the ruins. Their daggers flash as they rush toward your expedition, striking before your warriors can properly form a defensive line.",
+
+                "mage" => "Warrior cultivators burst from behind the shattered pillars, their swords already drawn. They charge your expedition before your mages can establish their defensive formations.",
+
+                "rogue" => "Mage cultivators reveal themselves among the broken structures. Their eyes gleam as concentrated mana gathers around their hands. Before your rogues can retreat into the shadows, a barrage of spells erupts toward your position."
+            ],
+
+            "choices" => [
+                "defend_against_rival" => [
+                    "text" => "Defend yourself against the rival expedition.",
+                    "description" => "The rival expedition has already launched its attack. Defend yourself against the Level 2 rival champion.",
+
+                    "insight_text" => "Your expedition was caught off guard. The rival champion has the advantage of surprise, and avoiding the confrontation is no longer possible. Prepare for a difficult battle.",
+                    "next" => "act1_rival_interception",
+                    "effects" => [
+                        "flags" => [
+                            "act1_rival_intercepted" => true,
+                            "act1_rival_surprised" => true
+                        ]
+                    ]
+                ]
+            ]
         ],
 
 
@@ -886,17 +918,17 @@ function getStoryNodes(): array
                 Fortunately, the strangers have not noticed your presence.",
 
             "faction_text" => [
-                "warrior" => "You recognize the distinctive robes and arcane equipment of the Mage Kingdom.
+                "warrior" => "You recognize the dark equipment and concealed weapons of the Rogue Kingdom.
 
-                The expedition consists of two Level 4 senior cultivators and a Level 2 champion carrying a staff. Faint magical energy gathers around the younger cultivator's hands.",
+                The expedition consists of two Level 4 senior cultivators and a Level 2 champion carrying a dagger. The younger cultivator moves with remarkable precision.",
 
                 "mage" => "You recognize the armor and military insignia of the Warrior Kingdom.
 
                 The expedition consists of two Level 4 senior cultivators and a Level 2 champion carrying a sword. The younger cultivator moves with the discipline of a trained soldier.",
 
-                "rogue" => "You recognize the dark equipment and concealed weapons of the Rogue Kingdom.
+                "rogue" => "You recognize the distinctive robes and arcane equipment of the Mage Kingdom.
 
-                The expedition consists of two Level 4 senior cultivators and a Level 2 champion carrying a dagger. The younger cultivator moves with remarkable precision."
+                The expedition consists of two Level 4 senior cultivators and a Level 2 champion carrying a staff. Faint magical energy gathers around the younger cultivator's hands."
             ],
 
             "companion_text" => "One of your seniors studies the rival expedition before turning toward you.
@@ -1196,9 +1228,7 @@ function getStoryNodes(): array
                     "tracker_text" => "Discovered a rare pool of liquid mana within the ancient ruins and began a cultivation breakthrough.",
 
                     "requires" => [
-                        "flags" => [
-                            "act1_rival_defeated" => true
-                        ]
+                        
                     ],
 
                     "effects" => [
@@ -1650,75 +1680,235 @@ function getStoryNodes(): array
 
 
         "first_rival_encounter" => [
-            "title" => "The Rival Expedition",
+            "title" => "A Tense Confrontation",
             "act" => 1,
 
-            "conditional_text" => [
-                [
-                    "requires" => [
-                        "flags" => [
-                            "approached_rivals_first" => true
-                        ]
-                    ],
+            "text" => "Having spotted the rival expedition first, you and your two senior companions emerge from behind the ancient stone pillars.
 
-                    "text" => "Having discovered the rival expedition before being noticed, you and your two senior companions step out from behind the ancient stone pillars.
+                The rival cultivators immediately notice your presence. Their two senior members step forward, positioning themselves protectively around their younger champion.
 
-                    The distant cultivators immediately turn toward your group. Their two senior members move forward cautiously, positioning themselves between you and the younger champion.
+                Neither expedition makes another move. The air grows tense as both groups assess one another.",
 
-                    'We mean no harm,' one of your companions announces. 'We are investigating these ruins and wish to speak with you.'
+            "faction_text" => [
+                "warrior" => "The Rogue champion immediately lowers their stance, slipping partially into the shadows. Two daggers appear in their hands.
 
-                    The rival expedition exchanges surprised glances. They clearly had not expected another group to approach them so openly.
+                    'Warriors? Here?' they mutter suspiciously.
 
-                    For the moment, you have taken the initiative in this encounter."
-                ],
+                    Their companions remain alert, watching for the slightest indication of an attack.",
 
-                [
-                    "requires" => [
-                        "flags" => [
-                            "approached_rivals_first" => false
-                        ]
-                    ],
+                "mage" => "The Warrior champion draws their sword, their shoulders tightening as they recognize your expedition.
 
-                    "text" => "As you and your senior companions approach the ancient structure, a powerful voice suddenly echoes from behind a nearby stone pillar.
+                    'Mages. I should have known,' they say, keeping their weapon raised.
 
-                    'Hold your position.'
+                    Their senior companions remain still, but their expressions make it clear they are prepared to fight.",
 
-                    Three figures emerge from the surrounding ruins, blocking your expedition's path.
+                "rogue" => "The Mage champion's eyes gleam as they recognize your expedition. The mana gathering around their hands suddenly becomes unnaturally still.
 
-                    Two of them radiate the unmistakable pressure of Level 4 cultivators. Between them stands a younger champion whose attention immediately settles upon you.
+                    'Rogues...' they whisper, watching your every movement.
 
-                    Your senior companions step forward, carefully observing the unexpected visitors.
-
-                    The rival expedition has discovered you first, leaving you little opportunity to determine their intentions before the confrontation begins."
-                ]
+                    Their companions shift into defensive positions, prepared to unleash their techniques at the first sign of hostility."
             ],
 
-            "text" => "For several moments, neither expedition makes another move.
+            "companion_text" => "One of your senior companions leans toward you.
 
-            The two groups carefully assess one another, their senior cultivators exchanging measured glances.
+                'They haven't attacked. We may still be able to settle this peacefully.'
 
-            Although no weapons have been drawn, the concentration of mana gathering around the experienced cultivators makes the tension unmistakable.
-
-            One of your senior companions finally breaks the silence.
-
-            'It appears we are not the only ones investigating this place.'
-
-            A senior from the opposing expedition responds with a cautious nod.
-
-            'Indeed. We have traveled a considerable distance to reach these ruins. It seems our kingdoms have developed an interest in the same mystery.'
-
-            The younger rival champion steps forward, studying you with an expression that is difficult to interpret.
-
-            Despite belonging to different kingdoms, the two of you occupy remarkably similar positions. Each has been entrusted with accompanying powerful senior cultivators on a mission that may influence the future of your homeland.
-
-            Whatever happens next, this encounter may shape the relationship between your kingdoms.",
+                The opposing expedition waits for your response.",
 
             "backgrounds" => [
                 "page" => null,
                 "scene" => null
             ],
 
-            "choices" => []
+            "choices" => [
+                "attack_rival" => [
+                    "text" => "Attack the Rival Expedition",
+
+                    "description" => "Abandon diplomacy and confront the rival champion in battle.",
+
+                    "insight_text" => "Both expeditions are aware of one another. Attacking now will begin an open confrontation rather than a surprise attack.",
+
+                    "next" => "first_rival_encounter",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "trust" => [
+                            "first_rival" => -20
+                        ],
+                        "flags" => [
+                            "rival_surprise_attack" => false
+                        ]
+                    ],
+
+                    "tracker_title" => "Confronting the Rival Champion",
+
+                    "tracker_text" => "You abandoned negotiations and challenged the rival champion to battle."
+                ],
+
+                "ask_to_negotiate" => [
+                    "text" => "Ask to Negotiate",
+
+                    "description" => "Attempt to resolve the confrontation peacefully.",
+
+                    "insight_text" => "The rival expedition is tense but has not attacked. Negotiation may offer a way to investigate the ruins without unnecessary bloodshed.",
+
+                    "next" => "act1_rival_negotiation",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "trust" => [
+                            "first_rival" => 0
+                        ],
+                        "flags" => [
+                            "act1_rival_negotiation_attempted" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Opening Negotiations",
+
+                    "tracker_text" => "You chose to negotiate with the rival expedition instead of attacking."
+                ]
+            ]
+        ],
+
+        "act1_rival_negotiation" => [
+            "title" => "An Offer of Cooperation",
+            "act" => 1,
+
+            "text" => "You raise a hand, signaling that you have no intention of attacking.
+
+                'We were sent here to investigate the unusual mana fluctuations surrounding these ruins. I assume your kingdom detected them as well.'
+
+                You glance toward the ancient structure.
+
+                'Whatever lies inside may be more dangerous than either of our expeditions anticipated. Fighting each other would only weaken us before we even begin our investigation.'
+
+                The rival champion remains silent, listening to your proposal.",
+
+            "faction_text" => [
+                "warrior" => "The Rogue champion keeps their daggers drawn, although their stance relaxes slightly.
+
+                    'And why should we trust a Warrior champion? What's stopping your kingdom from claiming everything for itself?'",
+
+                "mage" => "The Warrior champion narrows their eyes, their sword still held firmly at their side.
+
+                    'You expect us to believe the Mage Kingdom suddenly wants to share its discoveries? Give me one good reason.'",
+
+                "rogue" => "The Mage champion studies you carefully, the mana surrounding their hands gradually settling.
+
+                    'An interesting proposition coming from a Rogue. But what exactly are you suggesting?'"
+            ],
+
+            "companion_text" => "Your senior companions exchange cautious glances. Neither interrupts, allowing you to continue speaking.",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "propose_cooperation" => [
+                    "text" => "Propose Sharing Resources and Information",
+
+                    "description" => "Offer to cooperate during the investigation and share any discoveries made within the ruins.",
+
+                    "insight_text" => "Offering mutual cooperation may establish trust with the rival champion. Both expeditions could benefit from sharing information instead of risking unnecessary casualties.",
+
+                    "next" => "act1_rival_cooperation",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "trust" => [
+                            "first_rival" => 20
+                        ],
+
+                        "flags" => [
+                            "act1_rival_cooperated" => true,
+                            "act1_rival_defeated" => false
+                        ]
+                    ],
+
+                    "tracker_title" => "A Proposal for Cooperation",
+
+                    "tracker_text" => "You offered to share resources and information with the rival expedition."
+                ]
+            ]
+        ],
+
+        "act1_rival_cooperation" => [
+            "title" => "An Unexpected Agreement",
+            "act" => 1,
+
+            "text" => "For a moment, silence falls between the two expeditions. The rival champion considers your proposal while their senior companions exchange uncertain glances.",
+
+            "faction_text" => [
+                "warrior" => "The Rogue champion slowly lowers their daggers.
+
+                    'I still don't trust your kingdom,' they admit. 'But you're right. There's no point wasting our strength fighting each other.'
+
+                    They glance toward the ancient structure.
+
+                    'We'll investigate another entrance. If we discover anything important, we'll share what we find. I expect you to do the same.'",
+
+                "mage" => "The Warrior champion studies you for several moments before finally sheathing their sword.
+
+                    'I never expected to agree with a Mage,' they admit. 'But fighting here would be foolish.'
+
+                    They turn toward their companions.
+
+                    'We'll take another route through the ruins. If we uncover anything useful, you'll hear about it. See that you honor your end of the agreement.'",
+
+                "rogue" => "The Mage champion allows the mana surrounding their hands to dissipate.
+
+                    'A surprisingly reasonable proposal,' they remark. 'Perhaps cooperation will prove more productive than another pointless conflict.'
+
+                    They gesture toward a distant passage.
+
+                    'Our expedition will investigate that entrance. We'll exchange our findings once we've completed our search.'"
+            ],
+
+            "companion_text" => "The rival expedition gradually withdraws, disappearing among the ruined pathways.
+
+                One of your senior companions watches them leave before turning toward you.
+
+                'I genuinely didn't expect that to work.'
+
+                Your other companion lets out a quiet laugh.
+
+                'Neither did I. But we've avoided a battle, and we still have a mission to complete.'
+
+                With the confrontation resolved, your expedition turns its attention back toward the ancient structure.",
+
+            "choices" => [
+                "investigate_ruins_after_cooperation" => [
+                    "text" => "Investigate the Ancient Ruins",
+
+                    "description" => "Continue your expedition into the ancient structure now that the rival confrontation has been resolved peacefully.",
+
+                    "insight_text" => "Your agreement has allowed both expeditions to investigate without fighting. The rival group will explore another entrance while you continue toward the source of the mana fluctuations.",
+
+                    "next" => "rival_victory_ruins",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "trust" => [
+                            "first_rival" => 0
+                        ],
+                        "flags" => [
+                            "act1_rival_cooperated" => true,
+                            "act1_rival_defeated" => false
+                        ]
+                    ],
+
+                    "tracker_title" => "A Peaceful Resolution",
+
+                    "tracker_text" => "You reached an agreement with the rival expedition and continued investigating the ruins without a battle."
+                ]
+            ]
         ],
 
         "act1_training_dummy" => [
@@ -1787,7 +1977,2138 @@ function getStoryNodes(): array
             ]
         ],
 
+
+        "act1_mana_disaster_briefing" => [
+            "title" => "An Emerging Mana Disaster",
+            "act" => 1,
+
+            "text" => "Your time at the training grounds is interrupted by an urgent summons from your kingdom's leadership.
+
+                Reports of an increasingly dangerous mana disturbance near the Mage Kingdom have prompted an emergency briefing.
+
+                You leave the training grounds and make your way to meet your superiors, where the situation and your next assignment will be explained.",
+
+            "faction_text" => [
+                "warrior" => "Within the Warrior Kingdom's command hall, several senior commanders examine reports arriving from the Mage Kingdom's outer territories.
+
+                    'Our observers have confirmed an unstable concentration of mana near the Mage Kingdom,' one commander explains.
+
+                    'The disturbance has already begun affecting the surrounding environment. If it continues to grow, the consequences could extend well beyond the region.'
+
+                    The commander turns toward you.
+
+                    'The Three Kingdoms have agreed to dispatch cultivators to investigate and contain the disaster. We cannot afford to ignore a threat that may eventually reach our own borders.'
+
+                    'You have reached Level 3 and demonstrated your abilities during your previous expedition. You are qualified to accompany our senior forces on this assignment.'
+
+                    'Your two Level 4 companions from the ancient ruins expedition have been assigned to accompany you once again.'",
+
+                "mage" => "Within the Mage Kingdom's Grand Arcane Council, senior scholars gather around detailed maps and unstable mana readings.
+
+                    'We were the first to detect the disturbance,' one senior mage explains.
+
+                    'The affected region lies within our outer territory, near an abandoned mana refinery that operated for generations.'
+
+                    The mage gestures toward an old facility marked on the map.
+
+                    'Centuries ago, this region possessed exceptionally high ambient mana density. Our predecessors constructed a refinery to concentrate that energy and gradually produce liquid mana.'
+
+                    'The process continued for decades, but eventually the available mana diminished. The facility was abandoned when further refinement became impractical.'
+
+                    Another scholar examines the readings.
+
+                    'Recent worldwide increases in ambient mana appear to have reactivated the region's natural concentration. The abandoned refinery's remaining formations and equipment may have contributed to a dangerous chain reaction.'
+
+                    'We believe this has triggered the current mana disaster.'
+
+                    The council turns toward you.
+
+                    'Although the region belongs to our kingdom, its remote location places it beyond our regularly controlled mana zones. Under the Three Kingdoms' disaster-response treaty, all three kingdoms are sending assistance.'
+
+                    'You have reached Level 3, and your previous expedition has demonstrated your potential. Your two Level 4 senior companions will accompany you once again.'",
+
+                "rogue" => "Within the Rogue Kingdom's intelligence headquarters, senior operatives examine reports gathered by scouts stationed near the Mage Kingdom.
+
+                    'Our agents have confirmed an extraordinary mana disturbance in the Mage Kingdom's outer territory,' one senior operative explains.
+
+                    'The surrounding environment is becoming increasingly unstable. Reports suggest the disturbance is growing rather than fading.'
+
+                    Another operative places a map before you.
+
+                    'We have limited information about the cause. However, the concentration of mana is far beyond what our scouts normally encounter.'
+
+                    'Under the Three Kingdoms' disaster-response treaty, each kingdom is expected to assist in containing threats of this magnitude.'
+
+                    The senior operative studies you.
+
+                    'You have already proven yourself during the ancient ruins expedition. At Level 3, you are capable of participating in a more demanding assignment.'
+
+                    'Your two Level 4 companions from the previous expedition have been selected to accompany you again. Investigate the disturbance, determine what is happening, and help prevent it from spreading.'"
+            ],
+
+            "companion_text" => "The briefing concludes with instructions to prepare for departure.
+
+                Representatives from all three kingdoms are expected to participate in the containment effort.
+
+                Your assignment is to travel with your senior companions, investigate the affected region, and assist in preventing the unstable mana from spreading further.
+
+                Before leaving, you have an opportunity to ask about the nature of mana disasters or accept your assignment immediately.",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "ask_about_mana_disaster" => [
+                    "text" => "What Is a Mana Disaster?",
+
+                    "description" => "Ask your superiors to explain how mana disasters occur and why the Three Kingdoms must cooperate to contain them.",
+
+                    "insight_text" => "Understanding mana disasters may reveal why uncontrolled mana is dangerous and why all three kingdoms are obligated to respond.",
+
+                    "next" => "act1_mana_disaster_explanation",
+
+                    "requires" => [],
+
+                    "effects" => [],
+
+                    "tracker_title" => "Understanding Mana Disasters",
+
+                    "tracker_text" => "You requested an explanation of mana disasters and the Three Kingdoms' responsibility to contain them."
+                ],
+
+                "accept_mana_disaster_mission" => [
+                    "text" => "Accept the Mission",
+
+                    "description" => "Accept your assignment and prepare to depart with your two Level 4 senior companions.",
+
+                    "insight_text" => "Your cultivation has reached Level 3, qualifying you to accompany experienced cultivators on this dangerous mission. Accepting will advance the main story.",
+
+                    "next" => "act1_mission_departure",
+
+                    "requires" => [
+                        "stats" => [
+                            "level" => 3
+                        ]
+                    ],
+
+                    "effects" => [],
+
+                    "tracker_title" => "Accepting the Mana Disaster Mission",
+
+                    "tracker_text" => "You accepted your kingdom's assignment to investigate and contain the mana disaster near the Mage Kingdom."
+                ]
+            ]
+        ],
+
+        "act1_mission_departure" => [
+            "title" => "Preparations for Departure",
+            "act" => 1,
+
+            "text" => "With the briefing concluded, you leave your kingdom's leadership chambers and make your way toward the expedition's designated gathering point.
+
+                Preparations are already underway. Equipment and medical supplies are being distributed to the cultivators assigned to investigate the mana disaster.
+
+                Among the assembled forces, you recognize two familiar figures.
+
+                Your Level 4 senior companions from the ancient ruins expedition have been assigned to accompany you once again.",
+
+            "faction_text" => [
+                "warrior" => "Your two Warrior seniors stand near a group of soldiers preparing their equipment.
+
+                    One notices your approach and smiles.
+
+                    'There you are! We heard you'd been assigned to this expedition.'
+
+                    The other senior examines your cultivation before nodding approvingly.
+
+                    'Level 3 already. You've grown considerably stronger since our first journey.'
+
+                    'This mission is different from exploring ancient ruins. We're dealing with an unstable concentration of mana that could threaten entire regions.'
+
+                    'Keep your weapon ready and follow our instructions. We'll handle anything beyond your cultivation.'",
+
+                "mage" => "Your two Mage seniors are examining several magical instruments designed to measure ambient mana density.
+
+                    One looks up as you approach.
+
+                    'Excellent. We were hoping you'd be joining us again.'
+
+                    The other senior studies your cultivation with satisfaction.
+
+                    'Your control over mana has improved significantly. Level 3 suits you.'
+
+                    They gesture toward the instruments.
+
+                    'The readings from the affected region are extremely concerning. We'll need to monitor the mana carefully once we arrive.'
+
+                    'Stay close to us. If the surrounding energy becomes unstable, we may need to establish protective formations immediately.'",
+
+                "rogue" => "Your two Rogue seniors wait near the expedition's supply station, quietly examining maps and intelligence reports.
+
+                    One notices you approaching.
+
+                    'Look who's back. Ready for another expedition?'
+
+                    The other senior gives you an approving glance.
+
+                    'Level 3. Not bad. You've made impressive progress since the ruins.'
+
+                    They lower their voice.
+
+                    'Our scouts have provided limited information about the affected region. The mana is unstable, and we don't know what else might be waiting there.'
+
+                    'Keep your senses sharp and stay within our protection. This isn't a mission where carelessness can be tolerated.'"
+            ],
+
+            "companion_text" => "Before departure, your senior companions provide you with five Healing Potions.
+
+                'These are emergency supplies. Keep them close. We cannot predict what dangers the unstable mana might produce.'
+
+                You carefully secure the potions among your belongings.
+
+                Your companions then offer you a final opportunity to prepare.
+
+                'If you're still recovering from training or previous battles, now is the time to restore your strength.'
+
+                'Once we leave, we intend to travel at full speed. There may not be another opportunity to rest before reaching the affected region.'
+
+                With the expedition ready to depart, you must decide whether to complete your recovery or leave immediately.",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "complete_final_preparations" => [
+                    "text" => "Complete Final Preparations",
+
+                    "description" => "Restore your HP and Mana completely, collect your supplies, and prepare to begin Act 2.",
+
+                    "insight_text" => "Recovering before departure ensures that you enter the dangerous region at full strength. You will also receive five Healing Potions for the expedition.",
+
+                    "next" => "act2_disaster_arrival",
+
+                    "requires" => [
+                        "stats" => [
+                            "level" => 3
+                        ]
+                    ],
+
+                    "effects" => [
+                        "inventory" => [
+                            "add" => [
+                                "healing_potion",
+                                "healing_potion",
+                                "healing_potion",
+                                "healing_potion",
+                                "healing_potion"
+                            ]
+                        ],
+                        "flags" => [
+                            "act1_completed" => true,
+                            "act2_mission_started" => true
+                        ],
+                        "stats"=> [
+                            "mana" => 2000,
+                            "hp" => 200,
+                        ]
+                    ],
+
+                    "tracker_title" => "Fully Prepared for Act 2",
+
+                    "tracker_text" => "You reunited with your two Level 4 senior companions, received five Healing Potions, and completed your recovery before departing for the mana disaster."
+                ],
+
+                "depart_immediately" => [
+                    "text" => "Depart Immediately",
+
+                    "description" => "Collect your supplies and begin the expedition without taking additional time to recover.",
+
+                    "insight_text" => "Leaving immediately advances the mission, but any missing HP or Mana will remain unrestored. You will still receive five Healing Potions.",
+
+                    "next" => "act2_disaster_arrival",
+
+                    "requires" => [
+                        "stats" => [
+                            "level" => 3
+                        ]
+                    ],
+
+                    "effects" => [
+                        "inventory" => [
+                            "add" => [
+                                "healing_potion",
+                                "healing_potion",
+                                "healing_potion",
+                                "healing_potion",
+                                "healing_potion"
+                            ]
+                        ],
+                        "flags" => [
+                            "act1_completed" => true,
+                            "act2_mission_started" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Departing for the Mana Disaster",
+
+                    "tracker_text" => "You reunited with your two Level 4 senior companions, received five Healing Potions, and departed immediately for the mana disaster."
+                ]
+            ]
+        ],
+
+
+        "act2_disaster_arrival" => [
+            "title" => "Act II — The Mana Disaster",
+            "act" => 2,
+
+            "text" => "With preparations complete, your expedition finally departs.
+
+                Accompanied by your two Level 4 senior cultivators, you travel toward the remote region where the mana disaster has been reported.
+
+                As your destination draws closer, you begin sensing an unusual concentration of mana in the surrounding atmosphere.",
+
+            "faction_text" => [
+                "warrior" => "Your two Warrior seniors waste no time beginning the journey.
+
+                    Drawing upon their Level 4 cultivation, they rise into the sky, carrying you along as they accelerate toward the distant Mage Kingdom.
+
+                    The landscape races beneath you. Mountains, rivers, and vast stretches of wilderness disappear behind the expedition.
+
+                    Although your Level 3 cultivation has strengthened your body considerably, sustained flight remains beyond your current abilities.
+
+                    Your seniors maintain their tremendous speed until the distant forest surrounding the disaster site finally comes into view.
+
+                    As you descend, you feel an oppressive concentration of mana pressing against your body.",
+
+                "mage" => "Your two Mage seniors activate their flight techniques, lifting themselves into the air and carrying you alongside them.
+
+                    Unlike the expeditions departing from the other kingdoms, your destination lies relatively close to the Mage Kingdom's outer territories.
+
+                    The journey takes you beyond the regularly maintained mana-regulation zones and toward a remote region that has remained largely abandoned for decades.
+
+                    As you approach, the ambient mana becomes increasingly concentrated.
+
+                    Your seniors exchange concerned glances as their instruments begin registering unstable readings.
+
+                    Even before reaching the forest, you can sense the violent fluctuations spreading through the surrounding atmosphere.",
+
+                "rogue" => "Your two Rogue seniors exchange a glance before activating their movement techniques.
+
+                    Their Level 4 cultivation allows them to take to the skies, and they carry you along as they accelerate across the wilderness.
+
+                    The journey is astonishingly fast. Forests, mountain ranges, and distant settlements blur beneath you.
+
+                    Despite your improved Level 3 cultivation, you struggle to follow the movements of your seniors.
+
+                    Eventually, the expedition approaches the remote forest near the Mage Kingdom.
+
+                    As you descend toward the outskirts, your senses detect something deeply unsettling.
+
+                    The mana surrounding the region is unusually dense, unstable, and constantly shifting."
+            ],
+
+            "companion_text" => "Your expedition lands near the outskirts of a vast forest.
+
+                The atmosphere feels entirely different from the regions you traveled through earlier.
+
+                Mana saturates the air in overwhelming quantities. Unstable currents surge through the surroundings, occasionally whipping against your body like invisible gusts of wind.
+
+                The trees sway despite the absence of any ordinary breeze, and faint pulses of concentrated energy ripple through the forest.
+
+                One of your senior companions studies the environment.
+
+                'We're here. The mana density is even worse than the reports suggested.'
+
+                The other senior scans the distant treeline.
+
+                'Stay alert. We need to understand what is happening before attempting to approach the center of the disturbance.'
+
+                Your expedition prepares to investigate the surrounding area.",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "survey_disaster_area" => [
+                    "text" => "Survey the Surrounding Area",
+
+                    "description" => "Examine the forest outskirts and look for signs of unusual activity before proceeding.",
+
+                    "insight_text" => "Careful observation may reveal information about the disturbance or evidence of others who have passed through the region.",
+
+                    "next" => "act2_disaster_scouting",
+
+                    "requires" => [],
+
+                    "effects" => [],
+
+                    "tracker_title" => "Investigating the Mana Disaster",
+
+                    "tracker_text" => "You arrived at the mana disaster site and began surveying the unstable forest outskirts."
+                ]
+            ]
+        ],
+
+
+        "act2_disaster_scouting" => [
+            "title" => "Two Paths Through the Forest",
+            "act" => 2,
+
+            "text" => "Your expedition begins surveying the outskirts of the disaster-stricken forest.
+
+                The atmosphere is saturated with unstable mana. Strange fluctuations ripple through the trees, making it difficult to determine exactly where the disturbance originates.
+
+                After carefully examining the surrounding terrain, your two senior companions identify two areas worth investigating.
+
+                In one direction, several trees have been broken or knocked aside. The damage forms an irregular trail extending deeper into the forest.
+
+                In another direction, the surrounding mana grows noticeably denser. Powerful fluctuations radiate from somewhere beyond the treeline.
+
+                Both locations may provide valuable information about the disaster, but they appear to lead toward very different discoveries.",
+
+            "companion_text" => "One of your seniors gestures toward the damaged trees.
+
+                'Look over there. Several trees have been broken, and the damage seems to continue farther into the forest.'
+
+                Your other senior examines the surrounding area.
+
+                'That could be evidence of human activity. Remember, all three kingdoms have dispatched cultivators to investigate this disaster. Other expeditions may already be operating nearby.'
+
+                They turn toward the second direction.
+
+                'However, the mana fluctuations are considerably stronger over there. If we're searching for the source of this disaster, following that concentration may be more productive.'
+
+                The first senior looks toward you.
+
+                'Both directions are worth investigating. We could examine the damaged forest first, or proceed directly toward the stronger mana fluctuations.'
+
+                Your companions wait for your decision.",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "investigate_broken_trees" => [
+                    "text" => "Investigate the Broken Trees",
+
+                    "description" => "Examine the damaged forest for evidence of human activity or other expeditions.",
+
+                    "insight_text" => "The damaged trees may reveal information about other cultivators operating in the region. Investigating could uncover an optional path that would otherwise remain hidden.",
+
+                    "next" => "act2_forest_tracks",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "flags" => [
+                            "investigated_broken_trees" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Investigating the Damaged Forest",
+
+                    "tracker_text" => "You chose to examine the broken trees for signs of human activity before following the stronger mana fluctuations."
+                ],
+
+                "follow_dense_mana" => [
+                    "text" => "Follow the Dense Mana",
+
+                    "description" => "Proceed toward the stronger mana fluctuations and investigate the source of the disturbance.",
+
+                    "insight_text" => "Following the stronger mana fluctuations advances the main investigation, but you may miss information hidden along the damaged forest trail.",
+
+                    "next" => "act2_dense_mana",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "flags" => [
+                            "followed_dense_mana" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Following the Mana Fluctuations",
+
+                    "tracker_text" => "You bypassed the damaged forest and proceeded toward the increasingly powerful mana fluctuations."
+                ]
+            ]
+        ],
+
+
+
+        "act2_forest_tracks" => [
+            "title" => "Traces of Another Expedition",
+            "act" => 2,
+
+            "text" => "You lead your companions toward the damaged section of the forest.
+
+                Several large trees have been snapped apart, while others have been knocked aside with considerable force.
+
+                At first, the destruction appears to be another consequence of the unstable mana saturating the region.
+
+                However, closer examination reveals something unusual.
+
+                The broken trees form a rough passage through the forest. Beneath the fallen branches, you discover disturbed soil, footprints, and traces of recently released cultivation energy.
+
+                These are not the marks of ordinary wildlife or a natural mana disturbance.
+
+                Someone has deliberately forced their way through this forest.
+
+                Although the remaining energy signatures are too distorted to identify their kingdom, the tracks appear relatively fresh.
+
+                Whoever passed through here may still be somewhere nearby.",
+
+            "companion_text" => "One of your seniors crouches beside the disturbed ground.
+
+                'These are definitely cultivation traces. Another expedition passed through here recently.'
+
+                Your second companion examines the damaged trees.
+
+                'They must have cleared a path using their techniques. Judging by how fresh these marks are, they might still be operating in the surrounding forest.'
+
+                The first senior nods.
+
+                'We cannot determine which kingdom they belong to, but we should remain alert. We may encounter them farther ahead.'
+
+                Your companions turn toward the increasingly powerful mana fluctuations.
+
+                'For now, we should continue toward the source of the disturbance.'",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "continue_toward_dense_mana" => [
+                    "text" => "Follow the Dense Mana",
+
+                    "description" => "Continue toward the stronger mana fluctuations while remaining alert for the unidentified expedition.",
+
+                    "insight_text" => "You discovered evidence that another expedition passed through the forest. Although their identity remains unknown, you now know to search for their presence as you investigate the disaster.",
+
+                    "next" => "act2_dense_mana",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "flags" => [
+                            "rival_location_discovered" => true,
+                            "followed_dense_mana" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Discovered Another Expedition's Tracks",
+
+                    "tracker_text" => "You discovered fresh cultivation traces left by an unidentified expedition and continued toward the dense mana, aware that other cultivators may be nearby."
+                ]
+            ]
+        ],
+
+
+        "act2_dense_mana" => [
+            "title" => "The Thickening Mana",
+            "act" => 2,
+
+            "text" => "You press deeper into the forest, following the increasingly concentrated mana. The ground has begun to fracture, and a faint blue mist rises through the cracks. Nearby trees pulse with unnatural blue veins beneath their bark, while a low hum vibrates through the earth. With every step, the air grows heavier, until you notice a small, blackened cavern ahead. An intense stream of blue mist pours from its entrance, carrying the densest concentration of ambient mana you have ever encountered.",
+
+            "companion_text" => "One of your senior cultivators stops beside you, studying the cavern. \"That concentration should not be possible here. Something has disturbed the natural flow of mana. Stay close. We do not know what is waiting inside.\"",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "approach_blackened_cavern" => [
+                    "text" => "Approach the Blackened Cavern",
+
+                    "description" => "Move closer to the source of the unusually dense ambient mana.",
+
+                    "insight_text" => "The cavern appears to be a major source of the disturbance. Approaching it may reveal more about the disaster, but the abnormal mana concentration suggests that the area could be dangerous.",
+
+                    "next" => "act2_cavern_treants",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "stats" => [],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [],
+                        "flags" => [
+                            "act2_cavern_approached" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "The Blackened Cavern",
+                    "tracker_text" => "You followed the dense mana through the unstable forest and discovered a blackened cavern emitting an extraordinary concentration of ambient mana."
+                ]
+            ]
+        ],
+
+
+        "act2_cavern_treants" => [
+            "title" => "Guardians of the Blackened Cavern",
+            "act" => 2,
+
+            "text" => "As you approach the cavern, several humanoid figures emerge through the thick blue mist. Their bodies resemble twisted trees, with blackened bark and branches warped by excessive mana. These mana-corrupted treants stand between your expedition and the cavern entrance. Before you can examine them further, one releases a distorted howl and lunges directly toward you. Your senior cultivators immediately move to intercept the remaining creatures.",
+
+            "companion_text" => "One of your senior cultivators shouts, \"Rank Three treants! There are a few Rank Fours among them! Handle the one approaching you. We will take care of the others!\"",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "defeat_corrupted_treant" => [
+                    "text" => "Defeat the Corrupted Treant",
+
+                    "description" => "Engage the attacking treant while your senior cultivators eliminate the remaining creatures.",
+
+                    "insight_text" => "The treant is already committed to its attack. Your senior cultivators are occupied with the other creatures, leaving you to handle this opponent. The encounter will advance the story without deducting HP or Mana.",
+
+                    "next" => "act2_treant_aftermath",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "stats" => [],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [],
+                        "flags" => [
+                            "act2_corrupted_treants_defeated" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Corrupted Treants Defeated",
+                    "tracker_text" => "You defeated an attacking mana-corrupted treant while your senior cultivators eliminated the remaining creatures guarding the cavern."
+                ]
+            ]
+        ],
+
+
+        "act2_treant_aftermath" => [
+            "title" => "The Cavern's Threshold",
+            "act" => 2,
+
+            "text" => "The final corrupted treant collapses, its twisted body crumbling against the fractured earth. Around you, your senior cultivators finish eliminating the remaining Rank Three and Rank Four creatures. With the entrance secured, your expedition regroups before the small blackened cavern. Dense blue mist continues pouring from its depths, and the surrounding earth trembles with unstable mana. As you prepare to investigate, you notice several other concentrated mana signatures deeper within the surrounding forest.",
+
+            "companion_text" => "One of your senior cultivators examines the cavern entrance. \"We should investigate this place. However, those other mana signatures are unusual as well. If we intend to examine them, we should do so before entering. We cannot afford to keep retracing our steps through this unstable forest.\"",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "enter_blackened_cavern" => [
+                    "text" => "Enter the Blackened Cavern",
+
+                    "description" => "Proceed directly into the cavern to investigate the source of the mana disaster. You will not be able to return to the surrounding forest.",
+
+                    "insight_text" => "Entering the cavern advances the main investigation. However, doing so means abandoning the opportunity to investigate the other mana signatures and obtain the optional Zenith Boosts.",
+
+                    "next" => "act3_blackened_cavern_entrance",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "stats" => [],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [],
+                        "flags" => [
+                            "act2_cavern_entered" => true,
+                            "act2_zenith_path_skipped" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Entered the Blackened Cavern",
+                    "tracker_text" => "You entered the blackened cavern to continue investigating the mana disaster, leaving the other mana signatures unexplored."
+                ],
+
+                "investigate_other_mana_signatures" => [
+                    "text" => "Investigate the Other Mana Signatures",
+
+                    "description" => "Explore the unusual mana concentrations surrounding the cavern before proceeding inside.",
+
+                    "insight_text" => "The surrounding forest contains additional concentrations of unstable mana. Investigating them could reveal valuable discoveries, but doing so may expose you to further dangers and consume resources needed later.",
+
+                    "next" => "act2_zenith_path_start",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "stats" => [],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [],
+                        "flags" => [
+                            "act2_zenith_path_started" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Investigating the Mana Signatures",
+                    "tracker_text" => "Before entering the cavern, you decided to investigate the other unusual mana signatures detected in the surrounding forest."
+                ]
+            ]
+        ],
+
+        // Zenith Path
+
+        "act2_zenith_path_start" => [
+            "title" => "The Shattered Amber Clearing",
+            "act" => 2,
+
+            "text" => "Following the unusual mana signatures, your expedition arrives at what was once a clearing filled with amber sap trees. Many of the trees have violently ruptured, scattering splintered trunks and hardened amber across the forest floor. Brilliant blue veins pulse beneath the surrounding earth, feeding unstable mana into the surviving trees. Ahead, an enormous formation of crystallized amber blocks the passage. The ground beneath it trembles faintly, accompanied by a deep, rhythmic hum.",
+
+            "companion_text" => "One of your senior cultivators kneels beside the amber formation. \"These trees absorbed far more mana than their bodies could contain. Their sap crystallized when they ruptured.\" Another senior studies the ground. \"There is still a considerable amount of mana moving beneath us. We should be careful about disturbing it.\"",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "shatter_amber_barrier" => [
+                    "text" => "Shatter the Amber Barrier",
+
+                    "description" => "Use raw strength to break through the crystallized amber. The unstable formation may retaliate violently.",
+
+                    "insight_text" => "A forceful approach could clear the obstruction quickly, but the amber is saturated with unstable mana. Shattering it risks triggering a violent reaction and causing physical injury. You will lose 5 HP.",
+
+                    "next" => "act2_geyser_crossing",
+
+                    "requires" => [
+                        "stats" => [
+                            "hp" => 6
+                        ]
+                    ],
+
+                    "effects" => [
+                        "stats" => [
+                            "hp" => -5
+                        ],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [],
+                        "flags" => [
+                            "act2_amber_shattered" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Shattered the Amber Barrier",
+                    "tracker_text" => "You forcefully shattered the crystallized amber, suffering minor injuries as the unstable mana beneath the clearing erupted."
+                ],
+
+                "siphon_amber_mana" => [
+                    "text" => "Carefully Siphon the Mana",
+
+                    "description" => "Work alongside your senior cultivators to release the pressure within the amber formation without suffering injury.",
+
+                    "insight_text" => "Your senior cultivators can guide you in carefully regulating the mana flowing through the amber. This approach takes longer but allows you to detect the dangerous pressure beneath the clearing and retreat before it erupts. It is VERY mana intensive.",
+
+                    "next" => "act2_geyser_crossing",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "stats" => [
+                            "mana" => -10
+                        ],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [],
+                        "flags" => [
+                            "act2_amber_siphoned" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Stabilized the Amber Barrier",
+                    "tracker_text" => "With guidance from your senior cultivators, you carefully released the mana trapped within the amber and avoided injury when the underground geyser erupted."
+                ],
+
+                "examine_geyser_tracks" => [
+                    "text" => "Examine the Area",
+
+                    "description" => "Search the shattered amber clearing for signs of the expedition whose tracks you discovered earlier.",
+
+                    "insight_text" => "You discovered signs of another expedition while investigating the broken trees. The unusual tracks and cultivation traces suggest they may be somewhere near this clearing. Searching the area could reveal their location and create an opportunity for negotiation.",
+
+                    "next" => "act2_geyser_rival_discovery",
+
+                    "requires" => [
+                        "flags" => [
+                            "rival_location_discovered" => true,
+                            "investigated_broken_trees" => true,
+                        ],
+
+                        "geyser_rival" => [
+                            "available" => true
+                        ]
+                    ],
+
+                    "effects" => [
+                        "flags" => [
+                            "act2_geyser_tracks_examined" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Examined the Shattered Clearing",
+
+                    "tracker_text" => "You followed the clues discovered earlier and searched the shattered amber clearing, locating another expedition nearby."
+                ],
+            ]
+        ],
+
+
+        "act2_ruptured_mana_geyser" => [
+            "title" => "The Ruptured Mana Geyser",
+            "act" => 2,
+
+            "text" => "The amber barrier fractures, and a deafening rumble tears through the clearing. A towering column of brilliant blue mana erupts from beneath the earth, scattering crystallized amber in every direction. Your senior cultivators pull you away from the eruption before the full force reaches you. As the debris settles, you realize that the exposed opening is only a small portion of a much larger underground mana geyser. The entire ravine trembles as pressure continues building beneath it. Beyond the unstable passage, an unusual concentration of mana glimmers through the mist.",
+            
+            "companion_text" => "One of your senior cultivators studies the surging mana. 'This is no ordinary fluctuation. The entire ravine is acting as a pressure chamber.'
+
+            Another points toward the opening. 'We can force our way through, or use mana to shield ourselves, but both methods carry risks.'
+
+            The rival champion steps forward if cooperation has been established. 'Our expeditions have agreed to work together. Let us combine our cultivation techniques and stabilize the passage.'
+
+            Your senior cultivator nods. 'With both expeditions working together, we should be able to cross safely.'",
+
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "force_through_geyser" => [
+                    "text" => "Force Through the Geyser",
+
+                    "description" => "Push through the unstable passage using your physical endurance.",
+
+                    "insight_text" => "Crossing through the surging mana without sufficient protection will expose your body to intense pressure and flying debris. You will lose 15 HP, and the noise may alert anyone nearby.",
+
+                    "next" => "act2_geyser_crossing",
+
+                    "requires" => [
+                        "stats" => [
+                            "hp" => 16
+                        ]
+                    ],
+
+                    "effects" => [
+                        "stats" => [
+                            "hp" => -15
+                        ],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [],
+                        "flags" => [
+                            "act2_geyser_crossed_with_hp" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Endured the Mana Geyser",
+                    "tracker_text" => "You forced your way through the unstable mana geyser, sacrificing 15 HP to reach the other side."
+                ],
+
+                "shield_with_mana" => [
+                    "text" => "Shield Yourself with Mana",
+
+                    "description" => "Channel your mana into a protective barrier and cross the unstable passage.",
+
+                    "insight_text" => "A concentrated mana shield can protect your body from the geyser's pressure. However, maintaining the barrier will consume 20 Mana, potentially limiting your abilities in later encounters.",
+
+                    "next" => "act2_geyser_crossing",
+
+                    "requires" => [
+                        "stats" => [
+                            "mana" => 20
+                        ]
+                    ],
+
+                    "effects" => [
+                        "stats" => [
+                            "mana" => -20
+                        ],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [],
+                        "flags" => [
+                            "act2_geyser_crossed_with_mana" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Shielded Against the Geyser",
+                    "tracker_text" => "You created a protective mana barrier and crossed the geyser, sacrificing 20 Mana to avoid physical injury."
+                ],
+
+
+                "cooperate_cross_geyser" => [
+                    "text" => "Cooperate with the Rival Expedition",
+
+                    "description" => "Combine your expedition's cultivation techniques with those of the rival kingdom to safely cross the unstable mana geyser.",
+
+                    "insight_text" => "Your successful negotiations have created an opportunity for cooperation. By combining the strength and cultivation techniques of both expeditions, you can stabilize the surrounding mana long enough to cross without sacrificing HP or Mana.",
+
+                    "next" => "act2_first_zenith",
+
+                    "requires" => [
+                        "flags" => [
+                            "act2_geyser_cooperation_agreed" => true
+                        ]
+                    ],
+
+                    "effects" => [
+                        "stats" => [],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [
+                            "geyser_rival" => 0
+                        ],
+                        "flags" => [
+                            "act2_geyser_crossed_cooperatively" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Crossed the Geyser Together",
+
+                    "tracker_text" => "You and the rival expedition combined your cultivation techniques to stabilize the ruptured mana geyser. Working together, both expeditions crossed safely without sacrificing HP or Mana."
+                ],
+
+            ]
+        ],
+
+
+        "act2_geyser_crossing" => [
+            "title" => "Crossing the Ruptured Mana Geyser",
+            "act" => 2,
+
+            "text" => "The amber barrier fractures, and a deafening rumble tears through the clearing. A towering column of brilliant blue mana erupts from beneath the earth, scattering crystallized amber in every direction. Your senior cultivators pull you away from the eruption before the full force reaches you. As the debris settles, you realize that the exposed opening is only a small portion of a much larger underground mana geyser. The entire ravine trembles as pressure continues building beneath it. Beyond the unstable passage, an unusual concentration of mana glimmers through the mist.",
+
+            "companion_text" => "One of your senior cultivators studies the surging mana. 'The pressure is still increasing. We cannot remain here indefinitely.'
+
+            Another examines the unstable passage. 'We have two options. We can force our way through and endure the physical damage, or channel mana into a protective barrier.'
+
+            Your senior cultivator turns toward you. 'Neither approach is without risk, Champion. The decision is yours.'",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "force_through_geyser" => [
+                    "text" => "Force Through the Geyser",
+
+                    "description" => "Push through the unstable passage using your physical endurance.",
+
+                    "insight_text" => "Crossing through the surging mana without sufficient protection will expose your body to intense pressure and flying debris. You will lose 15 HP.",
+
+                    "next" => "act2_first_zenith",
+
+                    "requires" => [
+                        "stats" => [
+                            "hp" => 16
+                        ]
+                    ],
+
+                    "effects" => [
+                        "stats" => [
+                            "hp" => -15
+                        ],
+                        "flags" => [
+                            "act2_geyser_crossed_with_hp" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Endured the Mana Geyser",
+                    "tracker_text" => "You forced your way through the unstable mana geyser, sacrificing 15 HP to reach the other side."
+                ],
+
+                "shield_with_mana" => [
+                    "text" => "Shield Yourself with Mana",
+
+                    "description" => "Channel your mana into a protective barrier and cross the unstable passage.",
+
+                    "insight_text" => "A concentrated mana shield can protect your body from the geyser's pressure. Maintaining the barrier will consume 20 Mana.",
+
+                    "next" => "act2_first_zenith",
+
+                    "requires" => [
+                        "stats" => [
+                            "mana" => 20
+                        ]
+                    ],
+
+                    "effects" => [
+                        "stats" => [
+                            "mana" => -20
+                        ],
+                        "flags" => [
+                            "act2_geyser_crossed_with_mana" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Shielded Against the Geyser",
+                    "tracker_text" => "You created a protective mana barrier and crossed the geyser, sacrificing 20 Mana to avoid physical injury."
+                ]
+            ]
+        ],
+
+
+
+        "act2_geyser_rival_discovery" => [
+            "title" => "Figures Behind the Foliage",
+            "act" => 2,
+
+            "text" => "Remembering the cultivation traces discovered earlier in the forest, you decide to investigate the shattered amber clearing more carefully.
+
+                Beyond several fallen trees, you notice footprints partially concealed beneath crystallized amber.
+
+                The tracks are fresh.
+
+                Following them around the edge of the clearing, you discover several figures gathered behind a dense wall of vegetation.
+
+                Their clothing and insignia remain obscured by the foliage and drifting blue mist, making it impossible to determine which kingdom they belong to.
+
+                You can distinguish several experienced cultivators and a younger champion among them.
+
+                They appear to be examining the unstable mana flowing beneath the clearing.
+
+                Fortunately, they have not noticed your expedition.
+
+                You have discovered another kingdom's expedition before they discovered yours.",
+
+
+            "companion_text" => "One of your senior cultivators quietly signals everyone to stop.
+
+                'Another expedition. Those tracks in the forest led us directly to them.'
+
+                Your second senior studies the figures from behind the vegetation.
+
+                'I cannot identify their kingdom from here. However, they appear to be investigating the same mana disturbance.'
+
+                The senior turns toward you.
+
+                'We can approach them peacefully and attempt to cooperate, avoid them entirely, or attack before they notice us.'
+
+                'Remember, all three kingdoms are supposed to be cooperating to contain this disaster. An unnecessary confrontation could have serious consequences.'
+
+                Your companions wait for your decision.",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "approach_rival_peacefully" => [
+                    "text" => "Approach the Expedition Peacefully",
+
+                    "description" => "Reveal your presence and attempt to communicate with the unidentified cultivators.",
+
+                    "insight_text" => "A peaceful approach allows you to identify the expedition and potentially negotiate cooperation. Their response may depend on your existing relationship with their kingdom.",
+
+                    "next" => "act2_geyser_rival_negotiation",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "stats" => [],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [],
+                        "flags" => [
+                            "act2_geyser_rival_spotted" => true,
+                            "act2_geyser_peaceful_approach" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Approached an Unknown Expedition",
+                    "tracker_text" => "You discovered an unidentified expedition near the geyser and chose to approach them peacefully."
+                ],
+
+                "attack_rival_expedition" => [
+                    "text" => "Attack the Unidentified Expedition",
+
+                    "description" => "Launch an attack before the other cultivators can react. This is an openly hostile action.",
+
+                    "insight_text" => "Attacking an unidentified expedition could provoke a dangerous confrontation and severely damage diplomatic relations. Once their kingdom is identified, the attack will cost 20 trust with that kingdom. You will not receive a trust reward simply for sparing someone you deliberately attacked.",
+
+                    "next" => "act2_geyser_rival_attack",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "stats" => [],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [],
+                        "flags" => [
+                            "act2_geyser_rival_spotted" => true,
+                            "act2_geyser_player_attacked" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Attacked the Unknown Expedition",
+                    "tracker_text" => "You launched an attack against an unidentified expedition near the mana geyser."
+                ],
+
+                "avoid_rival_expedition" => [
+                    "text" => "Avoid the Unidentified Expedition",
+
+                    "description" => "Withdraw quietly and attempt to cross the geyser without making contact.",
+
+                    "insight_text" => "Avoiding the expedition prevents an immediate confrontation but does not guarantee safety. You have identified their approximate location, so you will not be completely surprised if they attempt an ambush later.",
+
+                    "next" => "act2_zenith_path_start",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "stats" => [],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [],
+                        "flags" => [
+                            "act2_geyser_rival_spotted" => true,
+                            "act2_geyser_rival_avoided" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Avoided the Unknown Expedition",
+                    "tracker_text" => "You located an unidentified expedition near the geyser but chose to avoid contact while remaining aware of its position."
+                ]
+            ]
+        ],
+
         
+        "act2_geyser_rival_negotiation" => [
+            "title" => "An Uneasy Encounter",
+            "act" => 2,
+
+            "text" => "You emerge from behind the foliage with your hands visible, signaling peaceful intentions. Your senior cultivators follow cautiously. Across the clearing, the rival expedition immediately assumes defensive positions. Their champion steps forward, recognizing your kingdom's insignia. Both expeditions remain separated by the unstable mana geyser. Despite the tension, neither side has attacked.",
+
+            "faction_text" => [
+                "warrior" => "The Rogue Kingdom champion studies you carefully. Their weapons remain ready, but they appear willing to hear your proposal.",
+
+                "mage" => "The Warrior Kingdom champion recognizes your Mage Kingdom robes. 'So the Mage Kingdom has reached the geyser as well,' they remark. 'What do you want?'",
+
+                "rogue" => "The Warrior Kingdom champion steps forward. Their senior cultivators remain alert, waiting for their champion's decision."
+            ],
+
+            "companion_text" => "One of your senior cultivators speaks quietly. 'The geyser is too unstable for either expedition to approach carelessly. Combining our cultivation techniques may allow us to cross safely.' Another adds, 'All three kingdoms agreed to investigate this disaster. Cooperation would serve everyone better than unnecessary bloodshed.'",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "propose_geyser_cooperation" => [
+                    "text" => "Propose Cooperation",
+
+                    "description" => "Ask the rival expedition to combine their strength with yours and stabilize the geyser together.",
+
+                    "insight_text" => "The rival expedition understands the danger of the geyser. Cooperation will allow both groups to cross safely without sacrificing HP or Mana. Their agreement will unlock a cooperative crossing option.",
+
+                    "next" => "act2_ruptured_mana_geyser",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "stats" => [],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [
+                            "geyser_rival" => 0
+                        ],
+                        "flags" => [
+                            "act2_geyser_cooperation_agreed" => true,
+                            "act2_geyser_rival_negotiated" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Established Expedition Cooperation",
+
+                    "tracker_text" => "You successfully negotiated with the rival champion. Both expeditions agreed to combine their cultivation techniques to cross the unstable mana geyser."
+                ],
+
+                "fight_geyser_rival" => [
+                    "text" => "Challenge the Rival Champion",
+
+                    "description" => "Reject cooperation and prepare to fight the opposing expedition.",
+
+                    "insight_text" => "Choosing violence will damage relations with the rival kingdom and prevent a peaceful crossing. This confrontation will be developed separately.",
+
+                    "next" => "act2_ruptured_mana_geyser",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "stats" => [],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [
+                            "geyser_rival" => -20
+                        ],
+                        "flags" => [
+                            "act2_geyser_rival_attacked" => true,
+                            "act2_geyser_cooperation_agreed" => false
+                        ]
+                    ],
+
+                    "tracker_title" => "Challenged the Rival Champion",
+
+                    "tracker_text" => "You rejected cooperation and challenged the rival expedition, risking the fragile alliance between the kingdoms."
+                ]
+            ]
+        ],
+
+
+        "act2_first_zenith" => [
+            "title" => "First Zenith — The Mana Crystal",
+            "act" => 2,
+
+            "text" => "Beyond the ruptured mana geyser, the turbulent pressure gradually begins to settle. You and your senior cultivators emerge into the heart of the Amber Clearing.
+
+            At the center of the clearing rests a small, brilliantly glowing mana crystal. Despite its size, the crystal radiates an extraordinary concentration of spiritual energy. Tiny droplets of condensation continuously form along its surface, rolling down its crystalline edges before evaporating into the surrounding air.
+
+            The mana pressure throughout the clearing appears to originate from this single crystal. Every pulse sends a faint wave of energy through the surrounding earth.
+
+            You approach cautiously, sensing that the crystal contains enough concentrated mana to strengthen your cultivation.",
+
+            "companion_text" => "One of your senior cultivators examines the crystal from a distance. 'Remarkable. Such a small object should not be capable of containing this much mana.'
+
+            Another cultivator turns toward you. 'Champion, your cultivation foundation may be strong enough to absorb its energy. If you succeed, this could provide a significant breakthrough.'
+
+            Your companions step aside, allowing you to approach the crystal.",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "absorb_first_zenith" => [
+                    "text" => "Grab and Absorb",
+
+                    "description" => "Take hold of the glowing mana crystal and absorb its concentrated spiritual energy to strengthen your cultivation.",
+
+                    "insight_text" => "The crystal contains highly concentrated mana capable of permanently strengthening your cultivation. Warriors will gain 5 maximum HP and 5 Strength. Rogues will gain 2 Strength and 30 maximum Mana. Mages will gain 50 maximum Mana.",
+
+                    "next" => "act2_zenith_clearing_return",
+
+                    "requires" => [
+                        "flags" => [
+                            "act2_first_zenith_absorbed" => false
+                        ]
+                    ],
+
+                    "effects" => [
+                        "stats" => [],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [],
+                        "flags" => [
+                            "act2_first_zenith_absorbed" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "First Zenith Achieved",
+
+                    "tracker_text" => "You absorbed the concentrated mana crystal at the center of the Amber Clearing, permanently strengthening your cultivation."
+                ]
+            ]
+        ],
+
+
+        "act2_zenith_clearing_return" => [
+            "title" => "The Amber Clearing",
+            "act" => 2,
+
+            "text" => "The mana crystal dissolves into brilliant streams of spiritual energy as you absorb its power. A surge of warmth spreads throughout your body, strengthening your cultivation foundation.
+
+            As the final traces of energy settle, you return your attention to the surrounding clearing. The once-overwhelming mana pressure has weakened considerably, allowing you to examine the area more carefully.
+
+            Beyond the clearing, the entrance to the Blackened Cavern stands partially concealed by jagged rocks and dark vegetation. Faint pulses of unfamiliar mana emerge from its depths.
+
+            However, something else catches your attention. Along the forest's edge, several enormous roots glow with an unnatural amber light. Their movements suggest that the surrounding vegetation has been affected by the same mana disturbances.
+
+            Your expedition has reached a crossroads. You can investigate the glowing roots or continue directly toward the cavern.",
+
+            "companion_text" => "One of your senior cultivators examines the cavern entrance. 'The mana fluctuations appear to continue underground. Whatever caused this disaster may be waiting inside.'
+
+            Another gestures toward the glowing roots. 'Those roots are behaving strangely. There may be something worth investigating before we proceed.'
+
+            Your companions await your decision.",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "investigate_glowing_roots" => [
+                    "text" => "Investigate the Glowing Roots",
+
+                    "description" => "Explore the strange mana-infused roots near the forest's edge before entering the cavern.",
+
+                    "insight_text" => "The glowing roots appear to contain traces of concentrated mana. Investigating them may reveal another opportunity to strengthen your cultivation, although the vegetation could present an unexpected danger.",
+
+                    "next" => "act2_glowing_roots",
+
+                    "requires" => [
+                        "flags" => [
+                            "act2_glowing_roots_rescue_refused" => false
+                        ]
+                    ],
+ 
+                    "effects" => [
+                        "stats" => [],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [],
+                        "flags" => [
+                            "act2_glowing_roots_investigated" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Investigated the Glowing Roots",
+
+                    "tracker_text" => "You chose to investigate the strange mana-infused roots before entering the Blackened Cavern."
+                ],
+
+                "enter_blackened_cavern" => [
+                    "text" => "Enter the Blackened Cavern",
+
+                    "description" => "Leave the Amber Clearing behind and continue your investigation inside the mysterious cavern.",
+
+                    "insight_text" => "The strongest remaining mana fluctuations originate from inside the Blackened Cavern. Entering will advance the story into Act 3. However, doing so now means leaving the optional second Zenith crystal undiscovered.",
+
+                    "next" => "act3_blackened_cavern_entrance",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "stats" => [],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [],
+                        "flags" => [
+                            "act2_zenith_path_completed" => true,
+                            "act3_blackened_cavern_entered" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Entered the Blackened Cavern",
+
+                    "tracker_text" => "After absorbing the first Zenith crystal, you left the Amber Clearing and entered the Blackened Cavern to investigate the source of the mana disturbances."
+                ]
+            ]
+        ],
+
+
+        "act2_glowing_roots" => [
+            "title" => "The Glowing Roots",
+            "act" => 2,
+
+            "text" => "Following the strange amber glow, you venture toward the edge of the clearing. The vegetation becomes increasingly dense, and thick roots twist across the forest floor.
+
+            As you approach, you notice several frightened forest animals struggling against enormous roots wrapped around their bodies. The roots pulse with concentrated mana, tightening whenever the animals attempt to escape.
+
+            You recognize the same amber energy that radiated from the mana crystal you absorbed earlier. These roots appear to have been strengthened by the surrounding mana disturbances.
+
+            The animals struggle desperately, but the roots show no signs of releasing them. You sense that forcing the roots apart with ordinary strength would be nearly impossible.
+
+            However, you could channel your own mana into the roots, overwhelming their absorption capacity and forcing them to loosen their grip.",
+
+            "companion_text" => "One of your senior cultivators kneels beside the roots. 'These plants have been transformed by the surrounding mana. They're continuously absorbing spiritual energy.'
+
+            Another examines the trapped animals. 'If you channel enough mana into the roots, they may release their grip. But the process will consume a considerable amount of your own energy.'
+
+            Your companions look toward you, awaiting your decision.",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "rescue_trapped_animals" => [
+                    "text" => "Rescue the Trapped Animals",
+
+                    "description" => "Channel 40 Mana into the glowing roots, forcing them to release the trapped animals.",
+
+                    "insight_text" => "The roots will absorb 40 Mana from your reserves. However, overwhelming their absorption capacity should cause them to loosen their grip, allowing the animals to escape safely.",
+
+                    "next" => "act2_glowing_roots_rescue",
+
+                    "requires" => [
+                        "stats" => [
+                            "mana" => 40
+                        ]
+                    ],
+
+                    "effects" => [
+                        "stats" => [
+                            "mana" => -40
+                        ],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [],
+                        "flags" => [
+                            "act2_glowing_roots_animals_rescued" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Rescued the Forest Animals",
+
+                    "tracker_text" => "You sacrificed 40 Mana to overwhelm the mana-infused roots and free the trapped forest animals."
+                ],
+
+
+                "refuse_rescue_animals" => [
+                    "text" => "Leave the Animals Behind",
+
+                    "description" => "Decide not to interfere with the mana-infused roots and return to the Amber Clearing.",
+
+                    "insight_text" => "Leaving the animals behind will preserve your Mana, but you may miss a Opportunity. Good deeds are often greatly Rewarded.",
+
+                    "next" => "act2_zenith_clearing_return",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "stats" => [],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [],
+                        "flags" => [
+                            "act2_glowing_roots_rescue_refused" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Left the Animals Behind",
+
+                    "tracker_text" => "You decided not to rescue the trapped forest animals and returned to the Amber Clearing to continue your expedition."
+                ],
+
+            ]
+        ],
+
+
+        "act2_glowing_roots_rescue" => [
+            "title" => "Second Zenith — A Gift of Gratitude",
+            "act" => 2,
+
+            "text" => "You extend your hands toward the glowing roots and begin channeling your mana into them.
+
+            The roots immediately respond, greedily siphoning spiritual energy from your body. Their amber glow intensifies as they absorb your mana.
+
+            For a moment, the roots tighten even further. Then, as the energy overwhelms their capacity, the roots begin to tremble. Their grip weakens, and one by one, the trapped animals break free.
+
+            The exhausted creatures scramble away from the roots and rush toward the safety of the forest.
+
+            However, just before disappearing into the vegetation, one of the animals drops a small, brilliantly glowing crystal onto the forest floor.
+
+            You approach the object and immediately recognize its appearance. It is nearly identical to the mana crystal you discovered at the center of the Amber Clearing.
+
+            Despite its small size, the crystal radiates concentrated spiritual energy. Another opportunity to strengthen your cultivation has appeared.",
+
+            "companion_text" => "One of your senior cultivators picks up the crystal and examines it carefully. 'Incredible. This crystal contains the same concentrated mana as the one you absorbed earlier.'
+
+            Another cultivator smiles. 'It seems your decision to rescue those creatures has rewarded you with another cultivation opportunity.'
+
+            Your companions step aside, allowing you to claim the crystal.",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "absorb_second_zenith" => [
+                    "text" => "Grab and Absorb",
+
+                    "description" => "Absorb the second mana crystal and strengthen your cultivation once again.",
+
+                    "insight_text" => "This crystal contains another concentration of spiritual energy. Absorbing it will provide a second permanent cultivation boost based on your faction.",
+
+                    "next" => "act2_zenith_path_complete",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "stats" => [],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [],
+                        "flags" => [
+                            "act2_second_zenith_absorbed" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Second Zenith Achieved",
+
+                    "tracker_text" => "After rescuing the trapped forest animals, you discovered and absorbed a second mana crystal, permanently strengthening your cultivation."
+                ]
+            ]
+        ],
+
+
+        "act2_zenith_path_complete" => [
+            "title" => "The End of the Zenith Path",
+            "act" => 2,
+
+            "text" => "The second mana crystal dissolves into radiant streams of spiritual energy as you absorb its power.
+
+            A familiar surge of energy courses through your body. Your cultivation foundation strengthens once again, and the remaining mana settles within you.
+
+            With the trapped animals rescued and the mysterious crystals absorbed, there is little left to investigate along the Zenith Path.
+
+            You return to the Amber Clearing, where your expedition has gathered near the entrance to the Blackened Cavern.
+
+            The cavern's entrance stretches into darkness, surrounded by jagged stone formations and vegetation corrupted by the surrounding mana disturbances.
+
+            Unlike the unstable geyser, the energy emerging from the cavern feels strangely controlled. Its fluctuations are powerful, yet they follow an almost deliberate rhythm.
+
+            Whatever lies beneath the earth may finally explain the disaster that brought the three kingdoms here.
+
+            Your exploration of the Zenith Path is complete. It is time to continue the expedition.",
+
+            "companion_text" => "One of your senior cultivators studies the cavern entrance.
+
+            'We've investigated everything we reasonably can on the surface. The strongest remaining mana fluctuations are coming from underground.'
+
+            Another cultivator nods.
+
+            'Champion, our next destination is clear. We must enter the Blackened Cavern and discover what is causing these disturbances.'
+
+            Your expedition prepares to advance.",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "enter_blackened_cavern" => [
+                    "text" => "Enter the Blackened Cavern",
+
+                    "description" => "Conclude your exploration of the Zenith Path and begin the final stage of the expedition.",
+
+                    "insight_text" => "The Zenith Path has provided two cultivation breakthroughs. The strongest remaining mana fluctuations originate from within the Blackened Cavern. Entering will begin Act 3, where the source of the disturbance may finally be revealed.",
+
+                    "next" => "act3_blackened_cavern_entrance",
+
+                    "requires" => [
+                        "flags" => [
+                            "act2_second_zenith_absorbed" => true
+                        ]
+                    ],
+
+                    "effects" => [
+                        "stats" => [],
+                        "inventory" => [
+                            "add" => [],
+                            "remove" => []
+                        ],
+                        "trust" => [],
+                        "flags" => [
+                            "act2_zenith_path_completed" => true,
+                            "act3_blackened_cavern_entered" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Completed the Zenith Path",
+
+                    "tracker_text" => "After absorbing two mana crystals and rescuing the trapped forest animals, you completed your exploration of the Zenith Path and prepared to enter the Blackened Cavern."
+                ]
+            ]
+        ],
+
+
+
+        // Act 3
+
+        
+        "act3_blackened_cavern_entrance" => [
+            "title" => "Act 3: The Blackened Cavern",
+            "act" => 3,
+
+            "text" => "Your expedition enters the Blackened Cavern. The air is thick with blue mana mist, and the cavern walls are covered in strange crystalline veins.
+
+            As you descend, a desperate cry echoes through the darkness.
+
+            Ahead, a Level Four cultivator lies trapped beneath a massive slab of fractured stone. Their robes are torn and blackened, with their kingdom's insignia completely obscured by dirt and blood.
+
+            You cannot determine which kingdom they belong to.
+
+            Unstable mana pulses through the surrounding rocks, threatening to bring the passage down.
+
+            The injured cultivator struggles to free themselves, but their remaining strength is insufficient.
+
+            They notice your expedition and desperately call for assistance.
+
+            You must decide whether to risk your own safety to save this stranger or continue toward the source of the disturbance.",
+
+            "companion_text" => "One of your senior cultivators examines the unstable passage.
+
+            'Champion, that cultivator is badly injured. We may be able to free them, but the surrounding mana is dangerously unstable.'
+
+            Another cultivator looks deeper into the cavern.
+
+            'Their insignia is completely destroyed. We cannot tell which kingdom they belong to.'
+
+            The injured cultivator calls out.
+
+            'Please! I cannot escape on my own!'",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "rescue_injured_cultivator" => [
+                    "text" => "Rescue the Injured Cultivator",
+
+                    "description" => "Risk your own safety to free the unidentified Level Four cultivator.",
+
+                    "insight_text" => "Rescuing this cultivator will cost 40 HP. Their identity remains unknown, but your actions may strengthen relations with another kingdom.",
+
+                    "next" => "act3_cultivator_rescued",
+
+                    "requires" => [
+                        "stats" => [
+                            "hp" => 41
+                        ]
+                    ],
+
+                    "effects" => [
+                        "stats" => [
+                            "hp" => -40
+                        ],
+                        "flags" => [
+                            "act3_injured_cultivator_rescued" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Rescued an Injured Cultivator",
+                    "tracker_text" => "You sacrificed 15 HP to rescue an unidentified Level Four cultivator trapped beneath unstable cavern debris."
+                ],
+
+                "ignore_injured_cultivator" => [
+                    "text" => "Leave the Cultivator Behind",
+
+                    "description" => "Continue deeper into the cavern without risking your expedition to rescue the stranger.",
+
+                    "insight_text" => "Leaving the cultivator behind preserves your HP, but you will miss any information, assistance, or rewards they might have offered.",
+
+                    "next" => "act3_fallen_expedition",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "flags" => [
+                            "act3_injured_cultivator_abandoned" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Left the Cultivator Behind",
+                    "tracker_text" => "You chose to continue investigating the cavern rather than risk your safety rescuing the unidentified cultivator."
+                ]
+            ]
+        ],
+
+
+        // Rescue the cultivator
+        "act3_cultivator_rescued" => [
+            "title" => "The Cultivator's Gratitude",
+            "act" => 3,
+
+            "text" => "With a final surge of strength, you lift the fractured stone and pull the injured cultivator to safety. The unstable mana lashes against your body, leaving you wounded.
+
+            As the cultivator recovers, they remove their damaged cloak, revealing the insignia of their kingdom.
+
+            'You saved my life,' they say. 'I never expected another kingdom's champion to risk their safety for me.'
+
+            The cultivator reaches into their robes and produces a small vial containing a luminous golden liquid.
+
+            'This is a refined cultivation elixir. I recovered it before everything went wrong. Please, accept it as my thanks.'
+
+            You carefully drink the elixir. A tremendous wave of purified mana flows through your meridians, strengthening your cultivation foundation.
+
+            Your cultivation rapidly advances toward the fourth level.
+
+            The cultivator looks toward the darkness deeper within the cavern.
+
+            'Be careful. Something powerful has awakened down there. Our expedition was completely overwhelmed.'",
+
+            "companion_text" => "Your senior cultivator examines the empty vial.
+
+            'An extraordinary cultivation elixir. The energy within it has accelerated your advancement considerably.'
+
+            The rescued cultivator speaks again.
+
+            'Whatever you encounter deeper inside, do not underestimate it.'
+
+            Your senior cultivator turns toward you.
+
+            'Champion, we should continue. The source of the disturbance must be close.'",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "continue_after_cultivator_rescue" => [
+                    "text" => "Continue Deeper into the Cavern",
+
+                    "description" => "Leave the rescued cultivator in safety and investigate what destroyed their expedition.",
+
+                    "insight_text" => "Your rescue has earned the gratitude of another kingdom, and the cultivation elixir has strengthened your abilities. A powerful threat awaits deeper within the cavern.",
+
+                    "next" => "act3_fallen_expedition",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "flags" => [
+                            "act3_cultivator_elixir_received" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Received the Cultivation Elixir",
+                    "tracker_text" => "After rescuing an injured cultivator, you received a powerful cultivation elixir and continued toward the source of the mana disturbance."
+                ]
+            ]
+        ],
+
+
+        "act3_fallen_expedition" => [
+            "title" => "The Fallen Expedition",
+            "act" => 3,
+
+            "text" => "Your expedition ventures deeper into the Blackened Cavern. The brilliant blue mana veins along the walls grow increasingly unstable, illuminating the passage with violent pulses of energy.
+
+            As you enter a vast underground chamber, a horrifying sight awaits.
+
+            Bodies are scattered across the cavern floor. Broken weapons, shattered cultivation artifacts, and fragments of armor lie among the fallen.
+
+            Several enormous trees, their roots twisted by unstable mana, have been ripped from the ground and thrown across the chamber.
+
+            You approach one of the fallen cultivators and recognize the insignia of the Mage Kingdom.
+
+            Examining the surrounding bodies reveals that many of these cultivators had reached Level Four.
+
+            Whatever destroyed this expedition was powerful enough to overwhelm numerous experienced Mage cultivators.
+
+            Deep claw marks cover the cavern walls. Massive footprints have crushed the surrounding stone, and traces of concentrated mana linger around the destruction.
+
+            At the far end of the chamber, a brilliant blue glow pulses from somewhere beyond the darkness.
+
+            A low, distant rumble echoes through the cavern.",
+
+            "companion_text" => "One of your senior cultivators kneels beside a fallen Mage.
+
+            'Level Four. And this one too. Almost everyone here had reached the fourth cultivation level.'
+
+            Another examines the enormous claw marks along the wall.
+
+            'These wounds were not caused by ordinary weapons. Something monstrous attacked them.'
+
+            Your senior cultivator studies the unstable mana surrounding the chamber.
+
+            'The Mage Kingdom must have discovered something here before the other kingdoms arrived. But whatever they attempted has clearly gone terribly wrong.'
+
+            A deep rumble echoes through the cavern once again.
+
+            'Champion, whatever destroyed this expedition may still be nearby.'",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "investigate_fallen_mages" => [
+                    "text" => "Investigate the Fallen Cultivators",
+
+                    "description" => "Examine the bodies and surrounding destruction for evidence of what happened.",
+
+                    "insight_text" => "The fallen cultivators appear to have belonged to the Mage Kingdom. Their cultivation levels and the surrounding damage suggest they encountered an extraordinarily powerful mana-based creature. The intense mana signatures deeper within the cavern may reveal the source of the catastrophe.",
+
+                    "next" => "act3_mana_beast_encounter",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "flags" => [
+                            "act3_fallen_mages_investigated" => true,
+                            "act3_mage_artifact_suspicion" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Investigated the Fallen Expedition",
+                    "tracker_text" => "You discovered the remains of numerous Level Four Mage cultivators and evidence of a devastating mana-based creature."
+                ],
+
+                "follow_mana_disturbance" => [
+                    "text" => "Follow the Mana Disturbance",
+
+                    "description" => "Move past the fallen cultivators and follow the powerful mana signatures deeper into the cavern.",
+
+                    "insight_text" => "The concentrated mana ahead appears connected to the destruction throughout the chamber. Proceeding will bring you closer to its source, but you may encounter whatever destroyed the Mage expedition.",
+
+                    "next" => "act3_mana_beast_encounter",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "flags" => [
+                            "act3_followed_mana_disturbance" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Followed the Mana Disturbance",
+                    "tracker_text" => "You followed the increasingly powerful mana fluctuations deeper into the Blackened Cavern."
+                ]
+            ]
+        ],
+
+        "act3_mana_beast_encounter" => [
+            "title" => "The Heart of the Blackened Cavern",
+            "act" => 3,
+
+            "text" => "Following the increasingly violent mana fluctuations, your expedition enters an enormous underground chamber.
+
+            At its center stands a colossal crystalline formation, radiating brilliant blue energy. Ancient symbols pulse across its surface, and enormous streams of mana flow outward through the cavern walls.
+
+            You recognize the unmistakable signature of the ancient mana artifact that brought the three kingdoms into this expedition.
+
+            But something is terribly wrong.
+
+            Shattered Mage Kingdom cultivation equipment surrounds the crystal. Broken containment pillars and destroyed sealing formations lie scattered across the chamber.
+
+            The truth becomes clear.
+
+            The Mage Kingdom discovered the artifact long before the other kingdoms arrived. They attempted to contain and harness its power, but the artifact's energy exceeded their control.
+
+            Their failed containment caused the massive mana fluctuations detected across the three kingdoms.
+
+            And now, standing directly before the artifact, is the consequence of their failure.
+
+            An enormous beast formed from corrupted mana towers above the shattered containment equipment. Brilliant blue energy courses through its body, and its claws carve deep fractures into the surrounding stone.
+
+            The creature slowly turns toward your expedition.
+
+            Its eyes ignite with concentrated mana.
+
+            'ROOOOOAAAAARRRR!'
+
+            The entire cavern trembles.
+
+            The beast charges.",
+
+            "companion_text" => "Your senior cultivator stares at the enormous crystal.
+
+            'The artifact... It was here all along.'
+
+            Another examines the shattered containment formations.
+
+            'The Mage Kingdom tried to control it. Their failed experiment caused the disturbances that brought us here.'
+
+            The mana beast releases another deafening roar.
+
+            'Champion! That creature is drawing power from the artifact itself!'
+
+            Your senior cultivator draws their weapon.
+
+            'We cannot retreat now. If that monster escapes the cavern, the consequences could be catastrophic.'
+
+            'Prepare yourself. This is our final battle.'",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "confront_mana_beast" => [
+                    "text" => "Confront the Mana Beast",
+
+                    "description" => "Face the Level Four mana beast guarding the ancient artifact.",
+
+                    "insight_text" => "The mana beast is an extremely dangerous Level Four opponent with 200 HP and 15 Strength. Prepare your healing items before engaging. Defeat will end your expedition permanently, without another attempt.",
+
+                    "next" => "act3_mana_beast_battle",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "flags" => [
+                            "act3_mana_artifact_discovered" => true,
+                            "act3_mage_containment_failure_discovered" => true,
+                            "act3_mana_beast_confronted" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Confronted the Mana Beast",
+                    "tracker_text" => "You discovered that the Mage Kingdom's failed attempt to contain the ancient artifact caused the mana catastrophe, and prepared to face the corrupted mana beast."
+                ]
+            ]
+        ],
+
+
+        "act3_mana_beast_battle" => [
+            "title" => "The Final Battle",
+            "act" => 3,
+
+            "text" => "The Corrupted Mana Beast stands between your expedition and the ancient mana artifact. The final battle has begun.",
+
+            "companion_text" => "Your senior cultivators prepare themselves for the confrontation.",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => []
+        ],
+
+        // Endings
+
+        "act3_artifact_decision" => [
+            "title" => "The Fate of the Ancient Artifact",
+            "act" => 3,
+
+            "text" => "The Corrupted Mana Beast releases one final roar before collapsing onto the shattered cavern floor.
+
+            The violent mana surges begin to subside.
+
+            Before you stands the enormous crystalline artifact, its brilliant blue light illuminating the ruined containment chamber.
+
+            The Mage Kingdom had discovered this artifact long before the other kingdoms arrived. Their attempt to harness its power caused the catastrophic mana disturbance that threatened all three kingdoms.
+
+            Now, with the creature defeated, the artifact is finally within your reach.
+
+            Your expedition gathers around the ancient crystal.
+
+            The decision you make here will determine the future of your kingdom and the balance of power between all three kingdoms.",
+
+            "companion_text" => "Your senior cultivator approaches the ancient crystal.
+
+            'Champion, we have accomplished what the Mage Kingdom could not. The artifact is ours to claim.'
+
+            Another cultivator studies the fading mana fluctuations.
+
+            'But we must consider the consequences. This artifact has already caused tremendous destruction.'
+
+            Your senior cultivator turns toward you.
+
+            'The decision belongs to you, Champion. What shall we do with the artifact?'",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "claim_ancient_artifact" => [
+                    "text" => "Claim the Artifact for Your Kingdom",
+
+                    "description" => "Secure the ancient mana artifact and return it to your kingdom.",
+
+                    "insight_text" => "Claiming the artifact will secure a decisive victory for your kingdom. However, the artifact's immense power may alter the balance between the three kingdoms.",
+
+                    "next" => "act3_faction_victory",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "flags" => [
+                            "act3_artifact_claimed" => true,
+                            "act3_faction_victory" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Claimed the Ancient Artifact",
+                    "tracker_text" => "You defeated the Corrupted Mana Beast and claimed the ancient artifact for your kingdom."
+                ],
+
+                "relinquish_artifact_claim" => [
+                    "text" => "Relinquish Your Claim",
+
+                    "description" => "Refuse to claim the ancient artifact despite defeating its guardian.",
+
+                    "insight_text" => "Relinquishing your claim prevents your kingdom from obtaining the artifact. Although you defeated the mana beast, your expedition will be considered unsuccessful in securing its objective.",
+
+                    "next" => "act3_faction_defeat",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "flags" => [
+                            "act3_artifact_relinquished" => true,
+                            "act3_faction_defeat" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Relinquished the Artifact",
+                    "tracker_text" => "You defeated the Corrupted Mana Beast but chose to relinquish your kingdom's claim to the ancient artifact."
+                ],
+
+                "unlock_secret_ending" => [
+                    "text" => "Secret Ending",
+
+                    "description" => "???",
+
+                    "insight_text" => "Something remains undiscovered/undone. Reconsider the alliances you formed and the path of cultivation you followed.",
+
+                    "next" => "act3_secret_ending",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "flags" => [
+                            "act3_secret_ending_unlocked" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "An Unknown Destiny",
+                    "tracker_text" => "Your decisions throughout the expedition revealed a hidden possibility beyond the ordinary fate of the three kingdoms."
+                ]
+            ]
+        ],
+
+
+        "act3_faction_victory" => [
+            "title" => "Ending: Faction Victory",
+            "act" => 3,
+            "location" => "Blackened Cavern",
+            "text" => [
+                "The Corrupted Mana Beast has fallen. With the ancient artifact finally secured, your expedition has accomplished what the three kingdoms believed might be impossible.",
+
+                "You return to your kingdom carrying the artifact and the promise of a new era of power. Your leaders celebrate your victory, recognizing you as the champion who changed the course of history.",
+
+                "Yet beyond your kingdom's borders, the other factions watch with uncertainty. The balance of power has shifted, and although your kingdom has emerged victorious, the future of the three kingdoms remains uncertain.",
+
+                "Your journey has ended in triumph, but the consequences of your victory will echo throughout the realm."
+            ],
+            "choices" => [],
+            "is_ending" => true,
+            "ending_type" => "faction_victory"
+        ],
+
+        "act3_faction_defeat" => [
+            "title" => "Ending: Faction Defeat",
+            "act" => 3,
+            "location" => "Blackened Cavern",
+            "text" => [
+                "The expedition has reached its conclusion, but the ancient artifact will not be returning to your kingdom.",
+
+                "Whether through defeat at the hands of the Corrupted Mana Beast or the decision to relinquish your claim, your kingdom's objective remains unfulfilled.",
+
+                "News of the failed expedition spreads throughout the realm. Your kingdom must now face an uncertain future without the power it had hoped to secure.",
+
+                "The other kingdoms continue their pursuit of dominance, and the tensions that first brought the three factions into conflict remain unresolved.",
+
+                "Your journey has ended, but the struggle for the future of the three kingdoms continues."
+            ],
+            "choices" => [],
+            "is_ending" => true,
+            "ending_type" => "faction_defeat"
+        ],
+
+        "act3_secret_ending" => [
+            "title" => "Secret Ending: The Threefold Accord",
+            "act" => 3,
+            "location" => "Blackened Cavern",
+
+            "text" => [
+                "The Corrupted Mana Beast has fallen, and the ancient artifact rests before you. Its power is greater than anything the three kingdoms have encountered, yet you recognize that claiming it for a single kingdom would only deepen the divisions between them.",
+
+                "Throughout your journey, you earned the trust of the Warriors, Mages, and Rogues. You completed the Zenith Path, absorbed both Zenith crystals, and demonstrated that the power of the realm need not belong to any one faction.",
+
+                "Drawing upon the energy of the Zenith crystals, you stabilize the ancient artifact. Instead of claiming its power for your kingdom, you propose an unprecedented agreement: the artifact will be protected through the cooperation of all three kingdoms.",
+
+                "Your proposal is met with hesitation. Generations of rivalry cannot be forgotten in a single moment. Yet the trust you have established gives the leaders of each kingdom a reason to listen.",
+
+                "The Warriors pledge their strength to defend the artifact. The Mages agree to study and preserve its ancient knowledge. The Rogues offer their intelligence and vigilance to ensure that no kingdom secretly attempts to seize its power.",
+
+                "Together, the three kingdoms establish the Threefold Accord, an alliance founded upon shared responsibility rather than conquest.",
+
+                "For the first time in generations, the future of the realm is no longer determined by which kingdom possesses the greatest power, but by what they can accomplish together.",
+
+                "Your journey ends not as the champion of a single kingdom, but as the champion who united all three."
+            ],
+
+            "choices" => [],
+            "is_ending" => true,
+            "ending_type" => "threefold_accord"
+        ],
+
+
+
+
+
 
 
 
@@ -1951,6 +4272,97 @@ function getStoryNodes(): array
                 ]
             ]
         ],
+
+        "act1_mana_disaster_explanation" => [
+            "title" => "Understanding Mana Disasters",
+            "act" => 1,
+
+            "text" => "Before the briefing concludes, you raise a question.
+
+                'What exactly is a mana disaster?'
+
+                One of your superiors pauses before offering an explanation.
+
+                'A mana disaster is a natural catastrophe caused or intensified by an uncontrolled concentration of mana.'
+
+                'Under ordinary circumstances, mana exists throughout the environment. Cultivators can absorb and manipulate it, while the Three Kingdoms maintain systems for regulating its concentration within their controlled territories.'
+
+                'However, when ambient mana accumulates beyond what the surrounding environment can safely sustain, it becomes unstable.'
+
+                'That instability can manifest in several ways. Violent mana storms can tear through entire regions. Sudden surges of concentrated energy can trigger devastating explosions, while disturbances beneath the earth can produce powerful earthquakes.'
+
+                'In extreme cases, the surrounding environment itself becomes dangerous, as uncontrolled mana continues to gather and react unpredictably.'
+
+                'Unlike an ordinary natural disaster, however, a mana disaster can sometimes be contained before it reaches its most destructive stage.'
+
+                'Experienced cultivators can disperse accumulated mana, redirect its flow, or use specialized formations to reduce the concentration within the affected region.'
+
+                'By lowering the ambient mana density to a manageable level, it is possible to stabilize the environment and prevent further destruction.'
+
+                The explanation continues.
+
+                'The Three Kingdoms have spent generations developing methods to regulate mana within their borders. Their major settlements and inner territories are protected by carefully maintained systems that prevent dangerous concentrations from forming.'
+
+                'Mana disasters are therefore much more likely to occur in remote regions, abandoned facilities, and territories where these systems are absent or poorly maintained.'
+
+                'Even when a disaster begins within one kingdom's territory, its effects may spread far beyond that kingdom's borders.'
+
+                'A powerful mana storm does not recognize political boundaries. Neither do the earthquakes, explosions, or other disturbances that may follow.'
+
+                'For this reason, the Three Kingdoms established a mutual disaster-response treaty.'
+
+                'Under this agreement, all three kingdoms are obligated to assist in containing major mana disasters, regardless of which kingdom controls the affected territory.'
+
+                'The treaty exists because allowing such disasters to spread would ultimately threaten everyone.'
+
+                'Political rivalries may continue, but preventing a widespread mana catastrophe is a responsibility shared by all three kingdoms.'",
+
+            "companion_text" => "Your superior returns their attention to the mission briefing.
+
+                'That brings us to the situation near the Mage Kingdom.'
+
+                'An unusually large concentration of unstable mana has developed in a remote region of its outer territory. The disturbance is continuing to intensify, and there is a serious risk that it could spread into surrounding lands.'
+
+                'Representatives from all three kingdoms are being dispatched to investigate the cause and assist with containment.'
+
+                'Your assignment is to accompany your two Level 4 senior companions to the affected region. You will help investigate the disturbance while the senior cultivators coordinate the containment effort.'
+
+                'At Level 3, you possess sufficient cultivation to participate in this mission, but you must remain cautious. The unstable mana may produce dangers that cannot be predicted in advance.'
+
+                Your superior gives you a final look.
+
+                'You have been briefed on the situation. Report to your companions and prepare for departure.'",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "accept_mana_disaster_mission" => [
+                    "text" => "Accept the Mission",
+
+                    "description" => "Finish the briefing and meet your two Level 4 senior companions before departing.",
+
+                    "insight_text" => "You now understand the dangers of uncontrolled mana and why the Three Kingdoms must cooperate. Accepting the mission will advance the main story.",
+
+                    "next" => "act1_mission_departure",
+
+                    "requires" => [
+                        "stats" => [
+                            "level" => 3
+                        ]
+                    ],
+
+                    "effects" => [],
+
+                    "tracker_title" => "Understanding the Mana Disaster",
+
+                    "tracker_text" => "After learning about mana disasters and the Three Kingdoms' mutual assistance treaty, you accepted the mission to investigate the disturbance near the Mage Kingdom."
+                ]
+            ]
+        ],
+
 
 
 

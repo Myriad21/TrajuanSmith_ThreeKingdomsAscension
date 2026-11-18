@@ -41,6 +41,53 @@
     }
 
     
+    // Retry the current battle after defeat.
+    if (
+        $_SERVER["REQUEST_METHOD"] === "POST" &&
+        ($_POST["combat_action"] ?? "") === "retry_combat" &&
+        ($_SESSION["combat"]["status"] ?? "") === "defeat" &&
+        isset($_SESSION["combat_checkpoint"]) &&
+        ($_SESSION["combat"]["enemy"]["id"] ?? "") !== "corrupted_mana_beast"
+    ) {
+        $checkpoint = $_SESSION["combat_checkpoint"];
+
+        // Restore the champion and inventory from before the battle.
+        $_SESSION["champion"] = $checkpoint["champion"];
+        $_SESSION["inventory"] = $checkpoint["inventory"];
+
+        // Identify the enemy from the failed encounter.
+        $enemyId = $_SESSION["combat"]["enemy"]["id"];
+
+        // Start a fresh encounter with the same enemy.
+        unset($_SESSION["combat"]);
+
+        startCombat($enemyId);
+
+        // Reapply the rival's opening surprise attack, if applicable.
+        if (
+            !empty($_SESSION["story_flags"]["act1_rival_surprised"]) &&
+            ($_SESSION["story_node"] ?? "") === "act1_rival_interception"
+        ) {
+            $damage = min(20, max(0, (int) $_SESSION["champion"]["hp"]));
+
+            $_SESSION["champion"]["hp"] -= $damage;
+
+            $_SESSION["combat"]["log"][] =
+                "The rival champion catches you off guard and deals "
+                . $damage
+                . " surprise damage!";
+
+            $_SESSION["combat"]["rival_opening_attack_applied"] = true;
+        }
+
+        // Save the restored champion and inventory.
+        savePlayerProgress(collectPlayerProgress());
+
+        // Redirect to prevent repeated submissions.
+        header("Location: combat.php");
+        exit;
+    }
+
     // Create the battle only if one does not already exist.
     if (!isset($_SESSION["combat"])) {
         $_SESSION["combat"] = initializeCombat(
@@ -80,7 +127,15 @@
         $combat["status"] === "victory" &&
         isset($combat["enemy"]["faction"]) &&
         ($combat["enemy"]["level"] ?? 0) === 2 &&
-        ($_SESSION["story_node"] ?? "") === "rival_ambush" &&
+        in_array(
+            $_SESSION["story_node"] ?? "",
+            [
+                "rival_ambush",
+                "act1_rival_interception",
+                "first_rival_encounter"
+            ],
+            true
+        ) &&
         empty($_SESSION["story_flags"]["act1_rival_defeated"])
     ) {
         // Identify the actual faction of the defeated rival.
@@ -130,6 +185,84 @@
         savePlayerProgress(collectPlayerProgress());
 
         // Keep the victory screen visible until Return to Story.
+        $_SESSION["combat"] = $completedCombat;
+        $combat = $completedCombat;
+    }
+
+
+
+    // Record the Act 2 Zenith rival victory.
+    if (
+        ($combat["status"] ?? "") === "victory" &&
+        ($combat["encounter"] ?? "") === "act2_zenith_rival" &&
+        ($combat["enemy"]["level"] ?? 0) == 3 &&
+        empty($_SESSION["story_flags"]["act2_geyser_rival_defeated"])
+    ) {
+        // Identify the faction of the defeated rival.
+        $rivalFaction = $combat["enemy"]["faction"] ?? null;
+
+        // Track the defeated rival without duplicates.
+        if ($rivalFaction !== null) {
+            if (!isset($_SESSION["story_flags"]["defeated_rivals"])) {
+                $_SESSION["story_flags"]["defeated_rivals"] = [];
+            }
+
+            if (!in_array(
+                $rivalFaction,
+                $_SESSION["story_flags"]["defeated_rivals"],
+                true
+            )) {
+                $_SESSION["story_flags"]["defeated_rivals"][] = $rivalFaction;
+            }
+        }
+
+        // Record the outcome of the confrontation.
+        $_SESSION["story_flags"]["act2_geyser_rival_defeated"] = true;
+        $_SESSION["story_flags"]["act2_geyser_cooperation_agreed"] = false;
+
+        // Return to the geyser without cooperative assistance.
+        $_SESSION["story_node"] = "act2_ruptured_mana_geyser";
+
+        // Preserve the completed battle for the victory screen.
+        $completedCombat = $_SESSION["combat"];
+
+        // Do not include temporary combat data in the saved progress.
+        unset($_SESSION["combat"]);
+
+        savePlayerProgress(collectPlayerProgress());
+
+        // Restore the victory screen until Return to Story is clicked.
+        $_SESSION["combat"] = $completedCombat;
+        $combat = $completedCombat;
+    }
+
+
+    // Record the Act 3 final boss outcome.
+    if (
+        ($combat["enemy"]["id"] ?? "") === "corrupted_mana_beast" &&
+        in_array($combat["status"] ?? "", ["victory", "defeat"], true) &&
+        empty($_SESSION["story_flags"]["act3_final_boss_resolved"])
+    ) {
+        $victory = $combat["status"] === "victory";
+
+        $_SESSION["story_flags"]["act3_mana_beast_defeated"] = $victory;
+        $_SESSION["story_flags"]["act3_mana_beast_failed"] = !$victory;
+        $_SESSION["story_flags"]["act3_final_boss_resolved"] = true;
+
+        // Victory leads to the artifact decision.
+        // Defeat leads directly to the ending summary.
+        $_SESSION["story_node"] = $victory
+            ? "act3_artifact_decision"
+            : "act3_faction_defeat";
+
+        // Preserve the completed battle for its result screen.
+        $completedCombat = $_SESSION["combat"];
+        unset($_SESSION["combat"]);
+
+        // Save the permanent outcome.
+        savePlayerProgress(collectPlayerProgress());
+
+        // Restore the result screen.
         $_SESSION["combat"] = $completedCombat;
         $combat = $completedCombat;
     }
@@ -875,6 +1008,36 @@
                         <p class="combat-result__description">
                             Your champion's journey has come to an end.
                         </p>
+
+                        
+                        <?php if (($combat["enemy"]["id"] ?? "") === "corrupted_mana_beast"): ?>
+
+                            <p class="combat-result__description">
+                                The Corrupted Mana Beast has overwhelmed your champion.
+                                Your expedition has failed to stop the mana catastrophe.
+                                This defeat is permanent.
+                            </p>
+
+                            <a href="game.php" class="combat-result__button">
+                                View Final Outcome
+                            </a>
+
+                        <?php else: ?>
+
+                            <form action="combat.php" method="POST" class="combat-retry-form">
+                                <input
+                                    type="hidden"
+                                    name="combat_action"
+                                    value="retry_combat"
+                                >
+
+                                <button type="submit" class="combat-retry-button">
+                                    Try Again
+                                </button>
+                            </form>
+
+                        <?php endif; ?>
+
 
                     <?php endif; ?>
 
