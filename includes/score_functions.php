@@ -15,10 +15,6 @@ function calculateFinalScore(
         "act3_secret_ending"
     ];
 
-    // Only completed adventures receive a final score.
-    if (!in_array($storyNode, $validEndings, true)) {
-        return 0;
-    }
 
     // Three major decisions: 50 points each.
     if (
@@ -38,8 +34,10 @@ function calculateFinalScore(
         $score += 50;
     }
 
-    // Reaching a valid ending.
-    $score += 50;
+   // Award completion points only after reaching an ending.
+    if (in_array($storyNode, $validEndings, true)) {
+        $score += 50;
+    }
 
     // Story achievements.
     if (!empty($storyFlags["act3_mana_beast_defeated"])) {
@@ -71,7 +69,7 @@ function calculateFinalScore(
     }
 
     if ($championLevel >= 5) {
-        $score += 50;
+        $score += 100;
     }
 
     // Secret ending bonus.

@@ -10,9 +10,9 @@
 
 body {
     margin: 0;
-    background: #111111;
-    color: #f1f1f1;
-    font-family: "Montserrat", Arial, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: inherit;
     line-height: 1.6;
 }
 
@@ -61,23 +61,31 @@ body {
 .ending-section,
 .hero-section,
 .results-section {
-    background: #303030;
-    border: 1px solid #454545;
+    background: var(--bg-panel);
+    border: 1px solid var(--border-default);
     border-radius: 12px;
-    padding: 22px;
-    margin-bottom: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
 }
 
 h1, h2, h3, p {
     margin-top: 0;
 }
 
-h2 {
-    font-size: 17px;
+.summary-page h2 {
+    font-size: 1.4rem;
+    color: var(--accent-gold, #b99468);
+    font-weight: 700;
 }
 
-h3 {
-    font-size: 15px;
+.summary-page h3 {
+    font-size: 1.15rem;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+.ending-section h1 {
+    color: var(--accent-gold, #b99468);
 }
 
 /* =========================================
@@ -128,8 +136,8 @@ h3 {
 }
 
 .kingdom-fate p {
-    font-size: 13px;
-    color: #dddddd;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
     margin-bottom: 0;
 }
 
@@ -149,19 +157,21 @@ h3 {
     flex-direction: column;
     gap: 4px;
     padding: 14px;
-    background: #080808;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-default);
     border-radius: 8px;
 }
 
 .hero-stat span,
 .result-card span {
-    font-size: 11px;
-    color: #aaaaaa;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
 }
 
 .hero-stat strong {
-    font-size: 15px;
+    font-size: 1.15rem;
     font-weight: 600;
+    color: var(--text-primary);
 }
 
 /* =========================================
@@ -169,10 +179,11 @@ h3 {
 ========================================= */
 
 .major-decisions {
-    background: #080808;
-    border-radius: 9px;
-    padding: 18px;
-    margin-top: 12px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-default);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 16px;
 }
 
 .major-decisions h3 {
@@ -185,8 +196,10 @@ h3 {
 }
 
 .major-decisions li {
-    font-size: 13px;
-    margin-bottom: 7px;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 10px;
 }
 
 .major-decisions li:last-child {
@@ -198,12 +211,15 @@ h3 {
 ========================================= */
 
 .hero-narrative {
-    margin-top: 12px;
-    padding: 18px;
-    border: 1px solid #515151;
-    border-radius: 9px;
-    color: #dddddd;
-    font-size: 13px;
+    margin-top: 16px;
+    padding: 20px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-default);
+    border-left: 4px solid var(--accent-gold, #b99468);
+    border-radius: 10px;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.7;
 }
 
 .hero-narrative p {
@@ -219,11 +235,12 @@ h3 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 5px;
-    min-height: 85px;
-    padding: 14px;
-    background: #080808;
-    border-radius: 8px;
+    gap: 6px;
+    min-height: 100px;
+    padding: 16px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-default);
+    border-radius: 10px;
 }
 
 .result-card strong {
@@ -234,7 +251,11 @@ h3 {
 .results-note {
     margin: 12px 0 0;
     font-size: 12px;
-    color: #aaaaaa;
+    color: var(--text-secondary);
+}
+
+.ending-subtitle {
+    color: var(--text-secondary);
 }
 
 /* =========================================
@@ -253,22 +274,171 @@ h3 {
     align-items: center;
     justify-content: center;
     min-height: 48px;
-    padding: 12px;
-    border: 1px solid #505050;
-    border-radius: 9px;
-    background: #303030;
-    color: #f1f1f1;
+    padding: 12px 20px;
+    border: 1px solid #b99560;
+    border-radius: 10px;
+    background: #8b683d;
+    color: #ffffff;
     text-align: center;
     text-decoration: none;
-    font-size: 13px;
+    font: inherit;
+    font-size: 0.95rem;
     font-weight: 600;
-    transition: background 0.2s, border-color 0.2s;
+    transition: background 0.2s, transform 0.2s;
 }
 
 .summary-actions a:hover {
-    background: #444444;
-    border-color: #888888;
+    background: #a47c48;
+    transform: translateY(-4px);
 }
+
+.summary-actions a:focus-visible {
+    outline: 2px solid #f0ce92;
+    outline-offset: 3px;
+}
+
+.ending-artwork {
+    width: 100%;
+    height: 300px;
+    margin-bottom: 22px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-default);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: var(--text-secondary);
+}
+
+.ending-artwork img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    animation: endingBannerPulse 4s ease-in-out infinite;
+}
+
+
+/* Gentle, continuous glow for the ending banner */
+@keyframes endingBannerPulse {
+    0%, 100% {
+        filter: brightness(1);
+        transform: scale(1);
+    }
+
+    50% {
+        filter: brightness(1.18);
+        transform: scale(1.025);
+    }
+}
+
+
+/* =========================================
+   HERO SUMMARY — FACTION BACKGROUNDS
+========================================= */
+
+body.summary-faction--warrior {
+    --summary-background: url("../images/Factions/warrior-background.jpeg");
+}
+
+body.summary-faction--mage {
+    --summary-background: url("../images/Factions/mage-background.jpeg");
+}
+
+body.summary-faction--rogue {
+    --summary-background: url("../images/Factions/rogue-background.jpeg");
+}
+
+
+/* Background gradually glows into view */
+@keyframes summaryBackgroundReveal {
+    0% {
+        opacity: 0;
+        filter: blur(18px) brightness(0.35);
+        transform: scale(1.06);
+    }
+
+    60% {
+        opacity: 1;
+        filter: blur(12px) brightness(1.25);
+    }
+
+    100% {
+        opacity: 1;
+        filter: blur(10px) brightness(1);
+        transform: scale(1);
+    }
+}
+
+
+/* Blurred faction background */
+body[class*="summary-faction--"]::before {
+    content: "";
+    position: fixed;
+    inset: -20px;
+    z-index: -2;
+
+    background-image: var(--summary-background);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    filter: blur(10px);
+    animation: summaryBackgroundReveal 2.2s ease-out both;
+
+}
+
+/* Dark overlay for readability */
+body[class*="summary-faction--"]::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+
+    background: rgba(10, 12, 17, 0.72);
+}
+
+
+/* Hero Summary content entrance animation */
+@keyframes summaryContentReveal {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animate the summary sections */
+.ending-section,
+.hero-section,
+.results-section,
+.summary-actions {
+    animation: summaryContentReveal 0.85s ease-out both;
+}
+
+/* Stagger each section */
+.ending-section {
+    animation-delay: 0.2s;
+}
+
+.hero-section {
+    animation-delay: 0.45s;
+}
+
+.results-section {
+    animation-delay: 0.7s;
+}
+
+.summary-actions {
+    animation-delay: 0.9s;
+}
+
 
 /* =========================================
    FOOTER
@@ -310,7 +480,8 @@ h3 {
     }
 
     .ending-artwork {
-        min-height: 120px;
+        height: 180px;
+        min-height: 0;
     }
 
     .hero-grid,
@@ -334,4 +505,20 @@ h3 {
     .summary-actions {
         grid-template-columns: 1fr;
     }
+
 }
+
+
+/* Respect reduced-motion accessibility preferences */
+
+@media (prefers-reduced-motion: reduce) {
+    .ending-artwork img,
+    body[class*="summary-faction--"]::before,
+    .ending-section,
+    .hero-section,
+    .results-section,
+    .summary-actions {
+        animation: none;
+    }
+}
+

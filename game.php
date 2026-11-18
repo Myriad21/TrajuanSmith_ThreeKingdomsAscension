@@ -699,7 +699,6 @@
                             action="game.php"
                             method="POST"
                             class="game-reset-form"
-                            onsubmit="return confirm('Reset your adventure? All story progress, inventory, and combat progress will be lost. Your champion name and faction will be preserved.');"
                         >
                             <input
                                 type="hidden"

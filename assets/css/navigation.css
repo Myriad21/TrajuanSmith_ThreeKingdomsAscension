@@ -96,3 +96,96 @@
         transition: none;
     }
 }
+
+
+/* =========================================
+   SHARED HEADER ACTION BUTTONS
+========================================= */
+
+/* Navigation button container */
+.site-header nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* Leaderboard and Logout buttons */
+.site-header nav a[href$="leaderboard.php"],
+.site-header nav a[href$="logout.php"] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 42px;
+    padding: 10px 20px;
+
+    border: 1px solid #b99560;
+    border-radius: 9px;
+    background: #303238;
+
+    color: #f0e8dc;
+    text-decoration: none;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1.2;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+/* Leaderboard hover */
+.site-header nav a[href$="leaderboard.php"]:hover {
+    background: #45403a;
+    border-color: #d4b48a;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Logout button */
+.site-header nav a[href$="logout.php"] {
+    background: rgba(110, 35, 40, 0.2);
+    border-color: rgba(210, 95, 95, 0.55);
+    color: #f0b7b7;
+}
+
+/* Logout hover */
+.site-header nav a[href$="logout.php"]:hover {
+    background: rgba(150, 45, 50, 0.35);
+    border-color: rgba(230, 110, 110, 0.8);
+    color: #ffe0e0;
+    transform: translateY(-2px);
+}
+
+/* Keyboard accessibility */
+.site-header nav a[href$="leaderboard.php"]:focus-visible,
+.site-header nav a[href$="logout.php"]:focus-visible {
+    outline: 2px solid #f0ce92;
+    outline-offset: 3px;
+}
+
+/* Responsive buttons */
+@media (max-width: 600px) {
+    .site-header nav {
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .site-header nav a[href$="leaderboard.php"],
+    .site-header nav a[href$="logout.php"] {
+        min-height: 40px;
+        padding: 9px 14px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .site-header nav a[href$="leaderboard.php"],
+    .site-header nav a[href$="logout.php"] {
+        transition: none;
+    }
+}

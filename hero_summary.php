@@ -41,6 +41,13 @@ $factionNames = [
 
 $factionKey = strtolower((string) $championFaction);
 
+// Determine the background based on the champion's faction.
+$allowedFactions = ["warrior", "mage", "rogue"];
+
+$backgroundFaction = in_array($factionKey, $allowedFactions, true)
+    ? $factionKey
+    : "warrior";
+
 $factionName = $factionNames[$factionKey]
     ?? "Your Kingdom";
 
@@ -303,6 +310,15 @@ $completedEndings = [
     "act3_secret_ending"
 ];
 
+// Select the illustration for the player's ending.
+$endingImages = [
+    "act3_faction_victory" => "assets/images/HeroSummary/faction_victory.png",
+    "act3_faction_defeat" => "assets/images/HeroSummary/faction_defeat.png",
+    "act3_secret_ending" => "assets/images/HeroSummary/threefold_accord.png"
+];
+
+$endingImage = $endingImages[$storyNode] ?? null;
+
 // Save only when the player has completed the story.
 if (in_array($storyNode, $completedEndings, true)) {
 
@@ -336,26 +352,37 @@ function summaryEscape($value) {
 
     <title>Hero Summary | Three Kingdoms Ascension</title>
 
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/navigation.css">
     <link rel="stylesheet" href="assets/css/hero_summary.css">
+    
 </head>
 
-<body>
+<body class="summary-faction--<?= summaryEscape($backgroundFaction) ?>">
+
+    <header class="site-header site-header--compact">
+        <h1>Three Kingdoms Ascension</h1>
+
+        <nav aria-label="Main navigation">
+            <a href="leaderboard.php">Leaderboard</a>
+            <a href="logout.php">Logout</a>
+        </nav>
+    </header>
+
     <div class="summary-page">
-
-        <header class="summary-header">
-            <span>THREE KINGDOMS ASCENSION</span>
-
-            <nav>
-                <a href="leaderboard.php">Leaderboard</a>
-                <a href="logout.php">Logout</a>
-            </nav>
-        </header>
 
         <main>
             <section class="ending-section">
 
                 <div class="ending-artwork">
-                    <span>Ending Illustration / Artwork</span>
+                    <?php if ($endingImage !== null): ?>
+                        <img
+                            src="<?= summaryEscape($endingImage) ?>"
+                            alt="<?= summaryEscape($endingTitle) ?> ending illustration"
+                        >
+                    <?php else: ?>
+                        <span>Your adventure is still unfolding.</span>
+                    <?php endif; ?>
                 </div>
 
                 <p class="ending-eyebrow">

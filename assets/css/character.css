@@ -434,6 +434,21 @@ form:has(input[value="rogue"]:checked)
     background: #9E534A;
     color: #F0ECE4;
     border: 1px solid #9E534A;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    box-sizing: border-box;
+
+
+    color: #f5f0e9;
+    border: 1px solid #454545;
+    border-radius: 10px;
+    text-decoration: none;
+
 }
 
 .champion-confirmation__begin:hover {

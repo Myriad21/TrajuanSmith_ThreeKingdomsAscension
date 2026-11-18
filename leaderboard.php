@@ -1,54 +1,69 @@
+
 <?php
 session_start();
-$leaderboardFile = 'storage/leaderboard.json';
+
+require_once __DIR__ . "/includes/score_functions.php";
+
+$leaderboardFile = __DIR__ . "/storage/saves.json";
 $leaderboard = [];
 $errors = [];
 
-function getPlayerLeague($level) {
-    if ($level < 15) {
-        return [
-            'name' => 'Bronze',
-            'badge' => 'assets/images/leagues/bronze.png'
-        ];
-    }
-    if ($level < 30) {
-        return [
-            'name' => 'Silver',
-            'badge' => 'assets/images/leagues/silver.png'
-        ];
-    }
-    return [
-        'name' => 'Gold',
-        'badge' => 'assets/images/leagues/gold.png'
-    ];
-}
+$endingLabels = [
+    "act3_faction_victory" => "Faction Victory",
+    "act3_faction_defeat" => "Faction Defeat",
+    "act3_secret_ending" => "Threefold Accord"
+];
 
-if (!file_exists($leaderboardFile)) {
-    $errors[] = "Leaderboard storage file is missing.";
+if (!is_file($leaderboardFile)) {
+    $errors[] = "Player save storage is missing.";
 } else {
-    $leaderboardData = json_decode(
+    $saves = json_decode(
         file_get_contents($leaderboardFile),
         true
     );
-    if (!is_array($leaderboardData)) {
-        $errors[] = "Unable to read leaderboard data.";
+
+    if (!is_array($saves)) {
+        $errors[] = "Unable to read player saves.";
     } else {
-        usort($leaderboardData, function ($a, $b) {
-            return ($b['level'] ?? 0) <=> ($a['level'] ?? 0);
-        });
-        foreach ($leaderboardData as $player) {
-            $level = (int) $player['level'];
+        foreach ($saves as $userId => $save) {
+            if (!is_array($save) ||
+                !isset($save["champion"]) ||
+                !is_array($save["champion"])) {
+                continue;
+            }
+
+            $champion = $save["champion"];
+            $level = (int) ($champion["level"] ?? 1);
+            $storyNode = $save["story_node"] ?? "introduction";
+            $storyFlags = $save["story_flags"] ?? [];
+
+            if (!is_array($storyFlags)) {
+                $storyFlags = [];
+            }
+
+            $score = calculateFinalScore(
+                $storyFlags,
+                $storyNode,
+                $level
+            );
+
             $leaderboard[] = [
-                'user_id' => (int) $player['user_id'],
-                'champion_name' => $player['champion_name'],
-                'kingdom' => $player['kingdom'],
-                'level' => $level,
-                'league' => getPlayerLeague($level)
+                "user_id" => (string) $userId,
+                "champion_name" => $champion["name"] ?? "Unknown",
+                "faction" => ucfirst($champion["faction"] ?? "Unknown"),
+                "level" => $level,
+                "ending" => $endingLabels[$storyNode] ?? "—",
+                "score" => $score
             ];
         }
+
+        usort($leaderboard, function ($a, $b) {
+            return $b["score"] <=> $a["score"];
+        });
     }
 }
 ?>
+
 
 
 
@@ -109,53 +124,62 @@ if (!file_exists($leaderboardFile)) {
                     No warriors have appeared on the leaderboard yet.
                 </p>
             <?php else: ?>
+                
                 <div class="leaderboard-table-wrapper">
                     <table class="leaderboard-table">
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Champion</th>
-                            <th>Kingdom</th>
-                            <th>Level</th>
-                            <th>League</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <?php foreach ($leaderboard as $index => $player): ?>
+                        <thead>
                             <tr>
-                                <td><?= $index + 1 ?></td>
-                                <td>
-                                    <?= htmlspecialchars(
-                                        $player['champion_name'],
-                                        ENT_QUOTES,
-                                        'UTF-8'
-                                    ) ?>
-                                </td>
-                                <td>
-                                    <?= htmlspecialchars(
-                                        $player['kingdom'],
-                                        ENT_QUOTES,
-                                        'UTF-8'
-                                    ) ?>
-                                </td>
-                                <td><?= $player['level'] ?></td>
-                                <td>
-                                    <div class="league-badge">
-                                        <img
-                                            src="<?= htmlspecialchars($player['league']['badge'], ENT_QUOTES, 'UTF-8') ?>"
-                                            alt="<?= htmlspecialchars($player['league']['name'], ENT_QUOTES, 'UTF-8') ?> League"
-                                        >
-                                        <span>
-                                            <?= htmlspecialchars($player['league']['name'], ENT_QUOTES, 'UTF-8') ?>
-                                        </span>
-                                    </div>
-                                </td>
+                                <th>Rank</th>
+                                <th>Champion</th>
+                                <th>Faction</th>
+                                <th>Level</th>
+                                <th>Ending Achieved</th>
+                                <th>Score</th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
+                        </thead>
+
+                        <tbody>
+                            <?php foreach ($leaderboard as $index => $player): ?>
+                                <tr>
+                                    <td><?= $index + 1 ?></td>
+
+                                    <td>
+                                        <?= htmlspecialchars(
+                                            $player['champion_name'],
+                                            ENT_QUOTES,
+                                            'UTF-8'
+                                        ) ?>
+                                    </td>
+
+                                    <td>
+                                        <?= htmlspecialchars(
+                                            $player['faction'],
+                                            ENT_QUOTES,
+                                            'UTF-8'
+                                        ) ?>
+                                    </td>
+
+                                    <td>
+                                        <?= (int) $player['level'] ?>
+                                    </td>
+
+                                    <td>
+                                        <?= htmlspecialchars(
+                                            $player['ending'],
+                                            ENT_QUOTES,
+                                            'UTF-8'
+                                        ) ?>
+                                    </td>
+
+                                    <td class="score-cell">
+                                        <?= number_format($player['score']) ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
                     </table>
                 </div>
+
             <?php endif; ?>
         </section>
     </main>
