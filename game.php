@@ -197,10 +197,7 @@
 
 
             if (
-                !is_array($requirements) ||
-                !meetsChoiceRequirements(
-                    $_SESSION["champion"],
-                    $_SESSION["inventory"],
+                !is_array($requirements) || !meetsChoiceRequirements( $_SESSION["champion"], $_SESSION["inventory"],
                     $_SESSION["story_flags"],
                     $requirements
                 )
