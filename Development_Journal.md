@@ -253,11 +253,25 @@ ChatGPT was used during development for planning, code explanation, debugging su
 
 **Limitations to disclose:** Rule-based guidance is constrained by the metadata and game state the developers encode; it cannot reason about unimplemented outcomes. The application depends on correct PHP session and saved-progress synchronization, and manual end-to-end testing remains important.
 
+### AI Feature Testing Results — November 18, 2026
+
+Three manual test cases were performed on the Insight Relic guidance system using the Brave browser and a local PHP development server.
+
+**AI-01 — Normal Case:** The Insight Relic predicted that launching a surprise attack could provide a combat advantage while damaging relationships. After selecting the choice, the game confirmed the surprise advantage and displayed a relationship penalty. **Result: PASS.**
+
+**AI-02 — Boundary Case:** A Mage with 7 Strength could not select a choice requiring 15 Strength. The system correctly identified the missing 8 Strength. A Warrior with exactly 15 Strength could select the choice, destroy the monument, absorb a crystal, and increase Strength to 20. **Result: PASS.**
+
+**AI-03 — Fallback/Edge Case:** The team confirmed that the ordinary "Continue the Expedition" choice exercises the fallback-guidance path. The Insight Relic displayed "Moving forward will leave any unexplored discoveries behind." No PHP errors or misleading stat consequences appeared. **Result: PASS.**
+
+**Evidence:** `assets/evidence/AI_Testcase1_TrustDecrease01.png` and `assets/evidence/AI_Testcase1_TrustDecrease02.png` show the prediction and relationship consequence for AI-01. `assets/evidence/TestCase02_StatBoundary01.png` through `assets/evidence/TestCase02_StatBoundary06.png` document the locked Mage choice, the Warrior path, the crystal reward, and the final Strength of 20 for AI-02. AI-03 was verified in the browser with the fallback guidance displayed; retain its screenshot with the submission evidence. Screenshot filenames refer to separate evidence files, not images embedded in this Markdown document.
+
+**Conclusion:** All three manual UI tests passed. The tests demonstrate contextual consequence previews, dynamic requirement explanations, and appropriate guidance for an ordinary choice. The system is rule-based and relies on predefined story metadata and the player's current state rather than a generative AI model. Testing was limited to the observed scenarios and does not establish complete coverage of every story branch.
+
 ## Evidence and final verification checklist
 
 - **GitHub:** Commit history identifies each contributor and records feature development, merges, and fixes.
 - **Trello:** Confirm all six sprint cards, assignees, status transitions, and actual review/stand-up evidence before presenting them as completed Scrum events.
 - **Application:** Demonstrate account registration/login, character creation, faction choice, stat-locked choices, Insight Relic previews, inventory, combat, save/reload, an ending, Hero Summary, and leaderboard.
-- **Testing:** Record at least three documented AI cases (normal, boundary/locked, and failure or missing-state), plus mobile/desktop and authentication checks.
+- **Testing:** Three AI cases are documented above (normal, boundary/locked, and fallback guidance). Mobile/desktop, authentication, and full-game regression checks remain separate final-verification items.
 - **Submission:** Confirm CODD deployment, GitHub URL, video link, Q&A responses, and each team member's submission file.
 

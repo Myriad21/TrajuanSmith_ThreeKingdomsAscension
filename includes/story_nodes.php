@@ -281,9 +281,91 @@ function getStoryNodes(): array
                     "tracker_title" => "Uncovering the Ancient Markings",
                     "tracker_text" => "You discovered that the markings follow the flow of mana through the ruins, suggesting that the area's unusual mana concentration may have ancient origins.",
 
+                ],
+
+
+                "destroy_monument" => [
+                    "text" => "Destroy the Monument",
+                    "description" => "Use your physical strength to shatter the ancient stone monument.",
+                    "insight_text" => "Destroying the monument requires at least 15 Strength. The shattered stone may conceal something valuable, but the ancient markings will be lost.",
+
+                    "next" => "search_monument_rubble",
+
+                    "requires" => [
+                        "stats" => [
+                            "strength" => 15
+                        ],
+                        "inventory" => [],
+                        "flags" => [
+                            "monument_crystal_absorbed" => false
+                        ],
+                        "trust" => []
+                    ],
+
+                    "effects" => [
+                        "flags" => [
+                            "explored_markings" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Shattering the Ancient Monument",
+                    "tracker_text" => "You used your strength to destroy the ancient monument, revealing rubble that may conceal something valuable."
+                ],
+
+            ]
+        ],
+
+
+        "search_monument_rubble" => [
+            "title" => "The Shattered Monument",
+            "act" => 1,
+
+            "text" => "You gather your strength and deliver a devastating blow to the ancient stone monument.
+
+            A thunderous crack echoes through the ruins as fractures spread across its surface. The weathered structure crumbles beneath your strength, sending fragments of stone scattering across the ground.
+
+            As the dust begins to settle, something unusual catches your attention.
+
+            A small crystal tumbles from the shattered remains, landing among the rubble. Its surface shimmers with an unnatural light, and the very matter surrounding it seems to bend and distort.
+
+            Despite its size, the crystal radiates an extraordinary concentration of energy.
+
+            As you approach, a strange sensation washes over you. The crystal almost seems to be calling to you, urging you to pick it up and absorb its power.",
+
+            "backgrounds" => [
+                "page" => null,
+                "scene" => null
+            ],
+
+            "choices" => [
+                "absorb_strength_crystal" => [
+                    "text" => "Pick Up and Absorb the Crystal",
+
+                    "description" => "Absorb the mysterious crystal's energy into your body, permanently increasing your Strength by 5.",
+
+                    "insight_text" => "The crystal contains concentrated physical energy. Absorbing it grants +5 Strength.",
+
+                    "next" => "expedition_start",
+
+                    "requires" => [],
+
+                    "effects" => [
+                        "stats" => [
+                            "strength" => 5
+                        ],
+                        "flags" => [
+                            "monument_crystal_absorbed" => true,
+                            "explored_markings" => true
+                        ]
+                    ],
+
+                    "tracker_title" => "Absorbing the Mysterious Crystal",
+
+                    "tracker_text" => "You shattered the ancient monument and discovered a mysterious crystal within its remains. After absorbing its energy, your Strength permanently increased by 5."
                 ]
             ]
         ],
+
 
         "explore_path" => [
             "title" => "The Overgrown Path",
@@ -1067,7 +1149,11 @@ function getStoryNodes(): array
                         ]
                     ],
 
-                    "effects" => [],
+                    "effects" => [
+                        "trust" => [
+                            "first_rival" => 0
+                        ]
+                    ],
 
                     "tracker_title" => "Battling the Rival Champion",
 

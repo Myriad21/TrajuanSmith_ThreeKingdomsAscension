@@ -1,7 +1,7 @@
 {
     "1": {
         "champion": {
-            "name": "Jael",
+            "name": "Kael",
             "faction": "mage",
             "hp": 85,
             "max_hp": 85,
@@ -22,18 +22,39 @@
             "artifact_knowledge": false,
             "ending": null
         },
-        "story_node": "introduction",
-        "story_flags": [],
+        "story_node": "explore_markings",
+        "story_flags": {
+            "artifact_rival_warning": true
+        },
         "inventory": [],
-        "choices_log": []
+        "choices_log": [
+            {
+                "scene": "introduction",
+                "act": null,
+                "scene_title": "Investigating the Rumors",
+                "choice": "investigate",
+                "choice_text": "You decided to investigate the rumors surrounding the ancient artifact."
+            },
+            {
+                "scene": "expedition_start",
+                "act": 1,
+                "scene_title": "Investigating the Ancient Markings",
+                "choice": "examine_markings",
+                "choice_text": "You decided to examine the mysterious markings carved into the ruins, hoping to uncover clues about the artifact."
+            }
+        ],
+        "last_choice_summary": {
+            "choice": "Examine the Ancient Stone Markings",
+            "consequences": []
+        }
     },
     "2": {
         "champion": {
-            "name": "Kael",
+            "name": "kkkL",
             "faction": "warrior",
             "hp": 120,
             "max_hp": 120,
-            "strength": 15,
+            "strength": 20,
             "mana": 40,
             "max_mana": 40,
             "level": 1,
@@ -50,10 +71,52 @@
             "artifact_knowledge": false,
             "ending": null
         },
-        "story_node": "introduction",
-        "story_flags": [],
+        "story_node": "expedition_start",
+        "story_flags": {
+            "artifact_rival_warning": true,
+            "explored_markings": true,
+            "monument_crystal_absorbed": true
+        },
         "inventory": [],
-        "choices_log": []
+        "choices_log": [
+            {
+                "scene": "introduction",
+                "act": null,
+                "scene_title": "Investigating the Rumors",
+                "choice": "investigate",
+                "choice_text": "You decided to investigate the rumors surrounding the ancient artifact."
+            },
+            {
+                "scene": "expedition_start",
+                "act": 1,
+                "scene_title": "Investigating the Ancient Markings",
+                "choice": "examine_markings",
+                "choice_text": "You decided to examine the mysterious markings carved into the ruins, hoping to uncover clues about the artifact."
+            },
+            {
+                "scene": "explore_markings",
+                "act": 1,
+                "scene_title": "Shattering the Ancient Monument",
+                "choice": "destroy_monument",
+                "choice_text": "You used your strength to destroy the ancient monument, revealing rubble that may conceal something valuable."
+            },
+            {
+                "scene": "search_monument_rubble",
+                "act": 1,
+                "scene_title": "Absorbing the Mysterious Crystal",
+                "choice": "absorb_strength_crystal",
+                "choice_text": "You shattered the ancient monument and discovered a mysterious crystal within its remains. After absorbing its energy, your Strength permanently increased by 5."
+            }
+        ],
+        "last_choice_summary": {
+            "choice": "Pick Up and Absorb the Crystal",
+            "consequences": [
+                {
+                    "text": "+5 Strength",
+                    "type": "positive"
+                }
+            ]
+        }
     },
     "3": {
         "champion": {
@@ -808,5 +871,75 @@
         "story_flags": [],
         "inventory": [],
         "choices_log": []
+    },
+    "6": {
+        "champion": {
+            "name": "Hiiiiiii",
+            "faction": "warrior",
+            "hp": 120,
+            "max_hp": 120,
+            "strength": 20,
+            "mana": 40,
+            "max_mana": 40,
+            "level": 1,
+            "inventory": [],
+            "act": 1,
+            "story_node": "act1_start",
+            "choices_log": [],
+            "relationships": {
+                "warrior": 100,
+                "mage": 50,
+                "rogue": 50
+            },
+            "defeated_rivals": [],
+            "artifact_knowledge": false,
+            "ending": null
+        },
+        "story_node": "expedition_start",
+        "story_flags": {
+            "artifact_rival_warning": true,
+            "explored_markings": true,
+            "monument_crystal_absorbed": true
+        },
+        "inventory": [],
+        "choices_log": [
+            {
+                "scene": "introduction",
+                "act": null,
+                "scene_title": "Investigating the Rumors",
+                "choice": "investigate",
+                "choice_text": "You decided to investigate the rumors surrounding the ancient artifact."
+            },
+            {
+                "scene": "expedition_start",
+                "act": 1,
+                "scene_title": "Investigating the Ancient Markings",
+                "choice": "examine_markings",
+                "choice_text": "You decided to examine the mysterious markings carved into the ruins, hoping to uncover clues about the artifact."
+            },
+            {
+                "scene": "explore_markings",
+                "act": 1,
+                "scene_title": "Shattering the Ancient Monument",
+                "choice": "destroy_monument",
+                "choice_text": "You used your strength to destroy the ancient monument, revealing rubble that may conceal something valuable."
+            },
+            {
+                "scene": "search_monument_rubble",
+                "act": 1,
+                "scene_title": "Absorbing the Mysterious Crystal",
+                "choice": "absorb_strength_crystal",
+                "choice_text": "You shattered the ancient monument and discovered a mysterious crystal within its remains. After absorbing its energy, your Strength permanently increased by 5."
+            }
+        ],
+        "last_choice_summary": {
+            "choice": "Pick Up and Absorb the Crystal",
+            "consequences": [
+                {
+                    "text": "+5 Strength",
+                    "type": "positive"
+                }
+            ]
+        }
     }
 }
