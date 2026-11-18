@@ -8,6 +8,7 @@ if (!isset($_SESSION["user"])) {
 }
 
 require_once __DIR__ . "/includes/game_functions.php";
+require_once __DIR__ . "/includes/save_functions.php";
 
 
 $pageTitle = "Character Creation";
@@ -26,6 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         try {
             $_SESSION["champion"] = createChampion($name, $faction);
             session_regenerate_id(true);
+
+            // Save the newly created champion to the authenticated account.
+            savePlayerProgress(collectPlayerProgress());
 
             header("Location: character_confirm.php");
             exit;

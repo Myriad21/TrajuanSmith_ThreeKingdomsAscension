@@ -581,11 +581,44 @@ main section.game-interface {
 }
 
 
+/* Gold Insight Relic predictions for cultivation breakthroughs */
+.insight-relic__automatic--cultivation {
+    color: rgb(105, 187, 105);
+    font-weight: 600;
+}
+
+
 
 /* AUTOMATIC CONSEQUENCE NOTIFICATION DISMISSAL */
 
 .game-consequences--notification {
     animation: consequenceFadeOut 6s ease forwards;
+}
+
+.combat-retry-form {
+    margin-top: 16px;
+}
+
+.combat-retry-button {
+    padding: 12px 24px;
+    border: 1px solid #b99669;
+    border-radius: 10px;
+    background-color: #b99669;
+    color: #17191d;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.combat-retry-button:hover {
+    background-color: #d4b48a;
+    transform: translateY(-2px);
+}
+
+.combat-retry-button:focus-visible {
+    outline: 3px solid #e8c99b;
+    outline-offset: 3px;
 }
 
 @keyframes consequenceFadeOut {

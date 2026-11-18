@@ -9,6 +9,7 @@
 
     require_once __DIR__ . "/includes/game_functions.php";
     require_once __DIR__ . "/includes/combat_functions.php";
+    require_once __DIR__ . "/includes/save_functions.php";
 
 
     $pageTitle = "Combat Encounter";
@@ -22,7 +23,71 @@
         exit;
     }
 
+    // Allow the player to leave combat training at any time.
+    if (
+        $_SERVER["REQUEST_METHOD"] === "POST" &&
+        ($_POST["combat_action"] ?? "") === "end_training" &&
+        ($_SESSION["combat"]["enemy"]["id"] ?? "") === "training_dummy"
+    ) {
+        // Remove the temporary training encounter.
+        unset($_SESSION["combat"]);
+
+        // Return to the training grounds story scene.
+        $_SESSION["story_node"] = "act1_training_dummy";
+
+        // Redirect back to the story interface.
+        header("Location: game.php");
+        exit;
+    }
+
     
+    // Retry the current battle after defeat.
+    if (
+        $_SERVER["REQUEST_METHOD"] === "POST" &&
+        ($_POST["combat_action"] ?? "") === "retry_combat" &&
+        ($_SESSION["combat"]["status"] ?? "") === "defeat" &&
+        isset($_SESSION["combat_checkpoint"]) &&
+        ($_SESSION["combat"]["enemy"]["id"] ?? "") !== "corrupted_mana_beast"
+    ) {
+        $checkpoint = $_SESSION["combat_checkpoint"];
+
+        // Restore the champion and inventory from before the battle.
+        $_SESSION["champion"] = $checkpoint["champion"];
+        $_SESSION["inventory"] = $checkpoint["inventory"];
+
+        // Identify the enemy from the failed encounter.
+        $enemyId = $_SESSION["combat"]["enemy"]["id"];
+
+        // Start a fresh encounter with the same enemy.
+        unset($_SESSION["combat"]);
+
+        startCombat($enemyId);
+
+        // Reapply the rival's opening surprise attack, if applicable.
+        if (
+            !empty($_SESSION["story_flags"]["act1_rival_surprised"]) &&
+            ($_SESSION["story_node"] ?? "") === "act1_rival_interception"
+        ) {
+            $damage = min(20, max(0, (int) $_SESSION["champion"]["hp"]));
+
+            $_SESSION["champion"]["hp"] -= $damage;
+
+            $_SESSION["combat"]["log"][] =
+                "The rival champion catches you off guard and deals "
+                . $damage
+                . " surprise damage!";
+
+            $_SESSION["combat"]["rival_opening_attack_applied"] = true;
+        }
+
+        // Save the restored champion and inventory.
+        savePlayerProgress(collectPlayerProgress());
+
+        // Redirect to prevent repeated submissions.
+        header("Location: combat.php");
+        exit;
+    }
+
     // Create the battle only if one does not already exist.
     if (!isset($_SESSION["combat"])) {
         $_SESSION["combat"] = initializeCombat(
@@ -36,14 +101,172 @@
     $combat = $_SESSION["combat"];
 
 
-    // Record the wolf's defeat so the story
-    // can recognize that the encounter is complete.
+    // Record and save the wolf victory once.
+    
     if (
         $combat["status"] === "victory" &&
-        ($combat["enemy_id"] ?? "mana_corrupted_wolf") === "mana_corrupted_wolf"
+        ($combat["enemy"]["id"] ?? "") === "mana_corrupted_wolf" &&
+        empty($_SESSION["story_flags"]["wolf_defeated"])
     ) {
         $_SESSION["story_flags"]["wolf_defeated"] = true;
+
+        // The battle is finished, so do not persist its temporary state.
+        $completedCombat = $_SESSION["combat"];
+        unset($_SESSION["combat"]);
+
+        savePlayerProgress(collectPlayerProgress());
+
+        // Keep the result available for the victory screen.
+        $_SESSION["combat"] = $completedCombat;
+        $combat = $completedCombat;
     }
+
+
+    // Record the Act 1 rival victory only once.
+    if (
+        $combat["status"] === "victory" &&
+        isset($combat["enemy"]["faction"]) &&
+        ($combat["enemy"]["level"] ?? 0) === 2 &&
+        in_array(
+            $_SESSION["story_node"] ?? "",
+            [
+                "rival_ambush",
+                "act1_rival_interception",
+                "first_rival_encounter"
+            ],
+            true
+        ) &&
+        empty($_SESSION["story_flags"]["act1_rival_defeated"])
+    ) {
+        // Identify the actual faction of the defeated rival.
+        $rivalFaction = $combat["enemy"]["faction"];
+
+        // Initialize the defeated rivals list if necessary.
+        if (!isset($_SESSION["story_flags"]["defeated_rivals"])) {
+            $_SESSION["story_flags"]["defeated_rivals"] = [];
+        }
+
+        // Initialize the injured rivals list if necessary.
+        if (!isset($_SESSION["story_flags"]["injured_rivals"])) {
+            $_SESSION["story_flags"]["injured_rivals"] = [];
+        }
+
+        // Record the rival's faction without duplicates.
+        if (!in_array(
+            $rivalFaction,
+            $_SESSION["story_flags"]["defeated_rivals"],
+            true
+        )) {
+            $_SESSION["story_flags"]["defeated_rivals"][] = $rivalFaction;
+        }
+
+        if (!in_array(
+            $rivalFaction,
+            $_SESSION["story_flags"]["injured_rivals"],
+            true
+        )) {
+            $_SESSION["story_flags"]["injured_rivals"][] = $rivalFaction;
+        }
+
+        // Mark the first rival as defeated but still alive.
+        $_SESSION["story_flags"]["act1_rival_defeated"] = true;
+
+        // The defeated rival retreats and survives.
+        $_SESSION["story_flags"]["act1_rival_retreated"] = true;
+
+        // Move to the victory aftermath scene.
+        $_SESSION["story_node"] = "rival_retreat";
+
+        // Save the completed encounter and updated story state.
+        $completedCombat = $_SESSION["combat"];
+
+        unset($_SESSION["combat"]);
+
+        savePlayerProgress(collectPlayerProgress());
+
+        // Keep the victory screen visible until Return to Story.
+        $_SESSION["combat"] = $completedCombat;
+        $combat = $completedCombat;
+    }
+
+
+
+    // Record the Act 2 Zenith rival victory.
+    if (
+        ($combat["status"] ?? "") === "victory" &&
+        ($combat["encounter"] ?? "") === "act2_zenith_rival" &&
+        ($combat["enemy"]["level"] ?? 0) == 3 &&
+        empty($_SESSION["story_flags"]["act2_geyser_rival_defeated"])
+    ) {
+        // Identify the faction of the defeated rival.
+        $rivalFaction = $combat["enemy"]["faction"] ?? null;
+
+        // Track the defeated rival without duplicates.
+        if ($rivalFaction !== null) {
+            if (!isset($_SESSION["story_flags"]["defeated_rivals"])) {
+                $_SESSION["story_flags"]["defeated_rivals"] = [];
+            }
+
+            if (!in_array(
+                $rivalFaction,
+                $_SESSION["story_flags"]["defeated_rivals"],
+                true
+            )) {
+                $_SESSION["story_flags"]["defeated_rivals"][] = $rivalFaction;
+            }
+        }
+
+        // Record the outcome of the confrontation.
+        $_SESSION["story_flags"]["act2_geyser_rival_defeated"] = true;
+        $_SESSION["story_flags"]["act2_geyser_cooperation_agreed"] = false;
+
+        // Return to the geyser without cooperative assistance.
+        $_SESSION["story_node"] = "act2_ruptured_mana_geyser";
+
+        // Preserve the completed battle for the victory screen.
+        $completedCombat = $_SESSION["combat"];
+
+        // Do not include temporary combat data in the saved progress.
+        unset($_SESSION["combat"]);
+
+        savePlayerProgress(collectPlayerProgress());
+
+        // Restore the victory screen until Return to Story is clicked.
+        $_SESSION["combat"] = $completedCombat;
+        $combat = $completedCombat;
+    }
+
+
+    // Record the Act 3 final boss outcome.
+    if (
+        ($combat["enemy"]["id"] ?? "") === "corrupted_mana_beast" &&
+        in_array($combat["status"] ?? "", ["victory", "defeat"], true) &&
+        empty($_SESSION["story_flags"]["act3_final_boss_resolved"])
+    ) {
+        $victory = $combat["status"] === "victory";
+
+        $_SESSION["story_flags"]["act3_mana_beast_defeated"] = $victory;
+        $_SESSION["story_flags"]["act3_mana_beast_failed"] = !$victory;
+        $_SESSION["story_flags"]["act3_final_boss_resolved"] = true;
+
+        // Victory leads to the artifact decision.
+        // Defeat leads directly to the ending summary.
+        $_SESSION["story_node"] = $victory
+            ? "act3_artifact_decision"
+            : "act3_faction_defeat";
+
+        // Preserve the completed battle for its result screen.
+        $completedCombat = $_SESSION["combat"];
+        unset($_SESSION["combat"]);
+
+        // Save the permanent outcome.
+        savePlayerProgress(collectPlayerProgress());
+
+        // Restore the result screen.
+        $_SESSION["combat"] = $completedCombat;
+        $combat = $completedCombat;
+    }
+
 
 
 
@@ -84,6 +307,11 @@
                 if ($_SESSION["combat"]["status"] === "active") {
 
                     reduceSpecialCooldown($_SESSION["combat"]);
+
+                    $_SESSION["combat"]["item_cooldown"] = max(
+                        0,
+                        (int) ($_SESSION["combat"]["item_cooldown"] ?? 0) - 1
+                    );
 
                     $_SESSION["combat"]["turn"]++;
                 }
@@ -145,46 +373,46 @@
         // USe Item
         elseif ($combatAction === "use_item") {
 
-            // Identify the item selected by the player.
             $itemId = $_POST["item_id"] ?? "";
 
-            // Initialize the inventory if necessary.
             if (!isset($_SESSION["inventory"])) {
                 $_SESSION["inventory"] = [];
             }
 
-            // Attempt to use the selected item.
-            $itemUsed = useCombatItem(
-                $_SESSION["combat"],
-                $_SESSION["champion"],
-                $_SESSION["inventory"],
-                $itemId
+            // Check whether the potion is still on cooldown.
+            $itemCooldown = (int) (
+                $_SESSION["combat"]["item_cooldown"] ?? 0
             );
 
-            // The enemy counterattacks after a successful item use.
             if (
-                $itemUsed &&
-                $_SESSION["combat"]["status"] === "active"
+                $_SESSION["combat"]["status"] === "active" &&
+                $itemCooldown === 0
             ) {
-                performEnemyAttack(
+
+                // Attempt to use the selected healing item.
+                $itemUsed = useCombatItem(
                     $_SESSION["combat"],
-                    $_SESSION["champion"]
+                    $_SESSION["champion"],
+                    $_SESSION["inventory"],
+                    $itemId
                 );
+
+                if ($itemUsed) {
+
+                    // Prevent another potion until a combat turn passes.
+                    $_SESSION["combat"]["item_cooldown"] = 1;
+
+                    // No enemy counterattack.
+                    // No turn advancement.
+                    $_SESSION["combat"]["log"][] =
+                        "You recover without giving the enemy an opening.";
+                }
             }
 
-            // Advance the turn and update cooldown.
-            if (
-                $itemUsed &&
-                $_SESSION["combat"]["status"] === "active"
-            ) {
-                reduceSpecialCooldown($_SESSION["combat"]);
-                $_SESSION["combat"]["turn"]++;
-            }
-
-            // Prevent duplicate item use when refreshing.
             header("Location: combat.php#CI");
             exit;
         }
+
 
         // Escape
         elseif ($combatAction === "escape") {
@@ -377,7 +605,7 @@
                             <h3><?= htmlspecialchars($enemy["name"]) ?></h3>
 
                             <p>
-                                Hostile Creature |
+                                Hostile Enemy |
                                 Level <?= htmlspecialchars((string) $enemy["level"]) ?>
                             </p>
 
@@ -428,6 +656,25 @@
                     <?php if ($combat["status"] === "active"): ?>
 
                         <h2>Choose Your Combat Action</h2>
+
+                        <?php if (!empty($combat["enemy"]["is_training"])): ?>
+                            <form action="combat.php" method="POST">
+                                <button
+                                    type="submit"
+                                    name="combat_action"
+                                    value="end_training"
+                                    class="combat-action"
+                                >
+                                    <span class="combat-action__title">
+                                        End Training
+                                    </span>
+
+                                    <span class="combat-action__description">
+                                        Stop practicing and return to the training grounds.
+                                    </span>
+                                </button>
+                            </form>
+                        <?php endif; ?>
 
                         <div class="combat-actions__grid">
 
@@ -487,22 +734,23 @@
                                 </span>
                             </label>
 
-
-                            <!-- Escape -->
-                            <form action="combat.php" method="POST">
-                                <button
-                                    type="submit"
-                                    name="combat_action"
-                                    value="escape"
-                                    class="combat-action"
-                                    <?= $combat["status"] !== "active" ? "disabled" : "" ?>
-                                >
-                                    <span class="combat-action__title">Escape</span>
-                                    <span class="combat-action__description">
-                                        Attempt to flee from the current encounter.
-                                    </span>
-                                </button>
-                            </form>
+                            <?php if (empty($combat["enemy"]["is_training"])): ?>
+                                <!-- Escape -->
+                                <form action="combat.php" method="POST">
+                                    <button
+                                        type="submit"
+                                        name="combat_action"
+                                        value="escape"
+                                        class="combat-action"
+                                        <?= $combat["status"] !== "active" ? "disabled" : "" ?>
+                                    >
+                                        <span class="combat-action__title">Escape</span>
+                                        <span class="combat-action__description">
+                                            Attempt to flee from the current encounter.
+                                        </span>
+                                    </button>
+                                </form>
+                            <?php endif; ?>
 
 
                             <!-- Expandable Special Abilities Panel -->
@@ -647,18 +895,35 @@
                                                     value="<?= htmlspecialchars($itemId) ?>"
                                                 >
 
+                                                <?php
+                                                    $itemCooldown = (int) ($combat["item_cooldown"] ?? 0);
+
+                                                    $itemDisabled = $championHP >= $championMaxHP
+                                                        || $itemCooldown > 0;
+                                                ?>
+
                                                 <button
                                                     type="submit"
                                                     name="combat_action"
                                                     value="use_item"
                                                     class="combat-action"
-                                                    <?= $championHP >= $championMaxHP ? "disabled" : "" ?>
+                                                    <?= $itemDisabled ? "disabled" : "" ?>
                                                 >
+                                                    
                                                     <?php if ($championHP >= $championMaxHP): ?>
+
                                                         HP Already Full
+
+                                                    <?php elseif ($itemCooldown > 0): ?>
+
+                                                        Potion Cooldown: <?= $itemCooldown ?> Turn
+
                                                     <?php else: ?>
+
                                                         Use <?= htmlspecialchars($item["name"]) ?>
+
                                                     <?php endif; ?>
+
                                                 </button>
 
                                             </form>
@@ -680,6 +945,38 @@
                     <!-- Victory / Defeat--->
                     <?php elseif ($combat["status"] === "victory"): ?>
 
+                    <?php if (!empty($combat["enemy"]["is_training"])): ?>
+
+                        <h2>Training Complete!</h2>
+
+                        <p class="combat-result__message">
+                            <?= htmlspecialchars($championName) ?>
+                            has successfully completed combat training!
+                        </p>
+
+                        <p class="combat-result__description">
+                            Your attacks have overwhelmed the reinforced training dummy.
+                            You have sharpened your combat techniques without risking
+                            your life.
+                        </p>
+
+                        <p class="combat-result__description">
+                            Training does not provide experience, levels, or additional rewards.
+                        </p>
+
+                        <form action="combat.php" method="POST">
+                            <button
+                                type="submit"
+                                name="combat_action"
+                                value="end_training"
+                                class="combat-result__button"
+                            >
+                                Return to Training Grounds
+                            </button>
+                        </form>
+
+                    <?php else: ?>
+
                         <h2>Victory!</h2>
 
                         <p class="combat-result__message">
@@ -696,6 +993,8 @@
                             Return to Story
                         </a>
 
+                    <?php endif; ?>
+
 
                     <?php elseif ($combat["status"] === "defeat"): ?>
 
@@ -709,6 +1008,36 @@
                         <p class="combat-result__description">
                             Your champion's journey has come to an end.
                         </p>
+
+                        
+                        <?php if (($combat["enemy"]["id"] ?? "") === "corrupted_mana_beast"): ?>
+
+                            <p class="combat-result__description">
+                                The Corrupted Mana Beast has overwhelmed your champion.
+                                Your expedition has failed to stop the mana catastrophe.
+                                This defeat is permanent.
+                            </p>
+
+                            <a href="game.php" class="combat-result__button">
+                                View Final Outcome
+                            </a>
+
+                        <?php else: ?>
+
+                            <form action="combat.php" method="POST" class="combat-retry-form">
+                                <input
+                                    type="hidden"
+                                    name="combat_action"
+                                    value="retry_combat"
+                                >
+
+                                <button type="submit" class="combat-retry-button">
+                                    Try Again
+                                </button>
+                            </form>
+
+                        <?php endif; ?>
+
 
                     <?php endif; ?>
 

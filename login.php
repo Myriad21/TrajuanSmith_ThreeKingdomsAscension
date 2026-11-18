@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+require_once __DIR__ . "/includes/save_functions.php";
+
 // Redirect logged-in users to the game
 if (isset($_SESSION['user'])) {
     header("Location: game.php");
@@ -45,13 +47,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ) {
                 if (password_verify($password, $user['password'])) {
                     $authenticated = true;
+                    
                     session_regenerate_id(true);
 
                     $_SESSION['user'] = $user['id'];
                     $_SESSION['username'] = $user['username'];
 
+                    // Clear any game state left in the current session.
+                    restorePlayerProgress([]);
+
+                    // Look for saved progress belonging to this account.
+                    $savedProgress = loadPlayerSave();
+
+                    if ($savedProgress !== null) {
+                        restorePlayerProgress($savedProgress);
+                    }
+
+                    // Continue to the game.
                     header("Location: game.php");
                     exit();
+
                 }
                 break;
             }

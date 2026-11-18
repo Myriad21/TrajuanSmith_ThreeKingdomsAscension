@@ -9,6 +9,8 @@
 
     require_once __DIR__ . "/includes/story_nodes.php";
     require_once __DIR__ . "/includes/game_functions.php";
+    require_once __DIR__ . "/includes/save_functions.php";
+    require_once __DIR__ . "/includes/combat_functions.php";
 
     $pageTitle = "Your Adventure";
 
@@ -50,6 +52,9 @@
             $_SESSION["last_choice_summary"],
             $_SESSION["combat"]
         );
+
+        // Overwrite the saved adventure with the reset state.
+        savePlayerProgress(collectPlayerProgress());
 
         // Redirect to prevent repeating the reset on refresh.
         header("Location: game.php");
@@ -111,6 +116,10 @@
         // Record that this encounter's ambush has been processed.
         $_SESSION["story_flags"]["wolf_ambush_resolved"] = true;
 
+        // Save the updated HP and ambush flag.
+        savePlayerProgress(collectPlayerProgress());
+
+
         // Refresh the displayed HP after updating the session.
         $championHP = $_SESSION["champion"]["hp"];
     }
@@ -132,6 +141,9 @@
             )
         ) {
             $_SESSION["champion"]["equipped_weapon"] = $weaponId;
+
+            // Save the champion's updated equipment selection.
+            savePlayerProgress(collectPlayerProgress());
         }
 
         // Prevent duplicate submissions on refresh.
@@ -171,6 +183,19 @@
             // Validate requirements on the server.
             $requirements = $selectedChoice["requires"] ?? [];
 
+
+            if (
+                $choiceId === "unlock_secret_ending" &&
+                !meetsThreefoldAccordRequirements(
+                    $_SESSION["champion"],
+                    $_SESSION["story_flags"]
+                )
+            ) {
+                header("Location: game.php");
+                exit;
+            }
+
+
             if (
                 !is_array($requirements) ||
                 !meetsChoiceRequirements(
@@ -198,6 +223,66 @@
                 // Retrieve the selected choice's stat effects.
                 $effects = $selectedChoice["effects"] ?? [];
 
+
+                // Apply the First Zenith cultivation reward.
+                if (
+                    $currentNodeId === "act2_first_zenith" &&
+                    $choiceId === "absorb_first_zenith" &&
+                    empty($_SESSION["story_flags"]["act2_first_zenith_absorbed"])
+                ) {
+                    $faction = strtolower(
+                        $_SESSION["champion"]["faction"] ?? ""
+                    );
+
+                    switch ($faction) {
+                        case "warrior":
+                            $effects["stats"]["max_hp"] = 5;
+                            $effects["stats"]["strength"] = 5;
+                            break;
+
+                        case "rogue":
+                            $effects["stats"]["strength"] = 2;
+                            $effects["stats"]["max_mana"] = 30;
+                            break;
+
+                        case "mage":
+                            $effects["stats"]["max_mana"] = 75;
+                            break;
+                    }
+                }
+
+
+                // Apply the Second Zenith cultivation reward.
+                if (
+                    $currentNodeId === "act2_glowing_roots_rescue" &&
+                    $choiceId === "absorb_second_zenith" &&
+                    empty($_SESSION["story_flags"]["act2_second_zenith_absorbed"])
+                ) {
+                    $faction = strtolower(
+                        $_SESSION["champion"]["faction"] ?? ""
+                    );
+
+                    switch ($faction) {
+                        case "warrior":
+                            $effects["stats"]["max_hp"] = 10;
+                            $effects["stats"]["strength"] = 10;
+                            $effects["stats"]["mana"] = 75;
+
+                            break;
+
+                        case "rogue":
+                            $effects["stats"]["strength"] = 5;
+                            $effects["stats"]["max_mana"] = 50;
+                            break;
+
+                        case "mage":
+                            $effects["stats"]["max_mana"] = 75;
+                            break;
+                    }
+                }
+
+
+
                 // Give the player their faction-specific expedition weapon.
                 if (
                     $currentNodeId === "explore_path" &&
@@ -218,6 +303,8 @@
                 $inventoryBefore = $_SESSION["inventory"];
                 $flagsBefore = $_SESSION["story_flags"];
 
+
+
                 // Apply valid effects to the champion.
                 if (is_array($effects)) {
 
@@ -231,6 +318,26 @@
                     $_SESSION["champion"] = $updatedState["champion"];
                     $_SESSION["inventory"] = $updatedState["inventory"];
                     $_SESSION["story_flags"] = $updatedState["flags"];
+
+                    // Successful Zenith negotiation establishes 90 trust.
+                    if (
+                        $currentNodeId === "act2_geyser_rival_negotiation" &&
+                        $choiceId === "propose_geyser_cooperation"
+                    ) {
+                        $playerFaction = $_SESSION["champion"]["faction"];
+
+                        $rivalFaction = resolveRelationshipTarget(
+                            "geyser_rival",
+                            $playerFaction
+                        );
+
+                        if (
+                            $rivalFaction !== null &&
+                            $rivalFaction !== $playerFaction
+                        ) {
+                            $_SESSION["champion"]["relationships"][$rivalFaction] = 90;
+                        }
+                    }
                 }
 
                 // Save the player's state AFTER the decision.
@@ -276,6 +383,54 @@
                 // Advance to the next scene.
                 $_SESSION["story_node"] = $nextNodeId;
 
+                
+                // Act 3: Reward the rescue of an unidentified cultivator.
+                if (
+                    $currentNodeId === "act3_blackened_cavern_entrance" &&
+                    $choiceId === "rescue_injured_cultivator" &&
+                    $nextNodeId === "act3_cultivator_rescued" &&
+                    empty($_SESSION["story_flags"]["act3_cultivator_rescue_rewarded"])
+                ) {
+                    $rescuedFaction = getLowestTrustFaction(
+                        $championBefore
+                    );
+
+                    if ($rescuedFaction !== null) {
+                        // Preserve the rescued cultivator's identity.
+                        $_SESSION["story_flags"]["act3_rescued_cultivator_faction"] =
+                            $rescuedFaction;
+
+                        // Raise that kingdom's trust to at least 90.
+                        $currentTrust = (int) (
+                            $_SESSION["champion"]["relationships"][$rescuedFaction] ?? 0
+                        );
+
+                        $_SESSION["champion"]["relationships"][$rescuedFaction] =
+                            max(90, $currentTrust);
+                    }
+
+                    // The elixir advances the champion to at least Level 4.
+                    $currentLevel = (int) (
+                        $_SESSION["champion"]["level"] ?? 1
+                    );
+
+                    if ($currentLevel < 4) {
+                        $_SESSION["champion"] = levelUpChampion(
+                            $_SESSION["champion"],
+                            4 - $currentLevel
+                        );
+                    }
+
+                    // Award the rescue benefits only once.
+                    $_SESSION["story_flags"]["act3_cultivator_elixir_received"] = true;
+                    $_SESSION["story_flags"]["act3_cultivator_rescue_rewarded"] = true;
+                }
+
+
+                // Save the updated champion, inventory, story flags,
+                // and Story Path Tracker before redirecting.
+                savePlayerProgress(collectPlayerProgress());
+
                 // Start the wolf encounter when the player chooses to fight.
                 if (
                     $currentNodeId === "expedition_deeper" &&
@@ -288,6 +443,193 @@
                     header("Location: combat.php");
                     exit;
                 }
+
+
+                // Start the Act 1 rival champion encounter.
+                if (
+                    $currentNodeId === "rival_ambush" &&
+                    $choiceId === "fight_rival"
+                ) {
+                    // Determine the Act 1 rival based on the player's faction.
+                    $rivalFaction = getFirstRival(
+                        $_SESSION["champion"]["faction"]
+                    );
+
+                    if ($rivalFaction !== null) {
+
+                        // Check whether the player previously chose an ambush.
+                        $ambush = !empty(
+                            $_SESSION["story_flags"]["rival_surprise_attack"]
+                        );
+
+                        // Clear any previous battle.
+                        unset($_SESSION["combat"]);
+
+                        // Start the Level 2 rival encounter.
+                        startRivalCombat($rivalFaction, 2, $ambush);
+
+                        // Open the combat interface.
+                        header("Location: combat.php");
+                        exit;
+                    }
+                }
+
+                // Start combat when the rival intercepts the player.
+                if (
+                    $currentNodeId === "act1_rival_interception" &&
+                    $choiceId === "defend_against_rival"
+                ) {
+                    $rivalFaction = getFirstRival(
+                        $_SESSION["champion"]["faction"]
+                    );
+
+                    if ($rivalFaction !== null) {
+
+                        // The player did not successfully ambush the rival.
+                        $ambush = false;
+
+                        // Save the player's state before combat begins.
+                        $_SESSION["combat_checkpoint"] = [
+                            "champion" => $_SESSION["champion"],
+                            "inventory" => $_SESSION["inventory"] ?? []
+                        ];
+
+                        // Clear any previous combat session.
+                        unset($_SESSION["combat"]);
+
+                        // Start the existing Level 2 rival encounter.
+                        startRivalCombat($rivalFaction, 2, $ambush);
+
+                        // The rival lands a surprise attack before normal combat begins.
+                        $surpriseDamage = 20;
+
+                        $currentHP = (int) $_SESSION["champion"]["hp"];
+
+                        $actualDamage = min($surpriseDamage, max(0, $currentHP));
+
+                        $_SESSION["champion"]["hp"] = max(
+                            0,
+                            $currentHP - $actualDamage
+                        );
+
+                        // Record the opening attack in the combat log.
+                        $_SESSION["combat"]["log"][] =
+                            "The rival champion catches you off guard and deals "
+                            . $actualDamage
+                            . " surprise damage!";
+
+                        // Prevent duplicate opening attacks.
+                        $_SESSION["combat"]["rival_opening_attack_applied"] = true;
+
+                        // Save the updated HP and combat encounter.
+                        savePlayerProgress(collectPlayerProgress());
+
+                        // Redirect to the combat interface.
+                        header("Location: combat.php");
+                        exit;
+                    }
+                }
+
+                
+                // Start combat when the player challenges the Act 2 geyser rival.
+                if (
+                    $currentNodeId === "act2_geyser_rival_negotiation" &&
+                    $choiceId === "fight_geyser_rival"
+                ) {
+                    // Retrieve the rivals eligible for this encounter.
+                    $availableRivals = getAct2GeyserRivals(
+                        $_SESSION["champion"],
+                        $_SESSION["story_flags"]
+                    );
+
+                    // Identify the rival assigned to the player's faction.
+                    $rivalFaction = resolveRelationshipTarget(
+                        "geyser_rival",
+                        $_SESSION["champion"]["faction"]
+                    );
+
+                    
+                    // Never start combat against an unavailable rival.
+                    if (
+                        $rivalFaction === null ||
+                        !in_array($rivalFaction, $availableRivals, true)
+                    ) {
+                        error_log(
+                            "Act 2 geyser combat unavailable for faction: " .
+                            $_SESSION["champion"]["faction"]
+                        );
+
+                        header("Location: game.php");
+                        exit;
+                    }
+
+                    // Preserve the champion and inventory for combat retries.
+                    $_SESSION["combat_checkpoint"] = [
+                        "champion" => $_SESSION["champion"],
+                        "inventory" => $_SESSION["inventory"] ?? []
+                    ];
+
+                    // Clear any previous encounter.
+                    unset($_SESSION["combat"]);
+
+                    // Initialize the Level 3 rival champion.
+                    startRivalCombat($rivalFaction, 3, false);
+
+                    // Mark this as the Act 2 Zenith rival encounter.
+                    $_SESSION["combat"]["encounter"] = "act2_zenith_rival";
+
+                    // Redirect to the combat page.
+                    header("Location: combat.php");
+                    exit;
+                }
+
+
+
+                // Start the Act 3 final boss encounter.
+                if (
+                    $currentNodeId === "act3_mana_beast_encounter" &&
+                    $choiceId === "confront_mana_beast"
+                ) {
+                    // Preserve the champion and inventory before combat.
+                    $_SESSION["combat_checkpoint"] = [
+                        "champion" => $_SESSION["champion"],
+                        "inventory" => $_SESSION["inventory"] ?? []
+                    ];
+
+                    // Clear any previous combat session.
+                    unset($_SESSION["combat"]);
+
+                    // Initialize the final boss.
+                    startCombat("corrupted_mana_beast");
+
+                    // Identify this encounter as the Act 3 final battle.
+                    $_SESSION["combat"]["encounter"] = "act3_final_boss";
+
+                    // Save story progress before entering combat.
+                    savePlayerProgress(collectPlayerProgress());
+
+                    // Redirect to the existing combat interface.
+                    header("Location: combat.php");
+                    exit;
+                }
+
+
+                // Start a practice battle against the training dummy.
+                if (
+                    $currentNodeId === "act1_training_dummy" &&
+                    $choiceId === "begin_dummy_training"
+                ) {
+                    // Clear any previous battle so training starts fresh.
+                    unset($_SESSION["combat"]);
+
+                    // Initialize the harmless training dummy encounter.
+                    startCombat("training_dummy");
+
+                    // Open the existing combat interface.
+                    header("Location: combat.php");
+                    exit;
+                }
+
 
                 // Prevent duplicate form submissions.
                 header("Location: game.php");
@@ -523,7 +865,17 @@
 
                     <!-- Shared story narration -->
                     <p>
-                        <?= nl2br(htmlspecialchars($currentNode["text"])) ?>
+                        
+<?php
+    $storyText = $currentNode["text"] ?? "";
+
+    if (is_array($storyText)) {
+        $storyText = implode("\n\n", $storyText);
+    }
+
+    echo nl2br(htmlspecialchars($storyText));
+?>
+
                     </p>
 
                     <!-- Faction-specific story narration -->
@@ -611,9 +963,25 @@
                             
                             <?php $choiceIndex = 0; ?>
 
+                            
                             <?php foreach ($currentNode["choices"] as $choiceId => $choice): ?>
 
-                                <?php $choiceIndex++; ?>
+                                <?php
+                                    // Hide rival tracks only when no eligible
+                                    // expedition can appear at the geyser.
+                                    if (
+                                        $choiceId === "identify_rival_tracks" &&
+                                        empty(getAct2GeyserRivals(
+                                            $champion,
+                                            $_SESSION["story_flags"]
+                                        ))
+                                    ) {
+                                        continue;
+                                    }
+
+                                    $choiceIndex++;
+                                ?>
+
 
 
                                 <?php
@@ -627,6 +995,15 @@
                                     $_SESSION["story_flags"],
                                     $requirements
                                 );
+
+
+                                if ($choiceId === "unlock_secret_ending") {
+                                    $isUnlocked = meetsThreefoldAccordRequirements(
+                                        $champion,
+                                        $_SESSION["story_flags"]
+                                    );
+                                }
+
 
                                 // Determine whether this exploration location was completed.
                                 $explorationFlags = [
@@ -656,7 +1033,19 @@
 
                                 ?>
 
-                                <form action="game.php" method="POST" class="game-choice" style="--choice-index: <?= $choiceIndex ?>">
+                                
+                                <?php
+                                    $hideRivalChoice = false;
+                                ?>
+
+                                <form
+                                    action="game.php"
+                                    method="POST"
+                                    class="game-choice"
+                                    style="--choice-index: <?= $choiceIndex ?>; <?= $hideRivalChoice ? 'visibility: hidden; pointer-events: none;' : '' ?>"
+                                    <?= $hideRivalChoice ? 'inert aria-hidden="true"' : '' ?>
+                                >
+
                                     <input
                                         type="hidden"
                                         name="choice"
@@ -768,17 +1157,78 @@
 
                         <?php foreach ($currentNode["choices"] ?? [] as $choiceId => $choice): ?>
 
+
+                            <?php
+                                // Keep Insight Relic guidance consistent
+                                // with the rival-track choice visibility.
+                                if (
+                                    $choiceId === "identify_rival_tracks" &&
+                                    empty(getAct2GeyserRivals(
+                                        $champion,
+                                        $_SESSION["story_flags"]
+                                    ))
+                                ) {
+                                    continue;
+                                }
+                            ?>
+
+
                             <?php $adviceIndex++; ?>
 
 
                             <?php
                                 $customInsight = $choice["insight_text"] ?? "";
 
+                                // Retrieve the player's previous story decisions.
+                                $choicesLog = $_SESSION["choices_log"] ?? [];
+
+                                // Generate an Insight Relic prediction using
+                                // the current choice effects and decision history.
                                 $automaticInsight = getInsightRelicHint(
-                                    $choice["effects"] ?? []
+                                    $choice["effects"] ?? [],
+                                    $choicesLog
                                 );
 
                                 $requirements = $choice["requires"] ?? [];
+
+                                // Retrieve relationship changes for this choice.
+                                $trustEffects = $choice["effects"]["trust"] ?? [];
+
+                                // Store relationship tiers using actual faction names.
+                                $relationshipTiers = [];
+
+                                $playerFaction = $champion["faction"] ?? "";
+
+                                if (is_array($trustEffects)) {
+
+                                    foreach ($trustEffects as $target => $change) {
+
+                                        // Convert aliases such as first_rival
+                                        // into the actual faction name.
+                                        $rivalFaction = resolveRelationshipTarget(
+                                            $target,
+                                            $playerFaction
+                                        );
+
+                                        // Ignore invalid targets and the player's own faction.
+                                        if (
+                                            $rivalFaction === null ||
+                                            $rivalFaction === $playerFaction
+                                        ) {
+                                            continue;
+                                        }
+
+                                        // Retrieve the current relationship tier.
+                                        $currentTier = getRivalRelationshipStatus(
+                                            $champion,
+                                            $rivalFaction
+                                        );
+
+                                        if ($currentTier !== null) {
+                                            $relationshipTiers[$rivalFaction] = $currentTier;
+                                        }
+                                    }
+                                }
 
                                 $isInsightUnlocked = meetsChoiceRequirements(
                                     $champion,
@@ -787,12 +1237,48 @@
                                     $requirements
                                 );
 
+
+                                if ($choiceId === "unlock_secret_ending") {
+                                    $isInsightUnlocked = meetsThreefoldAccordRequirements(
+                                        $champion,
+                                        $_SESSION["story_flags"]
+                                    );
+                                }
+
+
                             ?>
 
                             <div class="insight-relic__advice"
                                 data-choice="<?= htmlspecialchars($choiceId) ?>"
                                 style="--advice-index: <?= $adviceIndex ?>"
                                 >
+
+                                <?php if (!empty($relationshipTiers)): ?>
+
+                                    <div class="insight-relic__relationships">
+
+                                        <?php foreach ($relationshipTiers as $target => $tier): ?>
+
+                                            <div class="insight-relic__relationship">
+
+                                                <span class="insight-relic__relationship-name">
+                                                    <?= htmlspecialchars(
+                                                        ucwords(str_replace("_", " ", $target))
+                                                    ) ?>
+                                                </span>
+
+                                                <span class="insight-relic__relationship-tier"
+                                                    data-tier="<?= htmlspecialchars($tier) ?>">
+                                                    <?= htmlspecialchars($tier) ?>
+                                                </span>
+
+                                            </div>
+
+                                        <?php endforeach; ?>
+
+                                    </div>
+
+                                <?php endif; ?>
 
                                 <?php if ($customInsight !== ""): ?>
                                     <p class="insight-relic__custom">
@@ -801,7 +1287,12 @@
                                 <?php endif; ?>
 
                                 <?php if ($automaticInsight !== null): ?>
-                                    <p class="insight-relic__automatic">
+                                    <?php
+                                        $isCultivationPrediction =
+                                            (int) ($choice["effects"]["special"]["level_up"] ?? 0) > 0;
+                                    ?>
+
+                                    <p class="insight-relic__automatic<?= $isCultivationPrediction ? ' insight-relic__automatic--cultivation' : '' ?>">
                                         <?= htmlspecialchars($automaticInsight) ?>
                                     </p>
                                 <?php endif; ?>

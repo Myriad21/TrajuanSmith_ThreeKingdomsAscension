@@ -14,15 +14,200 @@ function initializeCombat(string $enemyId): array
             "is_boss" => false,
         ],
 
-        "first_rival" => [
-            "id" => "first_rival",
-            "name" => "Rival Champion",
+        "training_dummy" => [
+            "id" => "training_dummy",
+            "name" => "Reinforced Training Dummy",
+            "level" => 5,
+            "hp" => 500,
+            "max_hp" => 500,
+            "strength" => 0,
+            "is_boss" => false,
+            "is_training" => true
+        ],
+
+
+        "corrupted_mana_beast" => [
+            "id" => "corrupted_mana_beast",
+            "name" => "Corrupted Mana Beast",
+            "level" => 4,
+            "hp" => 150,
+            "max_hp" => 150,
+            "strength" => 25,
+            "is_boss" => true,
+        ],
+
+
+
+        // Rival Champions
+        "warrior_level_1" => [
+            "id" => "warrior_level_1",
+            "name" => "Warrior Champion",
+            "faction" => "warrior",
+            "level" => 1,
+            "hp" => 120,
+            "max_hp" => 120,
+            "strength" => 23,
+            "is_boss" => true,
+        ],
+
+        "warrior_level_2" => [
+            "id" => "warrior_level_2",
+            "name" => "Warrior Champion",
+            "faction" => "warrior",
             "level" => 2,
+            "hp" => 140,
+            "max_hp" => 140,
+            "strength" => 29,
+            "is_boss" => true,
+        ],
+
+        "warrior_level_3" => [
+            "id" => "warrior_level_3",
+            "name" => "Warrior Champion",
+            "faction" => "warrior",
+            "level" => 3,
+            "hp" => 160,
+            "max_hp" => 160,
+            "strength" => 35,
+            "is_boss" => true,
+        ],
+
+        "warrior_level_4" => [
+            "id" => "warrior_level_4",
+            "name" => "Warrior Champion",
+            "faction" => "warrior",
+            "level" => 4,
+            "hp" => 180,
+            "max_hp" => 180,
+            "strength" => 41,
+            "is_boss" => true,
+        ],
+
+        "warrior_level_5" => [
+            "id" => "warrior_level_5",
+            "name" => "Warrior Champion",
+            "faction" => "warrior",
+            "level" => 5,
             "hp" => 200,
             "max_hp" => 200,
-            "strength" => 12,
+            "strength" => 47,
             "is_boss" => true,
-        ]
+        ],
+
+        // Mage Champions
+
+        "mage_level_1" => [
+            "id" => "mage_level_1",
+            "name" => "Mage Champion",
+            "faction" => "mage",
+            "level" => 1,
+            "hp" => 85,
+            "max_hp" => 85,
+            "strength" => 21,
+            "is_boss" => true,
+        ],
+
+        "mage_level_2" => [
+            "id" => "mage_level_2",
+            "name" => "Mage Champion",
+            "faction" => "mage",
+            "level" => 2,
+            "hp" => 95,
+            "max_hp" => 95,
+            "strength" => 26,
+            "is_boss" => true,
+        ],
+
+        "mage_level_3" => [
+            "id" => "mage_level_3",
+            "name" => "Mage Champion",
+            "faction" => "mage",
+            "level" => 3,
+            "hp" => 105,
+            "max_hp" => 105,
+            "strength" => 31,
+            "is_boss" => true,
+        ],
+
+        "mage_level_4" => [
+            "id" => "mage_level_4",
+            "name" => "Mage Champion",
+            "faction" => "mage",
+            "level" => 4,
+            "hp" => 115,
+            "max_hp" => 115,
+            "strength" => 36,
+            "is_boss" => true,
+        ],
+
+        "mage_level_5" => [
+            "id" => "mage_level_5",
+            "name" => "Mage Champion",
+            "faction" => "mage",
+            "level" => 5,
+            "hp" => 125,
+            "max_hp" => 125,
+            "strength" => 41,
+            "is_boss" => true,
+        ],
+
+        // Rogue Champions
+
+        "rogue_level_1" => [
+            "id" => "rogue_level_1",
+            "name" => "Rogue Champion",
+            "faction" => "rogue",
+            "level" => 1,
+            "hp" => 85,
+            "max_hp" => 85,
+            "strength" => 22,
+            "is_boss" => true,
+        ],
+
+        "rogue_level_2" => [
+            "id" => "rogue_level_2",
+            "name" => "Rogue Champion",
+            "faction" => "rogue",
+            "level" => 2,
+            "hp" => 100,
+            "max_hp" => 100,
+            "strength" => 27,
+            "is_boss" => true,
+        ],
+
+        "rogue_level_3" => [
+            "id" => "rogue_level_3",
+            "name" => "Rogue Champion",
+            "faction" => "rogue",
+            "level" => 3,
+            "hp" => 115,
+            "max_hp" => 115,
+            "strength" => 33,
+            "is_boss" => true,
+        ],
+
+        "rogue_level_4" => [
+            "id" => "rogue_level_4",
+            "name" => "Rogue Champion",
+            "faction" => "rogue",
+            "level" => 4,
+            "hp" => 130,
+            "max_hp" => 130,
+            "strength" => 38,
+            "is_boss" => true,
+        ],
+
+        "rogue_level_5" => [
+            "id" => "rogue_level_5",
+            "name" => "Rogue Champion",
+            "faction" => "rogue",
+            "level" => 5,
+            "hp" => 145,
+            "max_hp" => 145,
+            "strength" => 44,
+            "is_boss" => true,
+        ],
+
 
     ];
 
@@ -51,6 +236,52 @@ function startCombat(string $enemyId): void
 {
     $_SESSION["combat"] = initializeCombat($enemyId);
 }
+
+
+function startRivalCombat(
+    string $rivalFaction,
+    int $rivalLevel,
+    bool $ambush = false
+): void {
+
+    // Validate the rival faction.
+    if (!in_array($rivalFaction, ["warrior", "mage", "rogue"], true)) {
+        throw new InvalidArgumentException(
+            "Invalid rival faction."
+        );
+    }
+
+    // Validate the rival level.
+    if ($rivalLevel < 1 || $rivalLevel > 5) {
+        throw new InvalidArgumentException(
+            "Invalid rival level."
+        );
+    }
+
+    // Select the correct enemy definition.
+    $enemyId = $rivalFaction . "_level_" . $rivalLevel;
+
+    // Initialize combat using that rival's stats.
+    $combat = initializeCombat($enemyId);
+
+    // Track the enemy's special cooldown.
+    $combat["enemy_special_cooldown"] = 0;
+
+    // Apply the Act 1 surprise attack when appropriate.
+    if ($ambush) {
+        $combat["enemy"]["hp"] = max(
+            0,
+            $combat["enemy"]["hp"] - 20
+        );
+
+        $combat["log"][] =
+            "Your surprise attack deals 20 damage before the battle begins!";
+    }
+
+    // Store the battle in the session.
+    $_SESSION["combat"] = $combat;
+}
+
 
 
 function calculateBasicDamage(
@@ -118,22 +349,25 @@ function performBasicAttack(array &$combat, array $champion, int $weaponBonus = 
 }
 
 
-function performEnemyAttack(array &$combat, array &$champion): void {
-    // Enemy attacks are only allowed during active combat.
+function performEnemyBasicAttack(
+    array &$combat,
+    array &$champion
+): void {
+
     if ($combat["status"] !== "active") {
         return;
     }
 
-    // Calculate the enemy's damage.
-    $damage = max(1, (int) $combat["enemy"]["strength"]);
+    $damage = max(
+        1,
+        (int) $combat["enemy"]["strength"]
+    );
 
-    // Reduce the champion's HP without going below zero.
     $champion["hp"] = max(
         0,
         (int) $champion["hp"] - $damage
     );
 
-    // Record the enemy's attack.
     $combat["log"][] =
         $combat["enemy"]["name"] .
         " attacks " .
@@ -142,7 +376,6 @@ function performEnemyAttack(array &$combat, array &$champion): void {
         $damage .
         " damage.";
 
-    // Check whether the champion was defeated.
     if ($champion["hp"] <= 0) {
         $combat["status"] = "defeat";
 
@@ -151,6 +384,53 @@ function performEnemyAttack(array &$combat, array &$champion): void {
             " has been defeated!";
     }
 }
+
+function performEnemyAttack(array &$combat, array &$champion): void
+{
+    if ($combat["status"] !== "active") {
+        return;
+    }
+
+    $enemy = $combat["enemy"];
+
+    // Training dummies cannot attack or damage the champion.
+    if (!empty($enemy["is_training"])) {
+        $combat["log"][] =
+            "The training dummy remains motionless, Taunting to try harder.";
+
+        return;
+    }
+
+    // Ordinary enemies continue using their existing basic attack.
+    if (
+        !isset($enemy["faction"]) ||
+        (int) ($enemy["level"] ?? 1) < 2
+    ) {
+        performEnemyBasicAttack($combat, $champion);
+        return;
+    }
+
+    // Track the rival's special cooldown separately from the player.
+    $cooldown = (int) ($combat["enemy_special_cooldown"] ?? 0);
+
+    if ($cooldown === 0) {
+
+        // Use a special attack when available.
+        performEnemySpecialAttack($combat, $champion);
+
+    } else {
+
+        // Use a basic attack while the special is unavailable.
+        performEnemyBasicAttack($combat, $champion);
+
+        // Reduce cooldown after the rival's basic attack.
+        $combat["enemy_special_cooldown"] = max(
+            0,
+            $cooldown - 1
+        );
+    }
+}
+
 
 
 function getSpecialAbilities(string $faction): array
@@ -172,11 +452,28 @@ function getSpecialAbilities(string $faction): array
             "arcane_burst" => [
                 "name" => "Arcane Burst",
                 "description" => "Unleash concentrated arcane energy.",
-                "mana_cost" => 15,
-                "damage_bonus" => 12,
+                "mana_cost" => 25,
+                "damage_bonus" => 25,
                 "required_level" => 2,
                 "unlock_type" => "level"
-            ]
+            ],
+            "arcane_Blast" => [
+                "name" => "Arcane Heal",
+                "description" => "Unleash concentrated Healing energy.",
+                "mana_cost" => 5,
+                "damage_bonus" => 12,
+                "required_level" => 3,
+                "unlock_type" => "level"
+            ],
+            "mana_Dominance" => [
+                "name" => "Mana Dominance",
+                "description" => "Dominate the area dealing crazy damage.",
+                "mana_cost" => 30,
+                "damage_bonus" => 45,
+                "required_level" => 5,
+                "unlock_type" => "level"
+            ],
+
         ],
 
         "rogue" => [
@@ -187,7 +484,23 @@ function getSpecialAbilities(string $faction): array
                 "damage_bonus" => 10,
                 "required_level" => 2,
                 "unlock_type" => "level"
-            ]
+            ],
+            "dagger_throw" => [
+                "name" => "Dagger Throw",
+                "description" => "Fling your dagger from the shadows to catch your enemy off guard",
+                "mana_cost" => 10,
+                "damage_bonus" => 15,
+                "required_level" => 3,
+                "unlock_type" => "level"
+            ],
+            "Shadow Domain" => [
+                "name" => "Shaow Domain",
+                "description" => "The shadows are yours. Make sure they know.",
+                "mana_cost" => 30,
+                "damage_bonus" => 30,
+                "required_level" => 4,
+                "unlock_type" => "level"
+            ],
         ]
     ];
 
@@ -272,6 +585,80 @@ function performSpecialAttack(
 
     return true;
 }
+
+
+function performEnemySpecialAttack(
+    array &$combat,
+    array &$champion
+): void {
+
+    if ($combat["status"] !== "active") {
+        return;
+    }
+
+    $enemy = &$combat["enemy"];
+
+    // Only rival champions at Level 2 or above can use specials.
+    if (
+        !isset($enemy["faction"]) ||
+        ($enemy["level"] ?? 1) < 2
+    ) {
+        return;
+    }
+
+    // Determine the special attack based on faction.
+    $specials = [
+        "warrior" => [
+            "name" => "Power Strike",
+            "bonus" => 8
+        ],
+        "mage" => [
+            "name" => "Arcane Burst",
+            "bonus" => 15
+        ],
+        "rogue" => [
+            "name" => "Shadow Strike",
+            "bonus" => 10
+        ]
+    ];
+
+    $faction = $enemy["faction"];
+
+    if (!isset($specials[$faction])) {
+        return;
+    }
+
+    $special = $specials[$faction];
+
+    // Use the rival's precalculated basic damage.
+    $damage = (int) $enemy["strength"]
+        + (int) $special["bonus"];
+
+    $champion["hp"] = max(
+        0,
+        (int) $champion["hp"] - $damage
+    );
+
+    $combat["log"][] =
+        $enemy["name"] .
+        " used " .
+        $special["name"] .
+        " and dealt " .
+        $damage .
+        " damage!";
+
+    // Begin the enemy's special cooldown.
+    $combat["enemy_special_cooldown"] = 2;
+
+    if ($champion["hp"] <= 0) {
+        $combat["status"] = "defeat";
+
+        $combat["log"][] =
+            $champion["name"] .
+            " has been defeated!";
+    }
+}
+
 
 
 function reduceSpecialCooldown(array &$combat): void
