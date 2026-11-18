@@ -1,0 +1,337 @@
+
+/* =========================================
+   THREE KINGDOMS ASCENSION
+   Hero Summary Page
+========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #111111;
+    color: #f1f1f1;
+    font-family: "Montserrat", Arial, sans-serif;
+    line-height: 1.6;
+}
+
+.summary-page {
+    width: min(100% - 32px, 950px);
+    margin: 24px auto;
+}
+
+/* =========================================
+   TOP NAVIGATION
+========================================= */
+
+.summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 22px;
+    margin-bottom: 14px;
+    background: #303030;
+    border: 1px solid #454545;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+
+.summary-header nav {
+    display: flex;
+    gap: 16px;
+}
+
+.summary-header a {
+    color: #d5d5d5;
+    text-decoration: none;
+}
+
+.summary-header a:hover {
+    color: #ffffff;
+}
+
+/* =========================================
+   SHARED SECTIONS
+========================================= */
+
+.ending-section,
+.hero-section,
+.results-section {
+    background: #303030;
+    border: 1px solid #454545;
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 12px;
+}
+
+h1, h2, h3, p {
+    margin-top: 0;
+}
+
+h2 {
+    font-size: 17px;
+}
+
+h3 {
+    font-size: 15px;
+}
+
+/* =========================================
+   ENDING DISPLAY
+========================================= */
+
+.ending-artwork {
+    min-height: 170px;
+    background: #222222;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaaaaa;
+    font-size: 13px;
+    margin-bottom: 22px;
+}
+
+.ending-eyebrow {
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: #b9b9b9;
+    margin-bottom: 5px;
+}
+
+.ending-section h1 {
+    text-align: center;
+    font-size: 27px;
+    margin-bottom: 5px;
+}
+
+.ending-subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #cccccc;
+    margin-bottom: 22px;
+}
+
+.kingdom-fate {
+    padding: 17px;
+    border: 1px solid #515151;
+    border-radius: 9px;
+}
+
+.kingdom-fate h2 {
+    margin-bottom: 8px;
+}
+
+.kingdom-fate p {
+    font-size: 13px;
+    color: #dddddd;
+    margin-bottom: 0;
+}
+
+/* =========================================
+   CHAMPION PROFILE
+========================================= */
+
+.hero-grid,
+.results-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.hero-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px;
+    background: #080808;
+    border-radius: 8px;
+}
+
+.hero-stat span,
+.result-card span {
+    font-size: 11px;
+    color: #aaaaaa;
+}
+
+.hero-stat strong {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* =========================================
+   MAJOR DECISIONS
+========================================= */
+
+.major-decisions {
+    background: #080808;
+    border-radius: 9px;
+    padding: 18px;
+    margin-top: 12px;
+}
+
+.major-decisions h3 {
+    margin-bottom: 10px;
+}
+
+.major-decisions ol {
+    padding-left: 22px;
+    margin: 0;
+}
+
+.major-decisions li {
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+
+.major-decisions li:last-child {
+    margin-bottom: 0;
+}
+
+/* =========================================
+   AI HERO NARRATIVE
+========================================= */
+
+.hero-narrative {
+    margin-top: 12px;
+    padding: 18px;
+    border: 1px solid #515151;
+    border-radius: 9px;
+    color: #dddddd;
+    font-size: 13px;
+}
+
+.hero-narrative p {
+    margin-bottom: 0;
+}
+
+/* =========================================
+   FINAL RESULTS
+========================================= */
+
+.result-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-height: 85px;
+    padding: 14px;
+    background: #080808;
+    border-radius: 8px;
+}
+
+.result-card strong {
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.results-note {
+    margin: 12px 0 0;
+    font-size: 12px;
+    color: #aaaaaa;
+}
+
+/* =========================================
+   ACTION BUTTONS
+========================================= */
+
+.summary-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.summary-actions a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 12px;
+    border: 1px solid #505050;
+    border-radius: 9px;
+    background: #303030;
+    color: #f1f1f1;
+    text-align: center;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.summary-actions a:hover {
+    background: #444444;
+    border-color: #888888;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.summary-footer {
+    padding: 14px;
+    background: #303030;
+    border: 1px solid #454545;
+    border-radius: 9px;
+    text-align: center;
+    color: #aaaaaa;
+    font-size: 11px;
+}
+
+/* =========================================
+   RESPONSIVE LAYOUT
+========================================= */
+
+@media (max-width: 600px) {
+    .summary-page {
+        width: min(100% - 20px, 950px);
+        margin: 10px auto;
+    }
+
+    .summary-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .ending-section,
+    .hero-section,
+    .results-section {
+        padding: 15px;
+    }
+
+    .ending-section h1 {
+        font-size: 23px;
+    }
+
+    .ending-artwork {
+        min-height: 120px;
+    }
+
+    .hero-grid,
+    .results-grid {
+        gap: 8px;
+    }
+
+    .hero-stat,
+    .result-card {
+        padding: 11px;
+    }
+
+    .hero-stat strong {
+        font-size: 13px;
+    }
+
+    .result-card strong {
+        font-size: 17px;
+    }
+
+    .summary-actions {
+        grid-template-columns: 1fr;
+    }
+}

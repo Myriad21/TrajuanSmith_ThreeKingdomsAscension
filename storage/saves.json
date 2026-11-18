@@ -428,9 +428,6 @@
             "encounter": "act3_final_boss",
             "item_cooldown": 0
         },
-        "last_choice_summary": {
-            "choice": "Secret Ending",
-            "consequences": []
-        }
+        "final_score": 900
     }
 }
