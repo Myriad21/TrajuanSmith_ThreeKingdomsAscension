@@ -73,7 +73,6 @@ Tests were conducted in **Brave** using the local PHP server.
 
 **Evidence files:** `assets/evidence/AI_Testcase1_TrustDecrease01.png`, `assets/evidence/AI_Testcase1_TrustDecrease02.png`, and `TestCase02_StatBoundary01.png` through `assets/evidence/TestCase02_StatBoundary06.png`. The AI-03 screenshot should also be retained with submission evidence. These are separate screenshots, not automatically included in the repository.
 
-These are targeted manual UI tests, not a claim of exhaustive coverage. Additional final checks should include all factions and endings, login/logout save restoration, leaderboard ordering, protected-route behavior, responsive layout, and CODD deployment.
 
 ## Development process
 
