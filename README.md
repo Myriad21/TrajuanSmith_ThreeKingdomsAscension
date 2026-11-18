@@ -34,8 +34,10 @@ Both contributors participated in integration, debugging, and documentation.
    php -S localhost:8000
    ```
 
-4. Open `CODD LINK TO BE ADDED` in your browser.
+4. Open `http://localhost:8000` in your browser.
 5. Register or sign in, create a champion, and start the adventure.
+
+**Live CODD deployment:** https://codd.cs.gsu.edu/~tsmith413/WebDev/Projects/Project02/TrajuanSmith_ThreeKingdomsAscension/index.php
 
 The application uses PHP sessions and JSON-based server-side storage rather than a database. Ensure the PHP process can access and write to the required files in `storage/`. Do not publish real user records or saved games to a public repository.
 
@@ -74,9 +76,17 @@ Tests were conducted in **Brave** using the local PHP server.
 **Evidence files:** `assets/evidence/AI_Testcase1_TrustDecrease01.png`, `assets/evidence/AI_Testcase1_TrustDecrease02.png`, and `TestCase02_StatBoundary01.png` through `assets/evidence/TestCase02_StatBoundary06.png`. The AI-03 screenshot should also be retained with submission evidence. These are separate screenshots, not automatically included in the repository.
 
 
+## Final QA and deployment — November 18, 2026
+
+Manual testing confirmed account registration/login/logout, separate account saves and restoration, combat victory/defeat/escape, class abilities and healing, ending generation, Hero Summary output, and leaderboard scoring. Responsive checks passed at **320px, 375px, and 768px**.
+
+On CODD, an initial JSON storage write-access issue affected registration and save-dependent game actions. Correcting file permissions so PHP could write to the storage files resolved the problem. Subsequent live-server checks confirmed account access, story navigation, Hero Summary, and image/background loading.
+
+These results cover the tested flows, not exhaustive testing of every possible story branch.
+
 ## Development process
 
-The team used GitHub branches and pull requests and organized development into six short sprint groupings from **November 10–18, 2026**. See `Development_Journal.md` for the chronological work record, contributor attribution, debugging notes, commit evidence, and outstanding verification tasks.
+The team used GitHub branches and pull requests and organized development into six short sprint groupings from **November 10–18, 2026**. See `Development_Journal.md` for the chronological work record, contributor attribution, debugging notes, commit evidence, and final QA/deployment results.
 
 ## Repository
 

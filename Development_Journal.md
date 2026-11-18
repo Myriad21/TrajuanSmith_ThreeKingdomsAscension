@@ -4,6 +4,7 @@
 **Project:** Project 2 — Choose Your Path (Three Kingdoms Ascension)  
 **Team:** Trajuan Smith and Hien Dao  
 **Repository:** https://github.com/Myriad21/TrajuanSmith_ThreeKingdomsAscension  
+**CODD deployment:** https://codd.cs.gsu.edu/~tsmith413/WebDev/Projects/Project02/TrajuanSmith_ThreeKingdomsAscension/index.php  
 **Development period documented:** November 10–18, 2026
 
 ## Roles and workflow
@@ -222,7 +223,7 @@ Complete Acts II–III, ending resolution, Hero Summary, and final leaderboard s
 ### Testing and debugging
 - The original Nov. 18 journal reports that the leaderboard displayed player information, sorted by score, and reflected progressing scores.
 - The latest project ZIP contains the leaderboard, score functions, Hero Summary, and save functions; this confirms implementation presence, not exhaustive runtime correctness.
-- Final browser checks still needed for each ending, secret-ending requirements, save restoration, leaderboard ordering, and protected-route access.
+- Subsequent final QA confirmed account-specific save restoration, combat victory/defeat and escape, ending generation, Hero Summary output, and leaderboard score recording. See the final QA entry below for the scope of testing.
 
 ### Selected commits
 - `cd9e805` — Trajuan: implement Act I through Act III
@@ -232,11 +233,8 @@ Complete Acts II–III, ending resolution, Hero Summary, and final leaderboard s
 - `5d88972` — merge pull request #7, Hero Summary styling (visible in supplied GitHub screenshot)
 
 ### Next steps
-- Verify PHP syntax, forms, sessions, registration/login/logout, and safe output.
-- Perform full Warrior/Mage/Rogue playthroughs, including defeat and secret-ending cases.
-- Verify saved progress after logging out and returning.
-- Check responsive behavior and keyboard accessibility on core pages.
-- Finish README, Trello sprint evidence, recorded presentation, Q&A, and submission links before the deadline.
+- Complete remaining presentation and submission deliverables, including the recorded demo and Q&A responses.
+- Keep any additional checks (such as a complete cross-faction regression or keyboard-accessibility audit) separate from the verified tests described below.
 
 ## Important debugging and refactoring record
 
@@ -267,11 +265,23 @@ Three manual test cases were performed on the Insight Relic guidance system usin
 
 **Conclusion:** All three manual UI tests passed. The tests demonstrate contextual consequence previews, dynamic requirement explanations, and appropriate guidance for an ordinary choice. The system is rule-based and relies on predefined story metadata and the player's current state rather than a generative AI model. Testing was limited to the observed scenarios and does not establish complete coverage of every story branch.
 
+## Final QA and CODD deployment — November 18, 2026
+
+**Functional QA:** Manual testing confirmed registration, login/logout, and saved-progress isolation between two accounts. Combat testing covered basic attacks, class abilities and cooldowns, healing without exceeding maximum HP, victory, defeat at zero HP, and escape. Final battle outcomes, ending generation, Hero Summary display, and leaderboard score recording were also confirmed working. These results describe the tested flows and do not imply exhaustive coverage of every possible story branch.
+
+**Responsive QA:** Tested the application at viewport widths of **320px, 375px, and 768px**; the tested layouts and controls displayed correctly.
+
+**CODD deployment debugging:** The initial live deployment produced an `Unable to open save storage` error, interrupting save-dependent story actions; registration also failed. The team corrected file permissions to enable PHP to write to the JSON storage files, resolving the issue. Subsequent live-server checks confirmed registration, login/logout for new and existing accounts, story navigation, Hero Summary, and image/background loading.
+
+**Deployment URL:** https://codd.cs.gsu.edu/~tsmith413/WebDev/Projects/Project02/TrajuanSmith_ThreeKingdomsAscension/index.php
+
+**Result:** Final functional, responsive, and live deployment smoke tests described above **PASS**. Presentation, Q&A, and submission packaging remain to be completed.
+
 ## Evidence and final verification checklist
 
 - **GitHub:** Commit history identifies each contributor and records feature development, merges, and fixes.
 - **Trello:** Confirm all six sprint cards, assignees, status transitions, and actual review/stand-up evidence before presenting them as completed Scrum events.
 - **Application:** Demonstrate account registration/login, character creation, faction choice, stat-locked choices, Insight Relic previews, inventory, combat, save/reload, an ending, Hero Summary, and leaderboard.
-- **Testing:** Three AI cases are documented above (normal, boundary/locked, and fallback guidance). Mobile/desktop, authentication, and full-game regression checks remain separate final-verification items.
-- **Submission:** Confirm CODD deployment, GitHub URL, video link, Q&A responses, and each team member's submission file.
+- **Testing:** Three Insight Relic cases passed. Final functional QA, responsive checks at 320px/375px/768px, and CODD smoke tests also passed as recorded above. Exhaustive branch-by-branch coverage is not claimed.
+- **Submission:** CODD deployment and GitHub repository are documented.
 
