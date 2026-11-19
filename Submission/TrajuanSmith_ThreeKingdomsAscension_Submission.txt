@@ -1,0 +1,3 @@
+CODD URL:     https://codd.cs.gsu.edu/~tsmith413/WebDev/Projects/Project02/TrajuanSmith_ThreeKingdomsAscension/index.php
+GitHub URL:   https://github.com/Myriad21/TrajuanSmith_ThreeKingdomsAscension
+Video URL:    

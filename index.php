@@ -69,15 +69,15 @@ session_start();
             
             <div class="faction-section">
                 <div class="interactive-card" id="warrior-faction">
-                    <img src="assets/images/factions/warrior-symbol.jpg">
+                    <img src="assets/images/Factions/warrior-symbol.jpg">
                     <h3>Warriors</h3>
                 </div>
                 <div class="interactive-card" id="warrior-faction">
-                    <img src="assets/images/factions/mage-symbol.jpg">
+                    <img src="assets/images/Factions/mage-symbol.jpg">
                     <h3>Mages</h3>
                 </div>
                 <div class="interactive-card" id="warrior-faction">
-                    <img src="assets/images/factions/rogue-symbol.jpg">
+                    <img src="assets/images/Factions/rogue-symbol.jpg">
                     <h3>Rogues</h3>
                 </div>
             </div>
