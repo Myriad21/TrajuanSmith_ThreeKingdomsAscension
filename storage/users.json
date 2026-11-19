@@ -1,12 +1,1 @@
-[
-    {
-        "id": 1,
-        "username": "test",
-        "password": "$2y$12$LjzR/gtEk6y5jE0RYBIb7eneV4UWzcNbVPqaOw3H3Aidr/wbe4una"
-    },
-    {
-        "id": 2,
-        "username": "test2",
-        "password": "$2y$12$S6GAyHVXzIK94DB6vQkJ4.jNuJhWH4wK.0FFXiPltU3sMAShLeuQi"
-    }
-]
+[]

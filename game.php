@@ -862,15 +862,15 @@
                     <!-- Shared story narration -->
                     <p>
                         
-<?php
-    $storyText = $currentNode["text"] ?? "";
+                    <?php
+                        $storyText = $currentNode["text"] ?? "";
 
-    if (is_array($storyText)) {
-        $storyText = implode("\n\n", $storyText);
-    }
+                        if (is_array($storyText)) {
+                            $storyText = implode("\n\n", $storyText);
+                        }
 
-    echo nl2br(htmlspecialchars($storyText));
-?>
+                        echo nl2br(htmlspecialchars($storyText));
+                    ?>
 
                     </p>
 
